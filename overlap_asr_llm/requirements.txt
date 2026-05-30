@@ -1,0 +1,16 @@
+# Core experiment helpers
+jiwer>=3.0.0
+
+# Optional ASR / audio stack for real experiments
+openai-whisper>=20231117
+funasr>=1.1.0
+torch>=2.0.0
+torchaudio>=2.0.0
+librosa>=0.10.0
+soundfile>=0.12.0
+speechbrain>=1.0.0
+scikit-learn>=1.3.0
+
+# Optional LLM/RAG helpers
+transformers>=4.44.0
+sentence-transformers>=3.0.0

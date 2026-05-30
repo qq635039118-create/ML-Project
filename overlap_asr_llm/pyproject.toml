@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "overlap-asr-llm"
+version = "0.1.0"
+description = "Overlapping speech ASR, diarization, separation, and LLM/RAG experiment suite."
+requires-python = ">=3.10"
+
+[project.scripts]
+overlap-asr-llm = "overlap_asr_llm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
