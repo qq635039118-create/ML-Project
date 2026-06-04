@@ -47,6 +47,7 @@ def _error_result(
     started: float,
     error: Exception,
 ) -> PipelineResult:
+    print(f"\n❌ [PIPELINE CRASHED] Pipeline: {pipeline}, Error: {error}\n")
     return PipelineResult(
         sample_id=sample.id,
         audio_path=str(sample.audio_path),
@@ -94,7 +95,7 @@ def run_diarization_asr(config: ExperimentConfig, sample: Sample) -> PipelineRes
         asr = make_asr(asr_name)
         diarizer = make_diarizer(diarizer_name)
         transcript = asr.transcribe(sample.audio_path, config.language)
-        labeled = diarizer.label(transcript, sample.speakers)
+        labeled = diarizer.label(transcript, sample.audio_path, sample.speakers)
         cer_value, wer_value = _score(sample.reference, labeled.text)
         return PipelineResult(
             sample_id=sample.id,

@@ -4,7 +4,7 @@
   "language": "zh",
   "models": {
     "asr": "mock",
-    "diarization": "mock",
+    "diarization": "speechbrain",
     "separation": "mock",
     "llm": "mock"
   },
@@ -17,21 +17,21 @@
   "samples": [
     {
       "id": "no_overlap_demo",
-      "audio_path": "data/samples/no_overlap_demo.wav",
+      "audio_path": "mixed_test_audio/NoOverlap.wav",
       "overlap_level": "none",
       "speakers": 2,
       "reference": "speaker one introduces the task speaker two explains the result"
     },
     {
       "id": "light_overlap_demo",
-      "audio_path": "data/samples/light_overlap_demo.wav",
+      "audio_path": "mixed_test_audio/LightOverlap.wav",
       "overlap_level": "light",
       "speakers": 2,
       "reference": "speaker one asks a question speaker two answers with partial overlap"
     },
     {
       "id": "heavy_overlap_demo",
-      "audio_path": "data/samples/heavy_overlap_demo.wav",
+      "audio_path": "mixed_test_audio/HeavyOverlap.wav",
       "overlap_level": "heavy",
       "speakers": 2,
       "reference": "both speakers talk at the same time and the transcript becomes difficult"
