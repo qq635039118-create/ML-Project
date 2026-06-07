@@ -1,0 +1,59 @@
+{
+  "project_name": "overlap_asr_llm",
+  "output_dir": "outputs",
+  "language": "zh",
+  "models": {
+    "asr": "funasr",
+    "diarization": "mock",
+    "separation": "mock",
+    "llm": "mock"
+  },
+  "pipelines": [
+    "direct_asr"
+  ],
+  "rag_context": [
+    "The audio samples come from a two-speaker Chinese debate scenario.",
+    "The five samples keep the same debate material but change speaker timing to create different overlap levels.",
+    "Speaker diarization can label who spoke when, but it cannot recover words hidden by strong overlap.",
+    "Speech separation may recover speaker-specific content, but it can introduce artifacts that hurt ASR.",
+    "LLM/RAG refinement may only improve punctuation, formatting, speaker readability, and debate terminology.",
+    "The refiner must not invent claims, arguments, or words that are not supported by ASR outputs."
+  ],
+  "samples": [
+    {
+      "id": "no_overlap",
+      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav",
+      "overlap_level": "none",
+      "speakers": 2,
+      "reference": null
+    },
+    {
+      "id": "light_overlap",
+      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav",
+      "overlap_level": "light",
+      "speakers": 2,
+      "reference": null
+    },
+    {
+      "id": "mid_overlap",
+      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav",
+      "overlap_level": "medium",
+      "speakers": 2,
+      "reference": null
+    },
+    {
+      "id": "heavy_overlap",
+      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav",
+      "overlap_level": "heavy",
+      "speakers": 2,
+      "reference": null
+    },
+    {
+      "id": "opposite_overlap",
+      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav",
+      "overlap_level": "opposite",
+      "speakers": 2,
+      "reference": null
+    }
+  ]
+}

@@ -23,7 +23,7 @@ dependencies.
 Chinese team quick start: `docs/QUICK_START_FOR_TEAM_CN.md`
 
 ```bash
-cd project/overlap_asr_llm
+cd project
 PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
 ```
 
@@ -32,6 +32,7 @@ The command writes:
 - `outputs/results.json`
 - `outputs/results.csv`
 - `outputs/run_summary.md`
+- `outputs/qualitative_review_template.csv`
 
 ## Real Model Mode
 
@@ -98,6 +99,10 @@ If a reference transcript is available, the runner computes:
 
 If no reference is available, metrics are left empty and the output can still be
 used for qualitative analysis.
+
+The qualitative review template is for manual readability scores and failure
+cases such as missing words, speaker mixing, separation artifacts, and LLM
+hallucination risk.
 
 ## Submission Checklist
 

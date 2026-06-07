@@ -7,6 +7,7 @@ machine. Optional heavy dependencies are imported lazily.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from pathlib import Path
 import shutil
 
@@ -57,12 +58,22 @@ class FunASR:
     name = "funasr"
 
     def __init__(self) -> None:
+        cache_dir = Path(
+            os.environ.get("OVERLAP_ASR_LLM_CACHE_DIR", "outputs/modelscope_cache")
+        ).resolve()
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        os.environ.setdefault("MODELSCOPE_CACHE", str(cache_dir))
+
         from funasr import AutoModel
+        import torch
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.model = AutoModel(
-            model="paraformer-zh",
-            vad_model="fsmn-vad",
-            punc_model="ct-punc",
+            model="iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
+            vad_model="iic/speech_fsmn_vad_zh-cn-16k-common-pytorch",
+            punc_model="iic/punc_ct-transformer_cn-en-common-vocab471067-large",
+            device=device,
             disable_update=True,
         )
 

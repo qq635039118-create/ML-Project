@@ -183,9 +183,12 @@ def run_all(config: ExperimentConfig) -> list[PipelineResult]:
     config.output_dir.mkdir(parents=True, exist_ok=True)
     results: list[PipelineResult] = []
     for sample in config.samples:
-        direct = run_direct_asr(config, sample)
-        diarized = run_diarization_asr(config, sample)
-        separated = run_separation_asr(config, sample)
-        results.extend([direct, diarized, separated])
-        results.append(run_llm_rag_refine(config, sample, results))
+        if "direct_asr" in config.pipelines:
+            results.append(run_direct_asr(config, sample))
+        if "diarization_asr" in config.pipelines:
+            results.append(run_diarization_asr(config, sample))
+        if "separation_asr" in config.pipelines:
+            results.append(run_separation_asr(config, sample))
+        if "llm_rag_refine" in config.pipelines:
+            results.append(run_llm_rag_refine(config, sample, results))
     return results

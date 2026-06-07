@@ -18,6 +18,12 @@ def main() -> int:
     config.models.update(
         {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
     )
+    config.pipelines[:] = [
+        "direct_asr",
+        "diarization_asr",
+        "separation_asr",
+        "llm_rag_refine",
+    ]
     results = run_all(config)
     expected = len(config.samples) * 4
     if len(results) != expected:

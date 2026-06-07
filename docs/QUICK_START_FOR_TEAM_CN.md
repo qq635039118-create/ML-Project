@@ -6,7 +6,7 @@
 
 ```bash
 git clone <仓库地址>
-cd overlap_asr_llm
+cd <仓库目录>
 ```
 
 如果已经 clone 过：
@@ -24,6 +24,15 @@ python3 --version
 ```
 
 本项目的 mock 模式只依赖 Python 标准库，不需要先安装大型模型。
+
+如果使用 Anaconda，建议先创建独立环境：
+
+```bash
+conda create -n overlap-asr-llm python=3.10 -y
+conda activate overlap-asr-llm
+pip install -e .
+pip install pytest
+```
 
 ## 3. 先跑 mock 版本
 
@@ -167,6 +176,12 @@ LLM:        mock
 ```
 
 真实模型可能需要 GPU、较大下载量和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
+
+当前配置已经接入 5 个真实混合音频样本。人工听写参考文本见：
+
+```text
+docs/REFERENCE_TRANSCRIPTION_CN.md
+```
 
 ## 10. 每个人要更新贡献记录
 
