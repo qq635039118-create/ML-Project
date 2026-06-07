@@ -22,35 +22,35 @@
   "samples": [
     {
       "id": "no_overlap",
-      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav",
       "overlap_level": "none",
       "speakers": 2,
       "reference": null
     },
     {
       "id": "light_overlap",
-      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav",
       "overlap_level": "light",
       "speakers": 2,
       "reference": null
     },
     {
       "id": "mid_overlap",
-      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav",
       "overlap_level": "medium",
       "speakers": 2,
       "reference": null
     },
     {
       "id": "heavy_overlap",
-      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav",
       "overlap_level": "heavy",
       "speakers": 2,
       "reference": null
     },
     {
       "id": "opposite_overlap",
-      "audio_path": "xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav",
       "overlap_level": "opposite",
       "speakers": 2,
       "reference": null

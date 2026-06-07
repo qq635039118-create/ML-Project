@@ -8,11 +8,11 @@
 
 | Sample ID | Audio | Overlap Level | Reference Status |
 | --- | --- | --- | --- |
-| `no_overlap` | `xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav` | none | TODO |
-| `light_overlap` | `xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav` | light | TODO |
-| `mid_overlap` | `xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav` | medium | TODO |
-| `heavy_overlap` | `xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav` | heavy | TODO |
-| `opposite_overlap` | `xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav` | opposite | TODO |
+| `no_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav` | none | TODO |
+| `light_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav` | light | TODO |
+| `mid_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav` | medium | TODO |
+| `heavy_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav` | heavy | TODO |
+| `opposite_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav` | opposite | TODO |
 
 ## 建议格式
 

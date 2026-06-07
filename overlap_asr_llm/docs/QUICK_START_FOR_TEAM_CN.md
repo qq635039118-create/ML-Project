@@ -6,7 +6,7 @@
 
 ```bash
 git clone <仓库地址>
-cd <仓库目录>
+cd <仓库目录>/overlap_asr_llm
 ```
 
 如果已经 clone 过：

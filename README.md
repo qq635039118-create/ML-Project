@@ -23,7 +23,7 @@ dependencies.
 Chinese team quick start: `docs/QUICK_START_FOR_TEAM_CN.md`
 
 ```bash
-cd project
+cd project/overlap_asr_llm
 PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
 ```
 
