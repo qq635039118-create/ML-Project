@@ -311,6 +311,42 @@ class MockLLMRefiner:
             return f"{text}\n\n[Context used] {prefix}"
         return text
 
+class LocalLLMRefiner:
+    name = "local_llm_refiner"
+
+    def __init__(self, model_name: str = "qwen2.5:7b"):
+        from openai import OpenAI
+        
+        # 本地运行Ollama
+        self.client = OpenAI(
+            base_url='http://localhost:11434/v1',
+            api_key='ollama',
+        )
+        self.model_name = model_name
+
+    def refine(self, text: str, context: list[str]) -> str:
+        rag_bullet_points = "\n".join(f"- {c}" for c in context)
+        system_prompt = (
+            "你是一个专业的语音转录文本格式化工具。你的任务是根据提供的RAG词汇表，"
+            "修正文本中的错别字，并输出带有说话人标签的对话剧本。\n"
+            f"【专业词汇表】\n{rag_bullet_points}\n\n"
+            "【要求】只输出最终剧本，严禁编造音频中没有的内容，不要输出任何解释说明。"
+        )
+
+        try:
+            print(f"[INFO] Requesting Local Model ({self.model_name}) via Ollama...")
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": f"整理以下ASR输出:\n\n{text}"}
+                ],
+                temperature=0.0 # 对小模型来说，温度设为0能最大程度减少幻觉
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"[WARN] Local LLM Failed: {e}")
+            return f"[LLM ERROR] {text}"
 
 def make_asr(kind: str):
     if kind == "mock":
@@ -345,4 +381,8 @@ def make_separator(kind: str):
 def make_llm_refiner(kind: str):
     if kind == "mock":
         return MockLLMRefiner()
+    if kind.startswith("ollama"):
+        parts = kind.split(":", 1)
+        model_name = parts[1] if len(parts) == 2 else "qwen2.5:7b"
+        return LocalLLMRefiner(model_name=model_name)
     raise ValueError(f"Unsupported LLM provider: {kind}")

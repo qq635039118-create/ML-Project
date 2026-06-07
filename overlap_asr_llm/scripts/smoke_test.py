@@ -8,9 +8,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
 sys.path.insert(0, str(SRC))
 
-from overlap_asr_llm.config import load_config
-from overlap_asr_llm.io import write_results
-from overlap_asr_llm.pipelines import run_all
+from src.config import load_config
+from src.io import write_results
+from src.pipelines import run_all
 
 
 def main() -> int:

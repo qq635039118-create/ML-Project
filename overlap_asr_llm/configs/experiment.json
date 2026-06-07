@@ -6,13 +6,13 @@
     "asr": "mock",
     "diarization": "speechbrain",
     "separation": "mock",
-    "llm": "mock"
+    "llm": "ollama:qwen2.5:7b"
   },
   "rag_context": [
-    "Speaker diarization assigns speaker labels to speech segments.",
-    "Speech separation tries to split mixed audio into speaker-specific streams.",
-    "ASR quality often degrades when multiple speakers overlap.",
-    "LLM refinement may improve readability but can hallucinate unsupported words."
+    "专有名词：Speaker Diarization (说话人日志分离)",
+    "专有名词：LLM (大语言模型)",
+    "专有名词：ASR (自动语音识别)",
+    "团队成员名字：Kevin, Bob, Alice"
   ],
   "samples": [
     {
