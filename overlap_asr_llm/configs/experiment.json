@@ -9,7 +9,10 @@
     "llm": "mock"
   },
   "pipelines": [
-    "direct_asr"
+    "direct_asr",
+    "diarization_asr",
+    "separation_asr",
+    "llm_rag_refine"
   ],
   "rag_context": [
     "The audio samples come from a two-speaker Chinese debate scenario.",
@@ -22,38 +25,38 @@
   "samples": [
     {
       "id": "no_overlap",
-      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav",
+      "audio_path": "data/samples/no_overlap.wav",
       "overlap_level": "none",
       "speakers": 2,
-      "reference": null
+      "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
       "id": "light_overlap",
-      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav",
+      "audio_path": "data/samples/light_overlap.wav",
       "overlap_level": "light",
       "speakers": 2,
-      "reference": null
+      "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
       "id": "mid_overlap",
-      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav",
+      "audio_path": "data/samples/mid_overlap.wav",
       "overlap_level": "medium",
       "speakers": 2,
-      "reference": null
+      "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
       "id": "heavy_overlap",
-      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav",
+      "audio_path": "data/samples/heavy_overlap.wav",
       "overlap_level": "heavy",
       "speakers": 2,
-      "reference": null
+      "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
       "id": "opposite_overlap",
-      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav",
+      "audio_path": "data/samples/opposite_overlap.wav",
       "overlap_level": "opposite",
       "speakers": 2,
-      "reference": null
+      "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     }
   ]
 }
