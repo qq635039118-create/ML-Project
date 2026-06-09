@@ -5,58 +5,92 @@
   "models": {
     "asr": "funasr",
     "diarization": "mock",
-    "separation": "mock",
     "llm": "mock"
   },
+  "asr_models": [
+    "funasr",
+    "whisper:base"
+  ],
   "pipelines": [
-    "direct_asr",
-    "diarization_asr",
-    "separation_asr",
-    "llm_rag_refine"
+    "direct_asr"
   ],
   "rag_context": [
     "The audio samples come from a two-speaker Chinese debate scenario.",
     "The five samples keep the same debate material but change speaker timing to create different overlap levels.",
     "Speaker diarization can label who spoke when, but it cannot recover words hidden by strong overlap.",
-    "Speech separation may recover speaker-specific content, but it can introduce artifacts that hurt ASR.",
     "LLM/RAG refinement may only improve punctuation, formatting, speaker readability, and debate terminology.",
     "The refiner must not invent claims, arguments, or words that are not supported by ASR outputs."
   ],
   "samples": [
     {
-      "id": "no_overlap",
+      "id": "new_no_overlap",
       "audio_path": "data/samples/no_overlap.wav",
       "overlap_level": "none",
       "speakers": 2,
       "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
-      "id": "light_overlap",
+      "id": "new_light_overlap",
       "audio_path": "data/samples/light_overlap.wav",
       "overlap_level": "light",
       "speakers": 2,
       "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
-      "id": "mid_overlap",
+      "id": "new_mid_overlap",
       "audio_path": "data/samples/mid_overlap.wav",
       "overlap_level": "medium",
       "speakers": 2,
       "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
-      "id": "heavy_overlap",
+      "id": "new_heavy_overlap",
       "audio_path": "data/samples/heavy_overlap.wav",
       "overlap_level": "heavy",
       "speakers": 2,
       "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
     },
     {
-      "id": "opposite_overlap",
+      "id": "new_opposite_overlap",
       "audio_path": "data/samples/opposite_overlap.wav",
       "overlap_level": "opposite",
       "speakers": 2,
       "reference": "我认为人工智能技术应该广泛应用在教育领域，因为它能提供个性化的学习体验。每个学生都能得到适合自己水平的教学内容。数据分析可以帮助老师及时发现学生的问题。而且AI可以节省教师大量批改作业的时间。所以在课堂上引入AI是非常有必要的做法。但是过度依赖AI可能会削弱学生的独立思考能力。教育不仅仅是知识的传递，更重要的是价值观的培养。AI无法理解学生的情感需求。技术再好也不能替代人与人之间的互动。我们必须谨慎对待AI在教育中的应用。"
+    },
+    {
+      "id": "xutong_no_overlap",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav",
+      "overlap_level": "none",
+      "speakers": 2,
+      "reference": "你方是要，那它是怎么缓解我们的空虚的，没问题，没问题，先不着急，因为有一个前提性的问题没有讨论，其实在讲的熬夜所谓的熬夜就是晚睡晚起是吧，好，我先聊晚睡晚起，既然你是晚睡晚起，你上班的时间必定也晚，你下班的时间必定也晚，那你个人的生活空间必定也就这么点，你是怎么多出额外的时间来过自己的生活的，我的意思是两点睡额十点起，跟八点睡六点起，我的个人的可以支配的日常时间是一致的对吧，我多了两个小时。哦，它让你在那个时间段里拥有了自己，哪怕这个自己是一个刷抖音的自己，额我方这里再稍微解释一下，其实布洛芬也是一种药，我方觉得晚睡晚起也是熬夜，晚睡早起也是熬夜了，因为你可以早睡早起，因为你可以为了身体健康早睡晚起，哦，不太一致，我可以给你解释，你没有多两个小时，但是你自己的时间多了两个，我可以给你解释。"
+    },
+    {
+      "id": "xutong_light_overlap",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav",
+      "overlap_level": "light",
+      "speakers": 2,
+      "reference": "你方是要，那它是怎么缓解我们的空虚的，没问题，没问题，先不着急，因为有一个前提性的问题没有讨论，其实在讲的熬夜所谓的熬夜就是晚睡晚起是吧，好，我先聊晚睡晚起，既然你是晚睡晚起，你上班的时间必定也晚，你下班的时间必定也晚，那你个人的生活空间必定也就这么点，你是怎么多出额外的时间来过自己的生活的，我的意思是两点睡额十点起，跟八点睡六点起，我的个人的可以支配的日常时间是一致的对吧，我多了两个小时。哦，它让你在那个时间段里拥有了自己，哪怕这个自己是一个刷抖音的自己，额我方这里再稍微解释一下，其实布洛芬也是一种药，我方觉得晚睡晚起也是熬夜，晚睡早起也是熬夜了，因为你可以早睡早起，因为你可以为了身体健康早睡晚起，哦，不太一致，我可以给你解释，你没有多两个小时，但是你自己的时间多了两个，我可以给你解释。"
+    },
+    {
+      "id": "xutong_mid_overlap",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav",
+      "overlap_level": "medium",
+      "speakers": 2,
+      "reference": "你方是要，那它是怎么缓解我们的空虚的，没问题，没问题，先不着急，因为有一个前提性的问题没有讨论，其实在讲的熬夜所谓的熬夜就是晚睡晚起是吧，好，我先聊晚睡晚起，既然你是晚睡晚起，你上班的时间必定也晚，你下班的时间必定也晚，那你个人的生活空间必定也就这么点，你是怎么多出额外的时间来过自己的生活的，我的意思是两点睡额十点起，跟八点睡六点起，我的个人的可以支配的日常时间是一致的对吧，我多了两个小时。哦，它让你在那个时间段里拥有了自己，哪怕这个自己是一个刷抖音的自己，额我方这里再稍微解释一下，其实布洛芬也是一种药，我方觉得晚睡晚起也是熬夜，晚睡早起也是熬夜了，因为你可以早睡早起，因为你可以为了身体健康早睡晚起，哦，不太一致，我可以给你解释，你没有多两个小时，但是你自己的时间多了两个，我可以给你解释。"
+    },
+    {
+      "id": "xutong_heavy_overlap",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav",
+      "overlap_level": "heavy",
+      "speakers": 2,
+      "reference": "你方是要，那它是怎么缓解我们的空虚的，没问题，没问题，先不着急，因为有一个前提性的问题没有讨论，其实在讲的熬夜所谓的熬夜就是晚睡晚起是吧，好，我先聊晚睡晚起，既然你是晚睡晚起，你上班的时间必定也晚，你下班的时间必定也晚，那你个人的生活空间必定也就这么点，你是怎么多出额外的时间来过自己的生活的，我的意思是两点睡额十点起，跟八点睡六点起，我的个人的可以支配的日常时间是一致的对吧，我多了两个小时。哦，它让你在那个时间段里拥有了自己，哪怕这个自己是一个刷抖音的自己，额我方这里再稍微解释一下，其实布洛芬也是一种药，我方觉得晚睡晚起也是熬夜，晚睡早起也是熬夜了，因为你可以早睡早起，因为你可以为了身体健康早睡晚起，哦，不太一致，我可以给你解释，你没有多两个小时，但是你自己的时间多了两个，我可以给你解释。"
+    },
+    {
+      "id": "xutong_opposite_overlap",
+      "audio_path": "../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav",
+      "overlap_level": "opposite",
+      "speakers": 2,
+      "reference": "你方是要，那它是怎么缓解我们的空虚的，没问题，没问题，先不着急，因为有一个前提性的问题没有讨论，其实在讲的熬夜所谓的熬夜就是晚睡晚起是吧，好，我先聊晚睡晚起，既然你是晚睡晚起，你上班的时间必定也晚，你下班的时间必定也晚，那你个人的生活空间必定也就这么点，你是怎么多出额外的时间来过自己的生活的，我的意思是两点睡额十点起，跟八点睡六点起，我的个人的可以支配的日常时间是一致的对吧，我多了两个小时。哦，它让你在那个时间段里拥有了自己，哪怕这个自己是一个刷抖音的自己，额我方这里再稍微解释一下，其实布洛芬也是一种药，我方觉得晚睡晚起也是熬夜，晚睡早起也是熬夜了，因为你可以早睡早起，因为你可以为了身体健康早睡晚起，哦，不太一致，我可以给你解释，你没有多两个小时，但是你自己的时间多了两个，我可以给你解释。"
     }
   ]
 }

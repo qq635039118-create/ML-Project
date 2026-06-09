@@ -5,8 +5,14 @@ from __future__ import annotations
 import re
 
 
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+_TOKEN_RE = re.compile(r"[\u4e00-\u9fff]|[a-z0-9]+", re.IGNORECASE)
+_PUNCTUATION_RE = re.compile(r"[^\w\s\u4e00-\u9fff]", re.UNICODE)
+
+
 def normalize_text(text: str) -> str:
     text = text.lower().strip()
+    text = _PUNCTUATION_RE.sub("", text)
     text = re.sub(r"\s+", " ", text)
     return text
 
@@ -36,9 +42,20 @@ def cer(reference: str, hypothesis: str) -> float:
     return edit_distance(ref, hyp) / len(ref)
 
 
+def tokenize_words(text: str) -> list[str]:
+    normalized = normalize_text(text)
+    if _CJK_RE.search(normalized):
+        try:
+            import jieba  # type: ignore
+        except ImportError:
+            return _TOKEN_RE.findall(normalized)
+        return [token for token in jieba.lcut(normalized) if token.strip()]
+    return normalized.split()
+
+
 def wer(reference: str, hypothesis: str) -> float:
-    ref = normalize_text(reference).split()
-    hyp = normalize_text(hypothesis).split()
+    ref = tokenize_words(reference)
+    hyp = tokenize_words(hypothesis)
     if not ref:
         return 0.0 if not hyp else 1.0
     return edit_distance(ref, hyp) / len(ref)

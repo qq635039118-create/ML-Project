@@ -11,6 +11,35 @@ from .metrics import cer, wer
 from .providers import make_asr, make_diarizer, make_llm_refiner, make_separator
 
 
+class ProviderCache:
+    def __init__(self, config: ExperimentConfig) -> None:
+        self.config = config
+        self._asr = None
+        self._diarizer = None
+        self._separator = None
+        self._refiner = None
+
+    def asr(self):
+        if self._asr is None:
+            self._asr = make_asr(self.config.models.get("asr", "mock"))
+        return self._asr
+
+    def diarizer(self):
+        if self._diarizer is None:
+            self._diarizer = make_diarizer(self.config.models.get("diarization", "mock"))
+        return self._diarizer
+
+    def separator(self):
+        if self._separator is None:
+            self._separator = make_separator(self.config.models.get("separation", "mock"))
+        return self._separator
+
+    def refiner(self):
+        if self._refiner is None:
+            self._refiner = make_llm_refiner(self.config.models.get("llm", "mock"))
+        return self._refiner
+
+
 @dataclass
 class PipelineResult:
     sample_id: str
@@ -62,11 +91,16 @@ def _error_result(
     )
 
 
-def run_direct_asr(config: ExperimentConfig, sample: Sample) -> PipelineResult:
+def run_direct_asr(
+    config: ExperimentConfig,
+    sample: Sample,
+    providers: ProviderCache | None = None,
+) -> PipelineResult:
     started = time.perf_counter()
     model_name = config.models.get("asr", "mock")
     try:
-        asr = make_asr(model_name)
+        asr = providers.asr() if providers else make_asr(model_name)
+        started = time.perf_counter()
         transcript = asr.transcribe(sample.audio_path, config.language)
         cer_value, wer_value = _score(sample.reference, transcript.text)
         return PipelineResult(
@@ -85,14 +119,19 @@ def run_direct_asr(config: ExperimentConfig, sample: Sample) -> PipelineResult:
         return _error_result(sample, "direct_asr", model_name, started, exc)
 
 
-def run_diarization_asr(config: ExperimentConfig, sample: Sample) -> PipelineResult:
+def run_diarization_asr(
+    config: ExperimentConfig,
+    sample: Sample,
+    providers: ProviderCache | None = None,
+) -> PipelineResult:
     started = time.perf_counter()
     asr_name = config.models.get("asr", "mock")
     diarizer_name = config.models.get("diarization", "mock")
     model_name = f"{asr_name}+{diarizer_name}"
     try:
-        asr = make_asr(asr_name)
-        diarizer = make_diarizer(diarizer_name)
+        asr = providers.asr() if providers else make_asr(asr_name)
+        diarizer = providers.diarizer() if providers else make_diarizer(diarizer_name)
+        started = time.perf_counter()
         transcript = asr.transcribe(sample.audio_path, config.language)
         labeled = diarizer.label(transcript, sample.speakers)
         cer_value, wer_value = _score(sample.reference, labeled.text)
@@ -112,14 +151,19 @@ def run_diarization_asr(config: ExperimentConfig, sample: Sample) -> PipelineRes
         return _error_result(sample, "diarization_asr", model_name, started, exc)
 
 
-def run_separation_asr(config: ExperimentConfig, sample: Sample) -> PipelineResult:
+def run_separation_asr(
+    config: ExperimentConfig,
+    sample: Sample,
+    providers: ProviderCache | None = None,
+) -> PipelineResult:
     started = time.perf_counter()
     asr_name = config.models.get("asr", "mock")
     separator_name = config.models.get("separation", "mock")
     model_name = f"{separator_name}+{asr_name}"
     try:
-        asr = make_asr(asr_name)
-        separator = make_separator(separator_name)
+        asr = providers.asr() if providers else make_asr(asr_name)
+        separator = providers.separator() if providers else make_separator(separator_name)
+        started = time.perf_counter()
         separated_dir = config.output_dir / "separated_audio" / sample.id
         speaker_paths = separator.separate(sample.audio_path, separated_dir, sample.speakers)
         parts = []
@@ -151,11 +195,13 @@ def run_llm_rag_refine(
     config: ExperimentConfig,
     sample: Sample,
     source_results: list[PipelineResult],
+    providers: ProviderCache | None = None,
 ) -> PipelineResult:
     started = time.perf_counter()
     llm_name = config.models.get("llm", "mock")
     try:
-        refiner = make_llm_refiner(llm_name)
+        refiner = providers.refiner() if providers else make_llm_refiner(llm_name)
+        started = time.perf_counter()
         source_text = "\n".join(
             f"{result.pipeline}: {result.text}"
             for result in source_results
@@ -181,14 +227,15 @@ def run_llm_rag_refine(
 
 def run_all(config: ExperimentConfig) -> list[PipelineResult]:
     config.output_dir.mkdir(parents=True, exist_ok=True)
+    providers = ProviderCache(config)
     results: list[PipelineResult] = []
     for sample in config.samples:
         if "direct_asr" in config.pipelines:
-            results.append(run_direct_asr(config, sample))
+            results.append(run_direct_asr(config, sample, providers))
         if "diarization_asr" in config.pipelines:
-            results.append(run_diarization_asr(config, sample))
+            results.append(run_diarization_asr(config, sample, providers))
         if "separation_asr" in config.pipelines:
-            results.append(run_separation_asr(config, sample))
+            results.append(run_separation_asr(config, sample, providers))
         if "llm_rag_refine" in config.pipelines:
-            results.append(run_llm_rag_refine(config, sample, results))
+            results.append(run_llm_rag_refine(config, sample, results, providers))
     return results

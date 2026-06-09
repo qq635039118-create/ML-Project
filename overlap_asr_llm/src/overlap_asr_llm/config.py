@@ -23,6 +23,7 @@ class ExperimentConfig:
     output_dir: Path
     language: str
     models: dict[str, str]
+    asr_models: list[str]
     pipelines: list[str]
     rag_context: list[str]
     samples: list[Sample]
@@ -56,6 +57,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
         output_dir=(base_dir / raw["output_dir"]).resolve(),
         language=raw["language"],
         models=dict(raw["models"]),
+        asr_models=list(raw.get("asr_models", [raw["models"].get("asr", "mock")])),
         pipelines=list(
             raw.get(
                 "pipelines",
