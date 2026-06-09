@@ -64,8 +64,7 @@ can make transcripts easier to read but depends on reliable segmentation. LLM/RA
 refinement can improve formatting and domain terms, but every correction must be
 checked against the audio to avoid hallucination.
 
-## Manual Review
+## Outputs
 
-The runner writes `outputs/qualitative_review_template.csv`. Fill one row per
-sample and pipeline with readability score, failure type, and a short observation
-such as missing words, speaker mixing, separation artifact, or hallucination risk.
+The runner writes `outputs/results.csv`, `outputs/results.json`, and
+`outputs/run_summary.md` for comparing model text, runtime, CER, and WER.

@@ -41,7 +41,16 @@ class WhisperASR:
         self.model = whisper.load_model(model_name)
 
     def transcribe(self, audio_path: Path, language: str) -> Transcript:
-        result = self.model.transcribe(str(audio_path), language=language, verbose=False)
+        result = self.model.transcribe(
+            str(audio_path),
+            language=language,
+            verbose=False,
+            beam_size=1,
+            best_of=1,
+            temperature=0.0,
+            condition_on_previous_text=False,
+            fp16=True,
+        )
         segments = [
             {
                 "start": float(seg.get("start", 0.0)),

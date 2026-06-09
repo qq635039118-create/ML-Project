@@ -31,7 +31,7 @@ class TestRunner(unittest.TestCase):
             },
         )
 
-    def test_writer_produces_qualitative_review_template(self):
+    def test_writer_produces_core_result_files_only(self):
         config = load_config(Path("configs/experiment.json"))
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
@@ -39,9 +39,10 @@ class TestRunner(unittest.TestCase):
         results = run_all(config)
         with tempfile.TemporaryDirectory() as tmpdir:
             write_results(results, Path(tmpdir))
-            review_path = Path(tmpdir) / "qualitative_review_template.csv"
-            self.assertTrue(review_path.exists())
-            self.assertIn("manual_readability_1_to_5", review_path.read_text())
+            self.assertTrue((Path(tmpdir) / "results.csv").exists())
+            self.assertTrue((Path(tmpdir) / "results.json").exists())
+            self.assertTrue((Path(tmpdir) / "run_summary.md").exists())
+            self.assertFalse((Path(tmpdir) / "qualitative_review_template.csv").exists())
 
     def test_runner_can_select_direct_asr_only(self):
         config = load_config(Path("configs/experiment.json"))

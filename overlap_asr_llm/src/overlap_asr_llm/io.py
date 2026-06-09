@@ -37,9 +37,6 @@ def write_results(results: list[PipelineResult], output_dir: Path) -> None:
         writer.writerows(rows)
 
     write_summary(results, output_dir / "run_summary.md")
-    write_qualitative_review_template(
-        results, output_dir / "qualitative_review_template.csv"
-    )
 
 
 def write_summary(results: list[PipelineResult], path: Path) -> None:
@@ -65,34 +62,3 @@ def write_summary(results: list[PipelineResult], path: Path) -> None:
             f"{error} |"
         )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-def write_qualitative_review_template(
-    results: list[PipelineResult],
-    path: Path,
-) -> None:
-    """Write a human review sheet for readability and failure-case analysis."""
-    fieldnames = [
-        "sample_id",
-        "overlap_level",
-        "pipeline",
-        "manual_readability_1_to_5",
-        "failure_type",
-        "observation",
-        "hallucination_risk",
-    ]
-    with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for result in results:
-            writer.writerow(
-                {
-                    "sample_id": result.sample_id,
-                    "overlap_level": result.overlap_level,
-                    "pipeline": result.pipeline,
-                    "manual_readability_1_to_5": "",
-                    "failure_type": "",
-                    "observation": "",
-                    "hallucination_risk": "",
-                }
-            )

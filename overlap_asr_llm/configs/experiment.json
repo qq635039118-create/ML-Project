@@ -9,7 +9,7 @@
   },
   "asr_models": [
     "funasr",
-    "whisper:base"
+    "whisper:large-v3"
   ],
   "pipelines": [
     "direct_asr"
