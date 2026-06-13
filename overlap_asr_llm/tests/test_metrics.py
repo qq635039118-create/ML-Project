@@ -1,6 +1,6 @@
 import unittest
 
-from overlap_asr_llm.metrics import cer, wer
+from overlap_asr_llm.metrics import cer, strip_speaker_labels, wer
 
 
 class TestMetrics(unittest.TestCase):
@@ -12,6 +12,12 @@ class TestMetrics(unittest.TestCase):
 
     def test_wer_chinese_without_spaces(self):
         self.assertLess(wer("你方是要它怎么缓解空虚", "你方是药它怎么缓解空虚"), 1.0)
+
+    def test_strip_speaker_labels(self):
+        self.assertEqual(
+            strip_speaker_labels("[SPEAKER_00] 你好 [SPEAKER1] 世界").strip(),
+            "你好   世界",
+        )
 
 
 if __name__ == "__main__":

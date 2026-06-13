@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 
 from .config import load_config
@@ -25,6 +26,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Force all providers to mock mode for local smoke tests.",
     )
+    run_parser.add_argument(
+        "--incremental",
+        action="store_true",
+        help="Write outputs after each sample so long experiments keep partial results.",
+    )
     return parser
 
 
@@ -38,8 +44,15 @@ def main(argv: list[str] | None = None) -> int:
             config.models.update(
                 {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
             )
-        results = run_all(config)
-        write_results(results, config.output_dir)
+        if args.incremental:
+            results = []
+            for sample in config.samples:
+                sample_config = replace(config, samples=[sample])
+                results.extend(run_all(sample_config))
+                write_results(results, config.output_dir, config.base_dir)
+        else:
+            results = run_all(config)
+        write_results(results, config.output_dir, config.base_dir)
         print(f"Wrote results to {config.output_dir}")
         return 0
 

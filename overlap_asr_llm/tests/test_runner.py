@@ -1,10 +1,13 @@
 from pathlib import Path
+from dataclasses import replace
+import os
 import tempfile
 import unittest
 
 from overlap_asr_llm.config import load_config
 from overlap_asr_llm.io import write_results
 from overlap_asr_llm.pipelines import run_all
+from overlap_asr_llm.providers import PyannoteDiarizer, _prepare_huggingface_download_env
 
 
 class TestRunner(unittest.TestCase):
@@ -19,7 +22,9 @@ class TestRunner(unittest.TestCase):
             "separation_asr",
             "llm_rag_refine",
         ]
-        results = run_all(config)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = replace(config, output_dir=Path(tmpdir))
+            results = run_all(config)
         self.assertEqual(len(results), len(config.samples) * 4)
         self.assertEqual(
             {result.pipeline for result in results},
@@ -36,13 +41,30 @@ class TestRunner(unittest.TestCase):
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
-        results = run_all(config)
+        config.pipelines[:] = ["diarization_asr"]
+        with tempfile.TemporaryDirectory() as run_tmpdir:
+            config = replace(config, output_dir=Path(run_tmpdir))
+            results = run_all(config)
         with tempfile.TemporaryDirectory() as tmpdir:
-            write_results(results, Path(tmpdir))
+            write_results(results, Path(tmpdir), config.base_dir)
             self.assertTrue((Path(tmpdir) / "results.csv").exists())
             self.assertTrue((Path(tmpdir) / "results.json").exists())
             self.assertTrue((Path(tmpdir) / "run_summary.md").exists())
+            self.assertTrue((Path(tmpdir) / "diarization_segments.csv").exists())
+            self.assertTrue((Path(tmpdir) / "diarization_segments.json").exists())
+            self.assertFalse((Path(tmpdir) / "README.md").exists())
             self.assertFalse((Path(tmpdir) / "qualitative_review_template.csv").exists())
+            segments_text = (Path(tmpdir) / "diarization_segments.csv").read_text()
+            self.assertIn("SPEAKER1", segments_text)
+            self.assertNotIn(str(Path.cwd()), segments_text)
+            results_text = (Path(tmpdir) / "results.csv").read_text()
+            self.assertIn("text_cer", results_text)
+            self.assertIn("text_wer", results_text)
+            summary_text = (Path(tmpdir) / "run_summary.md").read_text()
+            self.assertIn("Segments With Text", summary_text)
+            self.assertIn("Text CER", summary_text)
+            self.assertIn("Text WER", summary_text)
+            self.assertNotIn("| CER | WER |", summary_text)
 
     def test_runner_can_select_direct_asr_only(self):
         config = load_config(Path("configs/experiment.json"))
@@ -50,9 +72,59 @@ class TestRunner(unittest.TestCase):
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
         config.pipelines[:] = ["direct_asr"]
-        results = run_all(config)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = replace(config, output_dir=Path(tmpdir))
+            results = run_all(config)
         self.assertEqual(len(results), len(config.samples))
         self.assertEqual({result.pipeline for result in results}, {"direct_asr"})
+
+    def test_config_can_set_asr_prompt(self):
+        config = load_config(Path("configs/diarization_faster_whisper_samples2.json"))
+        self.assertIsNotNone(config.asr_prompt)
+        self.assertIn("简体中文", config.asr_prompt or "")
+
+    def test_mock_diarization_adds_speaker_labels(self):
+        config = load_config(Path("configs/experiment.json"))
+        config.models.update(
+            {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
+        )
+        config.pipelines[:] = ["diarization_asr"]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = replace(config, output_dir=Path(tmpdir))
+            results = run_all(config)
+        self.assertEqual(len(results), len(config.samples))
+        self.assertEqual({result.pipeline for result in results}, {"diarization_asr"})
+        self.assertTrue(all("SPEAKER" in result.speaker_labels for result in results))
+
+    def test_pyannote_diarizer_accepts_diarize_output_wrapper(self):
+        annotation = object()
+
+        class DiarizeOutput:
+            speaker_diarization = annotation
+
+        self.assertIs(
+            PyannoteDiarizer._speaker_diarization_annotation(DiarizeOutput()),
+            annotation,
+        )
+
+    def test_pyannote_diarizer_accepts_raw_annotation(self):
+        annotation = object()
+        self.assertIs(
+            PyannoteDiarizer._speaker_diarization_annotation(annotation),
+            annotation,
+        )
+
+    def test_hf_mirror_endpoint_is_replaced_for_gated_downloads(self):
+        original = os.environ.get("HF_ENDPOINT")
+        try:
+            os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+            _prepare_huggingface_download_env()
+            self.assertEqual(os.environ["HF_ENDPOINT"], "https://huggingface.co")
+        finally:
+            if original is None:
+                os.environ.pop("HF_ENDPOINT", None)
+            else:
+                os.environ["HF_ENDPOINT"] = original
 
 
 if __name__ == "__main__":

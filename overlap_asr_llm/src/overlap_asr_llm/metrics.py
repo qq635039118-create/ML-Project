@@ -6,8 +6,13 @@ import re
 
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+_SPEAKER_LABEL_RE = re.compile(r"\[\s*SPEAKER[\w-]*\s*\]", re.IGNORECASE)
 _TOKEN_RE = re.compile(r"[\u4e00-\u9fff]|[a-z0-9]+", re.IGNORECASE)
 _PUNCTUATION_RE = re.compile(r"[^\w\s\u4e00-\u9fff]", re.UNICODE)
+
+
+def strip_speaker_labels(text: str) -> str:
+    return _SPEAKER_LABEL_RE.sub(" ", text)
 
 
 def normalize_text(text: str) -> str:

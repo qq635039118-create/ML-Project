@@ -16,7 +16,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from overlap_asr_llm.config import load_config  # noqa: E402
-from overlap_asr_llm.io import FIELDNAMES  # noqa: E402
+from overlap_asr_llm.io import FIELDNAMES, _public_path  # noqa: E402
 from overlap_asr_llm.pipelines import PipelineResult, run_all  # noqa: E402
 
 
@@ -66,20 +66,24 @@ def write_report(
 
 def combined_rows(
     results_by_model: dict[str, list[PipelineResult]],
+    base_dir: Path,
 ) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for model_name, results in results_by_model.items():
         for result in results:
-            rows.append({"asr_model": model_name, **result.to_dict()})
+            row = {"asr_model": model_name, **result.to_dict()}
+            row["audio_path"] = _public_path(str(row["audio_path"]), base_dir)
+            rows.append(row)
     return rows
 
 
 def write_results(
     results_by_model: dict[str, list[PipelineResult]],
     output_dir: Path,
+    base_dir: Path,
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
-    rows = combined_rows(results_by_model)
+    rows = combined_rows(results_by_model, base_dir)
 
     with (output_dir / "results.json").open("w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
@@ -87,7 +91,16 @@ def write_results(
     with (output_dir / "results.csv").open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=COMPARISON_FIELDNAMES)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(csv_safe_rows(rows))
+
+
+def csv_safe_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    csv_rows = []
+    for row in rows:
+        csv_row = dict(row)
+        csv_row["segments"] = json.dumps(csv_row.get("segments", []), ensure_ascii=False)
+        csv_rows.append(csv_row)
+    return csv_rows
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -136,7 +149,7 @@ def main() -> int:
         print(f"Finished {model_name}")
 
     write_report(results_by_model, output_path)
-    write_results(results_by_model, config.output_dir)
+    write_results(results_by_model, config.output_dir, config.base_dir)
     print(f"Wrote combined report to {output_path}")
     print(f"Wrote combined results to {config.output_dir}")
     return 0
