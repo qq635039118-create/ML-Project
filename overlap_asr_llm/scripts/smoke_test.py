@@ -14,7 +14,7 @@ from overlap_asr_llm.pipelines import run_all
 
 
 def main() -> int:
-    config = load_config(ROOT / "configs" / "experiment.json")
+    config = load_config(ROOT / "configs" / "mock.json")
     config.models.update(
         {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
     )

@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import json
 from pathlib import Path
 import tempfile
 import time
 
 from .config import ExperimentConfig, Sample
-from .metrics import cer, wer
+from .metrics import cer, speaker_block_score, wer
 from .providers import make_asr, make_diarizer, make_llm_refiner, make_separator
 
 
@@ -55,6 +56,14 @@ class PipelineResult:
     wer: float | None
     text_cer: float | None = None
     text_wer: float | None = None
+    flat_cer: float | None = None
+    flat_wer: float | None = None
+    timeline_cer: float | None = None
+    timeline_wer: float | None = None
+    speaker_block_cer: float | None = None
+    speaker_block_wer: float | None = None
+    best_speaker_mapping: str = ""
+    score_basis: str = "flat"
     error: str | None = None
     segments: list[dict[str, object]] = field(default_factory=list)
 
@@ -93,6 +102,129 @@ def _subtitle_text(segments: list[dict[str, object]]) -> str:
 
 def _plain_text_from_segments(segments: list[dict[str, object]]) -> str:
     return " ".join(str(segment.get("text", "")).strip() for segment in segments).strip()
+
+
+def _timeline_text_from_segments(segments: list[dict[str, object]]) -> str:
+    ordered = sorted(
+        segments,
+        key=lambda segment: (
+            float(segment.get("start", 0.0)),
+            float(segment.get("end", 0.0)),
+            str(segment.get("speaker", "")),
+        ),
+    )
+    return _plain_text_from_segments(ordered)
+
+
+def _speaker_texts_from_segments(
+    segments: list[dict[str, object]],
+) -> dict[str, str]:
+    speaker_texts: dict[str, list[str]] = {}
+    for segment in segments:
+        text = str(segment.get("text", "")).strip()
+        if not text:
+            continue
+        speaker = str(segment.get("speaker", "UNKNOWN"))
+        speaker_texts.setdefault(speaker, []).append(text)
+    return {
+        speaker: " ".join(parts).strip()
+        for speaker, parts in speaker_texts.items()
+        if " ".join(parts).strip()
+    }
+
+
+@dataclass(frozen=True)
+class ScoreBundle:
+    cer: float | None
+    wer: float | None
+    text_cer: float | None
+    text_wer: float | None
+    flat_cer: float | None
+    flat_wer: float | None
+    timeline_cer: float | None
+    timeline_wer: float | None
+    speaker_block_cer: float | None
+    speaker_block_wer: float | None
+    best_speaker_mapping: str
+    score_basis: str
+
+
+def _score_bundle(
+    sample: Sample,
+    flat_text: str,
+    segments: list[dict[str, object]] | None = None,
+    prefer_speaker_block: bool = False,
+) -> ScoreBundle:
+    flat_cer, flat_wer = _score(sample.reference, flat_text)
+    timeline_text = _timeline_text_from_segments(segments or []) if segments else flat_text
+    timeline_cer, timeline_wer = _score(sample.reference, timeline_text)
+
+    speaker_cer = None
+    speaker_wer = None
+    best_mapping = ""
+    if sample.reference_speakers and segments:
+        reference_speakers = {
+            item.speaker: item.text for item in sample.reference_speakers
+        }
+        hypothesis_speakers = _speaker_texts_from_segments(segments)
+        if len(hypothesis_speakers) >= 2:
+            speaker_score = speaker_block_score(
+                reference_speakers,
+                hypothesis_speakers,
+            )
+            if speaker_score is not None:
+                speaker_cer = speaker_score.cer
+                speaker_wer = speaker_score.wer
+                best_mapping = json.dumps(
+                    speaker_score.mapping,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+
+    if prefer_speaker_block and speaker_cer is not None and speaker_wer is not None:
+        primary_cer = speaker_cer
+        primary_wer = speaker_wer
+        score_basis = "speaker_block"
+    elif timeline_cer is not None and timeline_wer is not None:
+        primary_cer = timeline_cer
+        primary_wer = timeline_wer
+        score_basis = "timeline"
+    else:
+        primary_cer = flat_cer
+        primary_wer = flat_wer
+        score_basis = "flat"
+
+    return ScoreBundle(
+        cer=primary_cer,
+        wer=primary_wer,
+        text_cer=timeline_cer,
+        text_wer=timeline_wer,
+        flat_cer=flat_cer,
+        flat_wer=flat_wer,
+        timeline_cer=timeline_cer,
+        timeline_wer=timeline_wer,
+        speaker_block_cer=speaker_cer,
+        speaker_block_wer=speaker_wer,
+        best_speaker_mapping=best_mapping,
+        score_basis=score_basis,
+    )
+
+
+def _result_scores(score: ScoreBundle) -> dict[str, object]:
+    return {
+        "cer": score.cer,
+        "wer": score.wer,
+        "text_cer": score.text_cer,
+        "text_wer": score.text_wer,
+        "flat_cer": score.flat_cer,
+        "flat_wer": score.flat_wer,
+        "timeline_cer": score.timeline_cer,
+        "timeline_wer": score.timeline_wer,
+        "speaker_block_cer": score.speaker_block_cer,
+        "speaker_block_wer": score.speaker_block_wer,
+        "best_speaker_mapping": score.best_speaker_mapping,
+        "score_basis": score.score_basis,
+    }
 
 
 def _write_audio_excerpt(
@@ -183,6 +315,14 @@ def _error_result(
         wer=None,
         text_cer=None,
         text_wer=None,
+        flat_cer=None,
+        flat_wer=None,
+        timeline_cer=None,
+        timeline_wer=None,
+        speaker_block_cer=None,
+        speaker_block_wer=None,
+        best_speaker_mapping="",
+        score_basis="error",
         error=f"{type(error).__name__}: {error}",
         segments=[],
     )
@@ -203,7 +343,12 @@ def run_direct_asr(
             config.language,
             prompt=config.asr_prompt,
         )
-        cer_value, wer_value = _score(sample.reference, transcript.text)
+        score = _score_bundle(
+            sample,
+            transcript.text,
+            transcript.segments,
+            prefer_speaker_block=False,
+        )
         return PipelineResult(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
@@ -213,8 +358,7 @@ def run_direct_asr(
             text=transcript.text,
             speaker_labels=_labels_from_segments(transcript.segments),
             runtime_seconds=round(time.perf_counter() - started, 4),
-            cer=cer_value,
-            wer=wer_value,
+            **_result_scores(score),
             segments=transcript.segments,
         )
     except Exception as exc:
@@ -248,8 +392,12 @@ def run_diarization_asr(
             asr.release_gpu()
         subtitle_text = _subtitle_text(segments)
         plain_text = _plain_text_from_segments(segments)
-        cer_value, wer_value = _score(sample.reference, subtitle_text)
-        text_cer_value, text_wer_value = _score(sample.reference, plain_text)
+        score = _score_bundle(
+            sample,
+            plain_text,
+            segments,
+            prefer_speaker_block=True,
+        )
         return PipelineResult(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
@@ -259,10 +407,7 @@ def run_diarization_asr(
             text=subtitle_text,
             speaker_labels=_labels_from_segments(segments),
             runtime_seconds=round(time.perf_counter() - started, 4),
-            cer=cer_value,
-            wer=wer_value,
-            text_cer=text_cer_value,
-            text_wer=text_wer_value,
+            **_result_scores(score),
             segments=segments,
         )
     except Exception as exc:
@@ -313,7 +458,12 @@ def run_separation_asr(
             )
         text = " ".join(parts)
         plain_text = _plain_text_from_segments(segments)
-        cer_value, wer_value = _score(sample.reference, plain_text)
+        score = _score_bundle(
+            sample,
+            plain_text,
+            segments,
+            prefer_speaker_block=True,
+        )
         return PipelineResult(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
@@ -323,8 +473,7 @@ def run_separation_asr(
             text=text,
             speaker_labels=_labels_from_segments(segments),
             runtime_seconds=round(time.perf_counter() - started, 4),
-            cer=cer_value,
-            wer=wer_value,
+            **_result_scores(score),
             segments=segments,
         )
     except Exception as exc:
@@ -348,7 +497,7 @@ def run_llm_rag_refine(
             if result.sample_id == sample.id and not result.error
         )
         refined = refiner.refine(source_text, config.rag_context)
-        cer_value, wer_value = _score(sample.reference, refined)
+        score = _score_bundle(sample, refined)
         return PipelineResult(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
@@ -358,8 +507,7 @@ def run_llm_rag_refine(
             text=refined,
             speaker_labels="LLM_REFINED",
             runtime_seconds=round(time.perf_counter() - started, 4),
-            cer=cer_value,
-            wer=wer_value,
+            **_result_scores(score),
             segments=[],
         )
     except Exception as exc:

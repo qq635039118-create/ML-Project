@@ -7,12 +7,17 @@ import unittest
 from overlap_asr_llm.config import load_config
 from overlap_asr_llm.io import write_results
 from overlap_asr_llm.pipelines import run_all
-from overlap_asr_llm.providers import PyannoteDiarizer, _prepare_huggingface_download_env
+from overlap_asr_llm.providers import (
+    DEFAULT_PYANNOTE_DIARIZATION_MODEL,
+    PyannoteDiarizer,
+    _load_pyannote_pipeline,
+    _prepare_huggingface_download_env,
+)
 
 
 class TestRunner(unittest.TestCase):
     def test_mock_runner_produces_four_results_per_sample(self):
-        config = load_config(Path("configs/experiment.json"))
+        config = load_config(Path("configs/mock.json"))
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
@@ -37,7 +42,7 @@ class TestRunner(unittest.TestCase):
         )
 
     def test_writer_produces_core_result_files_only(self):
-        config = load_config(Path("configs/experiment.json"))
+        config = load_config(Path("configs/mock.json"))
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
@@ -60,14 +65,16 @@ class TestRunner(unittest.TestCase):
             results_text = (Path(tmpdir) / "results.csv").read_text()
             self.assertIn("text_cer", results_text)
             self.assertIn("text_wer", results_text)
+            self.assertIn("speaker_block_cer", results_text)
+            self.assertIn("score_basis", results_text)
             summary_text = (Path(tmpdir) / "run_summary.md").read_text()
             self.assertIn("Segments With Text", summary_text)
-            self.assertIn("Text CER", summary_text)
-            self.assertIn("Text WER", summary_text)
+            self.assertIn("Primary CER", summary_text)
+            self.assertIn("Speaker CER", summary_text)
             self.assertNotIn("| CER | WER |", summary_text)
 
     def test_runner_can_select_direct_asr_only(self):
-        config = load_config(Path("configs/experiment.json"))
+        config = load_config(Path("configs/mock.json"))
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
@@ -79,12 +86,31 @@ class TestRunner(unittest.TestCase):
         self.assertEqual({result.pipeline for result in results}, {"direct_asr"})
 
     def test_config_can_set_asr_prompt(self):
-        config = load_config(Path("configs/diarization_faster_whisper_samples2.json"))
+        config = load_config(Path("configs/all_pipelines.json"))
         self.assertIsNotNone(config.asr_prompt)
         self.assertIn("简体中文", config.asr_prompt or "")
 
+    def test_sample2_config_extends_shared_base(self):
+        config = load_config(Path("configs/direct_asr.json"))
+        self.assertEqual(config.pipelines, ["direct_asr"])
+        self.assertEqual(config.output_dir.name, "direct_asr")
+        self.assertEqual(len(config.samples), 5)
+        self.assertTrue(all(sample.reference for sample in config.samples))
+        self.assertTrue(all(sample.reference_speakers for sample in config.samples))
+
+    def test_sample2_diarization_model_matches_pyannote_4(self):
+        config = load_config(Path("configs/all_pipelines.json"))
+        self.assertEqual(
+            config.models["diarization"],
+            f"pyannote:{DEFAULT_PYANNOTE_DIARIZATION_MODEL}",
+        )
+        self.assertEqual(
+            DEFAULT_PYANNOTE_DIARIZATION_MODEL,
+            "pyannote/speaker-diarization-community-1",
+        )
+
     def test_mock_diarization_adds_speaker_labels(self):
-        config = load_config(Path("configs/experiment.json"))
+        config = load_config(Path("configs/mock.json"))
         config.models.update(
             {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
         )
@@ -125,6 +151,16 @@ class TestRunner(unittest.TestCase):
                 os.environ.pop("HF_ENDPOINT", None)
             else:
                 os.environ["HF_ENDPOINT"] = original
+
+    def test_pyannote_loader_uses_pyannote_4_token_api(self):
+        class Pipeline:
+            @staticmethod
+            def from_pretrained(model_id, token=None, cache_dir=None):
+                return {"model_id": model_id, "token": token, "cache_dir": cache_dir}
+
+        loaded = _load_pyannote_pipeline(Pipeline, "model", "hf_token", Path("cache"))
+        self.assertEqual(loaded["token"], "hf_token")
+        self.assertEqual(loaded["cache_dir"], Path("cache"))
 
 
 if __name__ == "__main__":

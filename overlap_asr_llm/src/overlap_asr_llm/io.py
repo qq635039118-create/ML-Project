@@ -22,6 +22,14 @@ FIELDNAMES = [
     "wer",
     "text_cer",
     "text_wer",
+    "flat_cer",
+    "flat_wer",
+    "timeline_cer",
+    "timeline_wer",
+    "speaker_block_cer",
+    "speaker_block_wer",
+    "best_speaker_mapping",
+    "score_basis",
     "error",
     "segments",
 ]
@@ -71,9 +79,6 @@ def _public_result_row(
     row = result.to_dict()
     row["audio_path"] = _public_path(str(row["audio_path"]), base_dir)
     row["segments"] = _public_segments(row.get("segments", []), base_dir)
-    if result.pipeline == "diarization_asr":
-        row["cer"] = None
-        row["wer"] = None
     return row
 
 
@@ -214,12 +219,24 @@ def write_summary(results: list[PipelineResult], path: Path) -> None:
     lines = [
         "# Run Summary",
         "",
-        "| Sample | Overlap | Pipeline | Model | CER | WER | Runtime | Error |",
-        "| --- | --- | --- | --- | ---: | ---: | ---: | --- |",
+        "| Sample | Overlap | Pipeline | Model | Score Basis | Primary CER | Primary WER | Speaker CER | Speaker WER | Timeline CER | Timeline WER | Runtime | Error |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for result in results:
         cer_value = "" if result.cer is None else f"{result.cer:.4f}"
         wer_value = "" if result.wer is None else f"{result.wer:.4f}"
+        speaker_cer = (
+            "" if result.speaker_block_cer is None else f"{result.speaker_block_cer:.4f}"
+        )
+        speaker_wer = (
+            "" if result.speaker_block_wer is None else f"{result.speaker_block_wer:.4f}"
+        )
+        timeline_cer = (
+            "" if result.timeline_cer is None else f"{result.timeline_cer:.4f}"
+        )
+        timeline_wer = (
+            "" if result.timeline_wer is None else f"{result.timeline_wer:.4f}"
+        )
         error = result.error or ""
         lines.append(
             "| "
@@ -227,8 +244,13 @@ def write_summary(results: list[PipelineResult], path: Path) -> None:
             f"{result.overlap_level} | "
             f"{result.pipeline} | "
             f"{result.model} | "
+            f"{result.score_basis} | "
             f"{cer_value} | "
             f"{wer_value} | "
+            f"{speaker_cer} | "
+            f"{speaker_wer} | "
+            f"{timeline_cer} | "
+            f"{timeline_wer} | "
             f"{result.runtime_seconds:.4f} | "
             f"{error} |"
         )
@@ -239,8 +261,8 @@ def write_separation_summary(results: list[PipelineResult], path: Path) -> None:
     lines = [
         "# Run Summary",
         "",
-        "| Sample | Overlap | Pipeline | Model | Separated Sources | Sources With Text | CER | WER | Runtime | Error |",
-        "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Sample | Overlap | Pipeline | Model | Separated Sources | Sources With Text | Score Basis | Primary CER | Primary WER | Speaker CER | Speaker WER | Timeline CER | Timeline WER | Runtime | Error |",
+        "| --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for result in results:
         sources = {
@@ -256,6 +278,18 @@ def write_separation_summary(results: list[PipelineResult], path: Path) -> None:
         }
         cer_value = "" if result.cer is None else f"{result.cer:.4f}"
         wer_value = "" if result.wer is None else f"{result.wer:.4f}"
+        speaker_cer = (
+            "" if result.speaker_block_cer is None else f"{result.speaker_block_cer:.4f}"
+        )
+        speaker_wer = (
+            "" if result.speaker_block_wer is None else f"{result.speaker_block_wer:.4f}"
+        )
+        timeline_cer = (
+            "" if result.timeline_cer is None else f"{result.timeline_cer:.4f}"
+        )
+        timeline_wer = (
+            "" if result.timeline_wer is None else f"{result.timeline_wer:.4f}"
+        )
         lines.append(
             "| "
             f"{result.sample_id} | "
@@ -264,8 +298,13 @@ def write_separation_summary(results: list[PipelineResult], path: Path) -> None:
             f"{result.model} | "
             f"{len(sources)} | "
             f"{len(sources_with_text)} | "
+            f"{result.score_basis} | "
             f"{cer_value} | "
             f"{wer_value} | "
+            f"{speaker_cer} | "
+            f"{speaker_wer} | "
+            f"{timeline_cer} | "
+            f"{timeline_wer} | "
             f"{result.runtime_seconds:.4f} | "
             f"{result.error or ''} |"
         )
@@ -276,8 +315,8 @@ def write_diarization_summary(results: list[PipelineResult], path: Path) -> None
     lines = [
         "# Run Summary",
         "",
-        "| Sample | Overlap | Pipeline | Model | Speakers | Segments | Segments With Text | Text CER | Text WER | Runtime | Error |",
-        "| --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |",
+        "| Sample | Overlap | Pipeline | Model | Speakers | Segments | Segments With Text | Score Basis | Primary CER | Primary WER | Speaker CER | Speaker WER | Timeline CER | Timeline WER | Runtime | Error |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |",
     ]
     for result in results:
         speakers = ",".join(
@@ -286,8 +325,20 @@ def write_diarization_summary(results: list[PipelineResult], path: Path) -> None
         segments_with_text = sum(
             1 for segment in result.segments if str(segment.get("text", "")).strip()
         )
-        text_cer_value = "" if result.text_cer is None else f"{result.text_cer:.4f}"
-        text_wer_value = "" if result.text_wer is None else f"{result.text_wer:.4f}"
+        cer_value = "" if result.cer is None else f"{result.cer:.4f}"
+        wer_value = "" if result.wer is None else f"{result.wer:.4f}"
+        speaker_cer = (
+            "" if result.speaker_block_cer is None else f"{result.speaker_block_cer:.4f}"
+        )
+        speaker_wer = (
+            "" if result.speaker_block_wer is None else f"{result.speaker_block_wer:.4f}"
+        )
+        timeline_cer = (
+            "" if result.timeline_cer is None else f"{result.timeline_cer:.4f}"
+        )
+        timeline_wer = (
+            "" if result.timeline_wer is None else f"{result.timeline_wer:.4f}"
+        )
         lines.append(
             "| "
             f"{result.sample_id} | "
@@ -297,8 +348,13 @@ def write_diarization_summary(results: list[PipelineResult], path: Path) -> None
             f"{speakers} | "
             f"{len(result.segments)} | "
             f"{segments_with_text} | "
-            f"{text_cer_value} | "
-            f"{text_wer_value} | "
+            f"{result.score_basis} | "
+            f"{cer_value} | "
+            f"{wer_value} | "
+            f"{speaker_cer} | "
+            f"{speaker_wer} | "
+            f"{timeline_cer} | "
+            f"{timeline_wer} | "
             f"{result.runtime_seconds:.4f} | "
             f"{result.error or ''} |"
         )

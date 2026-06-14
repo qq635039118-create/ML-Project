@@ -1,0 +1,16 @@
+{
+  "extends": "base.json",
+  "description": "Run speech separation first, then ASR on each separated stream.",
+  "output_dir": "outputs/separation_asr",
+  "models": {
+    "asr": "faster-whisper:large-v3",
+    "separation": "clearvoice:MossFormer2_SS_16K",
+    "llm": "mock"
+  },
+  "asr_models": [
+    "faster-whisper:large-v3"
+  ],
+  "pipelines": [
+    "separation_asr"
+  ]
+}

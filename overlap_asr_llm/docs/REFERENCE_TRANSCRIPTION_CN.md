@@ -1,22 +1,40 @@
 # 人工参考文本记录
 
-`configs/experiment.json` 已经接入 5 个真实混合音频，但 `reference` 先保留为
-`null`。请人工听写后再填入参考文本，否则 CER/WER 会基于错误答案计算，实验结论
-会失真。
+本项目目前有两套配置需要区分：
 
-## 样本清单
+- `configs/mock.json`：快速检查配置，用于 mock/基础流程。
+- `configs/base.json`：当前主实验的共享配置，已经接入
+  `data/samples2/` 的 5 个音频样本，并填入整段参考文本和按说话人分块的参考文本。
+
+当前主实验的 CER/WER、timeline 分数和 speaker-block 分数都基于
+`configs/base.json` 里的 reference 计算。修改 reference
+会直接影响结果，请谨慎改动。
+
+## 当前主实验样本清单
 
 | Sample ID | Audio | Overlap Level | Reference Status |
 | --- | --- | --- | --- |
-| `no_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/NoOverlap.wav` | none | TODO |
-| `light_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/LightOverlap.wav` | light | TODO |
-| `mid_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/MidOverlap.wav` | medium | TODO |
-| `heavy_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/HeavyOverlap.wav` | heavy | TODO |
-| `opposite_overlap` | `../xutong_code/audio_exemple/ch/chongdie/mixed_test_audio/OppositeOverlap.wav` | opposite | TODO |
+| `sample2_no_overlap` | `data/samples2/no_overlap.wav` | none | done |
+| `sample2_light_overlap` | `data/samples2/light_overlap.wav` | light | done |
+| `sample2_mid_overlap` | `data/samples2/mid_overlap.wav` | medium | done |
+| `sample2_heavy_overlap` | `data/samples2/heavy_overlap.wav` | heavy | done |
+| `sample2_opposite_overlap` | `data/samples2/opposite_overlap.wav` | opposite | done |
+
+## 参考文本结构
+
+当前 sample2 配置里有两类参考文本：
+
+- `reference`：整段文本，用于 direct ASR 和 timeline/flat 比较。
+- `default_reference_speakers`：按 `speaker_1` 和 `speaker_2` 分块的文本，用于
+  `speaker_block_cer` 和 `speaker_block_wer`。
+
+speaker-block 评分会自动寻找预测 speaker label 和参考 speaker label 的最佳映射，因此
+`SPEAKER_00`、`SPEAKER_01`、`SPEAKER1`、`SPEAKER2` 即使顺序不同，也可以公平比较。
 
 ## 建议格式
 
 - 尽量逐字听写，不要替 ASR 或 LLM 做润色。
 - 如果能区分说话人，可用 `[SPEAKER1]` 和 `[SPEAKER2]` 标注。
 - 听不清的位置用 `[inaudible]`，不要猜测。
-- 完成后把文本填回 `configs/experiment.json` 的 `reference` 字段。
+- 完成后把文本填回对应配置的 `reference` 字段；当前主实验请优先更新
+  `configs/base.json`。

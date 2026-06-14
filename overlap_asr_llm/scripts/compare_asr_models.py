@@ -107,7 +107,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--config",
-        default="configs/experiment.json",
+        default="configs/direct_asr.json",
         help="Path to the base experiment config.",
     )
     parser.add_argument(

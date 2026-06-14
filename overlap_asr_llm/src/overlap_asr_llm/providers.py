@@ -39,6 +39,10 @@ def _prepare_huggingface_download_env() -> Path:
     return cache_dir
 
 
+def _load_pyannote_pipeline(Pipeline, model_id: str, token: str, cache_dir: Path):
+    return Pipeline.from_pretrained(model_id, token=token, cache_dir=cache_dir)
+
+
 class MockASR:
     name = "mock_asr"
 
@@ -254,10 +258,11 @@ class PyannoteDiarizer:
 
         self.torch = torch
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.pipeline = Pipeline.from_pretrained(
+        self.pipeline = _load_pyannote_pipeline(
+            Pipeline,
             model_id,
-            token=token,
-            cache_dir=cache_dir / "huggingface",
+            token,
+            cache_dir / "huggingface",
         )
         if self.pipeline is None:
             raise RuntimeError(
@@ -450,6 +455,7 @@ class ClearVoiceSeparator:
 
     def __init__(self, model_id: str = "MossFormer2_SS_16K") -> None:
         _prepare_huggingface_download_env()
+        self._disable_numba_cache_for_clearvoice()
 
         from clearvoice import ClearVoice
 
@@ -459,35 +465,60 @@ class ClearVoiceSeparator:
             model_names=[model_id],
         )
 
+    @staticmethod
+    def _disable_numba_cache_for_clearvoice() -> None:
+        try:
+            import numba
+        except ImportError:
+            return
+
+        for name in ("jit", "njit", "vectorize", "guvectorize"):
+            original = getattr(numba, name, None)
+            if original is None or getattr(original, "_overlap_no_cache", False):
+                continue
+
+            def no_cache_decorator(*args, _original=original, **kwargs):
+                if "cache" in kwargs:
+                    kwargs["cache"] = False
+                return _original(*args, **kwargs)
+
+            no_cache_decorator._overlap_no_cache = True
+            setattr(numba, name, no_cache_decorator)
+
     def separate(self, audio_path: Path, output_dir: Path, speakers: int) -> list[Path]:
-        import librosa
-        import numpy as np
-        import soundfile as sf
-
         output_dir.mkdir(parents=True, exist_ok=True)
-        audio, sample_rate = sf.read(str(audio_path), always_2d=False)
-        audio = np.asarray(audio, dtype=np.float32)
-        if audio.ndim == 2:
-            audio = audio.mean(axis=1)
-        if sample_rate != 16000:
-            audio = librosa.resample(y=audio, orig_sr=sample_rate, target_sr=16000)
-        audio = audio.reshape(1, -1).astype(np.float32)
-
-        separated = self.model(audio, False)
-        sources = self._as_source_array(separated)
         required_sources = max(speakers, 1)
-        if sources.shape[0] < required_sources:
-            raise RuntimeError(
-                f"ClearVoice returned {sources.shape[0]} source(s), "
-                f"but {required_sources} were requested."
-            )
+        raw_output_dir = output_dir / "clearvoice_raw"
+        self.model(str(audio_path), online_write=True, output_path=str(raw_output_dir))
 
         outputs = []
         for source_idx in range(required_sources):
+            source = self._find_clearvoice_output(
+                raw_output_dir,
+                audio_path.stem,
+                source_idx + 1,
+            )
             target = output_dir / f"speaker_{source_idx + 1}.wav"
-            sf.write(str(target), sources[source_idx], 16000)
+            shutil.copyfile(source, target)
             outputs.append(target)
+        shutil.rmtree(raw_output_dir, ignore_errors=True)
         return outputs
+
+    def _find_clearvoice_output(
+        self,
+        raw_output_dir: Path,
+        audio_stem: str,
+        source_index: int,
+    ) -> Path:
+        candidates = sorted(raw_output_dir.rglob(f"{audio_stem}_s{source_index}.*"))
+        if candidates:
+            return candidates[0]
+        all_outputs = sorted(raw_output_dir.rglob("*"))
+        files = [path for path in all_outputs if path.is_file()]
+        raise RuntimeError(
+            f"ClearVoice did not write source {source_index} for {audio_stem}. "
+            f"Found files: {[path.as_posix() for path in files]}"
+        )
 
     @staticmethod
     def _as_source_array(separated) -> "object":

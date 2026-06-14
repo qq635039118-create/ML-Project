@@ -18,7 +18,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser = subparsers.add_parser("run", help="Run all experiment pipelines.")
     run_parser.add_argument(
         "--config",
-        default="configs/experiment.json",
+        default="configs/mock.json",
         help="Path to the JSON experiment config.",
     )
     run_parser.add_argument(

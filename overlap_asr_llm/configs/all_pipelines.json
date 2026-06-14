@@ -1,0 +1,19 @@
+{
+  "extends": "base.json",
+  "description": "Final comparison run for all current real non-LLM pipelines.",
+  "output_dir": "outputs/all_pipelines",
+  "models": {
+    "asr": "faster-whisper:large-v3",
+    "diarization": "pyannote:pyannote/speaker-diarization-community-1",
+    "separation": "clearvoice:MossFormer2_SS_16K",
+    "llm": "mock"
+  },
+  "asr_models": [
+    "faster-whisper:large-v3"
+  ],
+  "pipelines": [
+    "direct_asr",
+    "diarization_asr",
+    "separation_asr"
+  ]
+}
