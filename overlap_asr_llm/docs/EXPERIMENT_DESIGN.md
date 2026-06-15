@@ -2,16 +2,17 @@
 
 ## Current Progress
 
-The core non-LLM experiment is now implemented and has produced a complete
-sample2 result set. The current completion level is about 70-75% of the full
-plan:
+The core experiment is implemented and has produced a complete sample2 result
+set with the four planned pipeline families plus a diarization-order ablation.
+The current completion level is about 90-95% of the full plan:
 
-- Completed: controlled sample set, direct ASR, diarization ASR, separation ASR,
-  reference-based scoring, segment exports, runtime measurement, and unit tests.
-- Partially complete: speaker-label consistency analysis and qualitative
-  failure-case notes.
-- Not yet complete: real LLM/RAG refinement, automatic overlap-aware pipeline
-  selection, and a full manual readability review for the current sample2 run.
+- Completed: controlled sample set, direct ASR, two diarization-ASR orders,
+  separation ASR, API LLM/RAG refinement, reference-based scoring, segment
+  exports, runtime measurement, and unit tests.
+- Partially complete: speaker-label consistency analysis, qualitative
+  failure-case notes, and overlap-aware routing rules.
+- Not yet complete: final team metadata, repository URL, and any optional
+  production implementation of an automatic overlap-aware selector.
 
 The main current output is:
 
@@ -53,12 +54,17 @@ complete in `data/samples2/`:
 ## Pipelines
 
 - Direct ASR on mixed audio: implemented and run with faster-whisper.
-- Direct ASR plus speaker diarization: implemented and run with pyannote plus
-  faster-whisper.
+- Full-audio ASR plus speaker diarization alignment: implemented and run with
+  pyannote plus faster-whisper. This is the default `diarization_asr` path.
+- Turn-level diarization followed by ASR on each speaker turn: implemented as
+  `diarization_turn_asr` for comparing the original "diarization first, then
+  ASR" order against the more stable full-audio ASR alignment path.
 - Speech separation followed by ASR on each separated stream: implemented and
   run with ClearVoice plus faster-whisper.
 - LLM/RAG refinement using project glossary and previous pipeline outputs:
-  framework exists, but the current provider is still mock-only.
+  implemented and run with an OpenAI-compatible API refiner. The refiner is
+  constrained to formatting and terminology cleanup and must not invent missing
+  transcript words.
 
 ## Proposed Improvement
 
@@ -78,12 +84,11 @@ Use an overlap-aware pipeline selector:
 
 - CER and WER when reference transcripts are available: complete.
 - Runtime for each pipeline: complete.
-- Speaker-label consistency: partially complete through speaker-block scoring
-  and best speaker mapping.
-- Manual readability score from 1 to 5: partially complete in qualitative
-  notes, but needs to be refreshed for the current sample2 result set.
-- Failure cases and hallucination cases: partially complete. LLM hallucination
-  still requires a real LLM/RAG run.
+- Speaker-label consistency: complete for the current evaluation through
+  speaker-block scoring and best speaker mapping.
+- Manual readability score from 1 to 5: summarized in qualitative notes.
+- Failure cases and hallucination cases: documented for direct, diarization,
+  separation, and constrained LLM/RAG outputs.
 
 The result schema now includes several scoring views:
 
@@ -104,16 +109,22 @@ checked against the audio to avoid hallucination.
 Current sample2 results refine that story:
 
 - Direct ASR is the fastest pipeline and performs best for none, light, medium,
-  and heavy overlap in the current run.
-- Diarization ASR improves speaker readability and is competitive when the
-  segmentation is clean, but it is slower than direct ASR.
+  and heavy overlap in the current run, except for a small LLM/RAG gain on light
+  overlap.
+- Full-audio diarization ASR improves speaker readability and has the best
+  average CER/WER, but it is slower than direct ASR.
+- Turn-level diarization ASR is useful as an ablation, but short speaker-turn
+  excerpts are more prone to ASR hallucination and should not be the default
+  path.
 - Separation ASR is weak on most standard overlap conditions because separation
   artifacts hurt transcription quality, but it is clearly strongest for the
   opposite-order overlap case.
+- LLM/RAG refinement improves formatting and slightly helps light overlap, but
+  the constrained refiner intentionally does not recover missing speech content.
 
 ## Outputs
 
 The runner writes `results.csv`, `results.json`, and `run_summary.md` for
 comparing model text, runtime, CER, WER, score basis, and errors. Pipelines that
-produce segments also write `diarization_segments.*` and
-`separation_segments.*`.
+produce segments also write `diarization_segments.*`, `separation_segments.*`,
+or `llm_rag_source_segments.*` depending on the selected experiment.

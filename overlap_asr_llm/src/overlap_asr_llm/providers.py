@@ -7,6 +7,7 @@ machine. Optional heavy dependencies are imported lazily.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 import os
 from pathlib import Path
 import shutil
@@ -43,6 +44,24 @@ def _load_pyannote_pipeline(Pipeline, model_id: str, token: str, cache_dir: Path
     return Pipeline.from_pretrained(model_id, token=token, cache_dir=cache_dir)
 
 
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _configure_torch_tf32(torch) -> None:
+    if not _env_flag("OVERLAP_ASR_LLM_ENABLE_TF32"):
+        return
+    if not torch.cuda.is_available():
+        return
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+    if hasattr(torch, "set_float32_matmul_precision"):
+        torch.set_float32_matmul_precision("high")
+
+
 class MockASR:
     name = "mock_asr"
 
@@ -71,7 +90,8 @@ class WhisperASR:
         import torch
 
         self.torch = torch
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        _configure_torch_tf32(torch)
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.model = whisper.load_model(model_name)
 
     def transcribe(
@@ -80,7 +100,7 @@ class WhisperASR:
         language: str,
         prompt: str | None = None,
     ) -> Transcript:
-        if self.device == "cuda":
+        if self.device.startswith("cuda"):
             self.model.to(self.device)
         result = self.model.transcribe(
             str(audio_path),
@@ -105,7 +125,7 @@ class WhisperASR:
         return Transcript(text=str(result.get("text", "")).strip(), segments=segments)
 
     def release_gpu(self) -> None:
-        if self.device != "cuda":
+        if not self.device.startswith("cuda"):
             return
         self.model.to("cpu")
         self.torch.cuda.empty_cache()
@@ -121,12 +141,15 @@ class FasterWhisperASR:
         import torch
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device_index = 0 if self.device == "cuda" else None
         self.compute_type = "int8_float16" if self.device == "cuda" else "int8"
+        kwargs = {"device_index": self.device_index} if self.device_index is not None else {}
         self.model = WhisperModel(
             model_name,
             device=self.device,
             compute_type=self.compute_type,
             download_root=str(cache_dir / "faster_whisper"),
+            **kwargs,
         )
 
     def transcribe(
@@ -170,7 +193,8 @@ class FunASR:
         from funasr import AutoModel
         import torch
 
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        _configure_torch_tf32(torch)
+        device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
         self.model = AutoModel(
             model="iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
@@ -257,7 +281,8 @@ class PyannoteDiarizer:
         import torch
 
         self.torch = torch
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        _configure_torch_tf32(torch)
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.pipeline = _load_pyannote_pipeline(
             Pipeline,
             model_id,
@@ -269,12 +294,13 @@ class PyannoteDiarizer:
                 f"Could not load {model_id}. Make sure your HF_TOKEN is valid "
                 "and you accepted the model terms on Hugging Face."
             )
-        if self.device == "cuda":
-            self.pipeline.to(torch.device("cuda"))
+        if self.device.startswith("cuda"):
+            self.pipeline.to(torch.device(self.device))
 
     def diarize(self, audio_path: Path, speakers: int) -> list[dict[str, object]]:
-        if self.device == "cuda":
-            self.pipeline.to(self.torch.device("cuda"))
+        _configure_torch_tf32(self.torch)
+        if self.device.startswith("cuda"):
+            self.pipeline.to(self.torch.device(self.device))
         diarization_result = self.pipeline(
             {"audio": str(audio_path)},
             num_speakers=max(speakers, 1),
@@ -291,7 +317,7 @@ class PyannoteDiarizer:
         ]
 
     def release_gpu(self) -> None:
-        if self.device != "cuda":
+        if not self.device.startswith("cuda"):
             return
         self.pipeline.to(self.torch.device("cpu"))
         self.torch.cuda.empty_cache()
@@ -396,6 +422,102 @@ class PyannoteDiarizer:
         return value / 1000 if value > 1000 else value
 
 
+class SpeechBrainDiarizer:
+    """Speaker diarization using SpeechBrain embeddings and fixed speaker clustering."""
+
+    name = "speechbrain"
+
+    def __init__(self, model_id: str = "speechbrain/spkrec-ecapa-voxceleb") -> None:
+        cache_dir = _prepare_huggingface_download_env()
+        try:
+            from speechbrain.inference.speaker import SpeakerRecognition
+        except ImportError:
+            from speechbrain.pretrained import SpeakerRecognition
+        import torch
+
+        self.torch = torch
+        _configure_torch_tf32(torch)
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        try:
+            from speechbrain.utils.fetching import LocalStrategy
+
+            self.encoder = SpeakerRecognition.from_hparams(
+                source=model_id,
+                savedir=str(cache_dir / "speechbrain" / model_id.split("/")[-1]),
+                run_opts={"device": self.device},
+                local_strategy=LocalStrategy.COPY,
+            )
+        except TypeError:
+            self.encoder = SpeakerRecognition.from_hparams(
+                source=model_id,
+                savedir=str(cache_dir / "speechbrain" / model_id.split("/")[-1]),
+                run_opts={"device": self.device},
+            )
+
+    def diarize(self, audio_path: Path, speakers: int) -> list[dict[str, object]]:
+        import librosa
+        import numpy as np
+        import soundfile as sf
+        from sklearn.cluster import AgglomerativeClustering
+
+        y, sr = sf.read(str(audio_path), dtype="float32")
+        if getattr(y, "ndim", 1) > 1:
+            y = y.mean(axis=1)
+        if sr != 16000:
+            y = librosa.resample(y, orig_sr=sr, target_sr=16000)
+            sr = 16000
+
+        intervals = librosa.effects.split(y, top_db=30)
+        if len(intervals) == 0:
+            intervals = np.array([[0, len(y)]])
+
+        min_frames = int(0.35 * sr)
+        usable = [
+            (int(start), int(end))
+            for start, end in intervals
+            if int(end) - int(start) >= min_frames
+        ]
+        if not usable:
+            usable = [(0, len(y))]
+
+        embeddings = []
+        turns = []
+        for start, end in usable:
+            wav = y[start:end]
+            with self.torch.no_grad():
+                tensor = self.torch.tensor(wav, dtype=self.torch.float32).unsqueeze(0)
+                tensor = tensor.to(self.device)
+                emb = self.encoder.encode_batch(tensor).squeeze().detach().cpu().numpy()
+            embeddings.append(emb)
+            turns.append(
+                {
+                    "start": round(start / sr, 4),
+                    "end": round(end / sr, 4),
+                    "speaker": "UNKNOWN",
+                    "text": "",
+                }
+            )
+
+        speaker_count = max(1, min(int(speakers), len(embeddings)))
+        if speaker_count == 1:
+            labels = [0 for _ in embeddings]
+        else:
+            labels = AgglomerativeClustering(
+                n_clusters=speaker_count,
+                metric="cosine",
+                linkage="average",
+            ).fit_predict(embeddings)
+
+        for turn, label in zip(turns, labels):
+            turn["speaker"] = f"SPEAKER_{int(label) + 1}"
+        return turns
+
+    def release_gpu(self) -> None:
+        if not self.device.startswith("cuda"):
+            return
+        self.torch.cuda.empty_cache()
+
+
 class MockSeparator:
     name = "mock_separator"
 
@@ -425,10 +547,11 @@ class SpeechBrainSeparator:
         import torch
 
         self.torch = torch
+        _configure_torch_tf32(torch)
         self.model = SepformerSeparation.from_hparams(
             source=model_id,
             savedir=str(cache_dir / "speechbrain" / model_id.split("/")[-1]),
-            run_opts={"device": "cuda" if torch.cuda.is_available() else "cpu"},
+            run_opts={"device": "cuda:0" if torch.cuda.is_available() else "cpu"},
         )
 
     def separate(self, audio_path: Path, output_dir: Path, speakers: int) -> list[Path]:
@@ -554,6 +677,65 @@ class MockLLMRefiner:
         return text
 
 
+class ApiLLMRefiner:
+    """OpenAI-compatible LLM refiner for constrained transcript cleanup."""
+
+    name = "api_llm_refiner"
+
+    def __init__(self, model_name: str | None = None) -> None:
+        self.model_name = model_name or os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+        self.base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        self.api_key = os.environ.get("OPENAI_API_KEY")
+        if not self.api_key:
+            raise RuntimeError("API LLM refinement requires OPENAI_API_KEY.")
+
+    def refine(self, text: str, context: list[str]) -> str:
+        import httpx
+
+        system_prompt = (
+            "You are a constrained ASR transcript editor. Improve punctuation, "
+            "formatting, and terminology consistency only. Do not add, infer, "
+            "recover, or paraphrase words that are not already supported by the "
+            "input transcript. The retrieved context is background only, not a "
+            "source of missing transcript words. Keep speaker labels and timestamp "
+            "order. If a span is unclear, keep the original wording or mark it "
+            "uncertain instead of rewriting it. Return JSON with refined_text, "
+            "changes, uncertain_spans, and hallucination_risk."
+        )
+        user_prompt = {
+            "retrieved_context": context,
+            "transcript": text,
+            "output_schema": {
+                "refined_text": "string",
+                "changes": ["string"],
+                "uncertain_spans": ["string"],
+                "hallucination_risk": "low|medium|high",
+            },
+        }
+        response = httpx.post(
+            f"{self.base_url.rstrip('/')}/chat/completions",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": self.model_name,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {
+                        "role": "user",
+                        "content": json.dumps(user_prompt, ensure_ascii=False),
+                    },
+                ],
+                "temperature": 0,
+            },
+            timeout=120,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return str(data["choices"][0]["message"]["content"]).strip()
+
+
 def make_asr(kind: str):
     if kind == "mock":
         return MockASR()
@@ -577,6 +759,10 @@ def make_diarizer(kind: str):
         parts = kind.split(":", 1)
         model_id = parts[1] if len(parts) == 2 else DEFAULT_PYANNOTE_DIARIZATION_MODEL
         return PyannoteDiarizer(model_id=model_id)
+    if kind.startswith("speechbrain"):
+        parts = kind.split(":", 1)
+        model_id = parts[1] if len(parts) == 2 else "speechbrain/spkrec-ecapa-voxceleb"
+        return SpeechBrainDiarizer(model_id=model_id)
     raise ValueError(f"Unsupported diarization provider: {kind}")
 
 
@@ -597,4 +783,8 @@ def make_separator(kind: str):
 def make_llm_refiner(kind: str):
     if kind == "mock":
         return MockLLMRefiner()
+    if kind == "api":
+        return ApiLLMRefiner()
+    if kind.startswith("api:"):
+        return ApiLLMRefiner(model_name=kind.split(":", 1)[1])
     raise ValueError(f"Unsupported LLM provider: {kind}")

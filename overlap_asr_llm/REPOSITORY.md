@@ -9,8 +9,8 @@ TODO: https://github.com/<org-or-user>/<repo>
 ## Current Repository State
 
 The project is an experiment suite for overlapping Mandarin speech recognition.
-It compares direct ASR, speaker diarization plus ASR, speech separation plus
-ASR, and an LLM/RAG refinement path.
+It compares direct ASR, two diarization-ASR orders, speech separation plus ASR,
+and an LLM/RAG refinement path.
 
 Current implemented status:
 
@@ -19,10 +19,9 @@ Current implemented status:
 - Real speaker diarization is supported through pyannote.
 - Real speech separation is supported through ClearVoice and SpeechBrain
   SepFormer providers.
-- Real LLM/RAG refinement is not yet implemented. The current LLM provider is a
-  mock refiner.
-- The main current experiment compares three real pipelines on five sample2
-  overlap conditions.
+- Real LLM/RAG refinement is supported through an OpenAI-compatible API refiner.
+- The main current experiment compares the four planned pipeline families plus a
+  diarization-order ablation on five sample2 overlap conditions.
 
 Current main experiment:
 
@@ -54,11 +53,10 @@ tests/                             Unit tests
 Basic unit tests can be run with:
 
 ```bash
-python -m unittest discover -s tests -q
+PYTHONPATH=src python -m unittest discover -s tests -q
 ```
 
-This command ran 16 tests successfully. If `pytest` is installed, the same tests
-can also be run through `pytest`.
+If `pytest` is installed, the same tests can also be run through `pytest`.
 
 ## Collaboration Workflow
 

@@ -26,6 +26,13 @@ class Sample:
 
 
 @dataclass(frozen=True)
+class LLMRAGSource:
+    label: str
+    pipeline: str
+    models: dict[str, str]
+
+
+@dataclass(frozen=True)
 class ExperimentConfig:
     project_name: str
     output_dir: Path
@@ -34,6 +41,7 @@ class ExperimentConfig:
     models: dict[str, str]
     asr_models: list[str]
     pipelines: list[str]
+    llm_rag_sources: tuple[LLMRAGSource, ...]
     rag_context: list[str]
     samples: list[Sample]
     base_dir: Path
@@ -96,6 +104,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
                 ],
             )
         ),
+        llm_rag_sources=_load_llm_rag_sources(raw.get("llm_rag_sources", [])),
         rag_context=list(raw.get("rag_context", [])),
         samples=samples,
         base_dir=base_dir,
@@ -151,6 +160,39 @@ def _reference_text(value: Any) -> str | None:
         return text or None
     text = str(value).strip()
     return text or None
+
+
+def _load_llm_rag_sources(raw: Any) -> tuple[LLMRAGSource, ...]:
+    if not raw:
+        return ()
+    if not isinstance(raw, list):
+        raise ValueError("llm_rag_sources must be a list.")
+
+    sources = []
+    for index, item in enumerate(raw, start=1):
+        if isinstance(item, str):
+            sources.append(
+                LLMRAGSource(
+                    label=item,
+                    pipeline=item,
+                    models={},
+                )
+            )
+            continue
+        if not isinstance(item, dict):
+            raise ValueError("llm_rag_sources entries must be strings or objects.")
+        pipeline = str(item.get("pipeline", "diarization_asr"))
+        models = item.get("models", {})
+        if not isinstance(models, dict):
+            raise ValueError("llm_rag_sources models must be an object.")
+        sources.append(
+            LLMRAGSource(
+                label=str(item.get("label", f"source_{index}")),
+                pipeline=pipeline,
+                models={str(key): str(value) for key, value in models.items()},
+            )
+        )
+    return tuple(sources)
 
 
 def _load_reference_speakers(raw: Any) -> tuple[ReferenceSpeaker, ...]:

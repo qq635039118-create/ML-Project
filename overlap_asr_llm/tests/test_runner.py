@@ -1,12 +1,14 @@
 from pathlib import Path
 from dataclasses import replace
+import json
 import os
 import tempfile
 import unittest
 
-from overlap_asr_llm.config import load_config
+from overlap_asr_llm.config import LLMRAGSource, load_config
+from overlap_asr_llm.cli import _load_env_file
 from overlap_asr_llm.io import write_results
-from overlap_asr_llm.pipelines import run_all
+from overlap_asr_llm.pipelines import _refined_text_for_scoring, run_all
 from overlap_asr_llm.providers import (
     DEFAULT_PYANNOTE_DIARIZATION_MODEL,
     PyannoteDiarizer,
@@ -85,10 +87,70 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(results), len(config.samples))
         self.assertEqual({result.pipeline for result in results}, {"direct_asr"})
 
+    def test_llm_rag_only_can_compare_hidden_diarization_sources(self):
+        config = load_config(Path("configs/mock.json"))
+        config.models.update(
+            {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
+        )
+        config.pipelines[:] = ["llm_rag_refine"]
+        config = replace(
+            config,
+            llm_rag_sources=(
+                LLMRAGSource(
+                    label="mock_diarization_a",
+                    pipeline="diarization_asr",
+                    models={"diarization": "mock"},
+                ),
+                LLMRAGSource(
+                    label="mock_diarization_b",
+                    pipeline="diarization_asr",
+                    models={"diarization": "mock"},
+                ),
+            ),
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = replace(config, output_dir=Path(tmpdir))
+            results = run_all(config)
+        self.assertEqual(len(results), len(config.samples) * 2)
+        self.assertEqual({result.pipeline for result in results}, {"llm_rag_refine"})
+        self.assertTrue(all("<-" in result.model for result in results))
+        self.assertTrue(all("SPEAKER" in result.speaker_labels for result in results))
+
+    def test_refined_text_scoring_strips_json_subtitle_markup(self):
+        refined = _refined_text_for_scoring(
+            json.dumps(
+                {
+                    "refined_text": (
+                        "00:00:00.000 --> 00:00:01.000 [SPEAKER_1] 你好\n"
+                        "00:00:01.000 --> 00:00:02.000 [SPEAKER_2] 世界"
+                    )
+                }
+            )
+        )
+        self.assertEqual(refined, "你好 世界")
+
     def test_config_can_set_asr_prompt(self):
         config = load_config(Path("configs/all_pipelines.json"))
         self.assertIsNotNone(config.asr_prompt)
         self.assertIn("简体中文", config.asr_prompt or "")
+
+    def test_cli_env_loader_reads_local_dotenv_without_overriding(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            env_path = Path(tmpdir) / ".env"
+            env_path.write_text(
+                "OVERLAP_ASR_LLM_ENABLE_TF32=1\n"
+                "EXISTING_OVERLAP_TEST_VALUE=from_file\n",
+                encoding="utf-8",
+            )
+            os.environ["EXISTING_OVERLAP_TEST_VALUE"] = "from_env"
+            try:
+                os.environ.pop("OVERLAP_ASR_LLM_ENABLE_TF32", None)
+                _load_env_file(env_path)
+                self.assertEqual(os.environ["OVERLAP_ASR_LLM_ENABLE_TF32"], "1")
+                self.assertEqual(os.environ["EXISTING_OVERLAP_TEST_VALUE"], "from_env")
+            finally:
+                os.environ.pop("OVERLAP_ASR_LLM_ENABLE_TF32", None)
+                os.environ.pop("EXISTING_OVERLAP_TEST_VALUE", None)
 
     def test_sample2_config_extends_shared_base(self):
         config = load_config(Path("configs/direct_asr.json"))
@@ -120,6 +182,20 @@ class TestRunner(unittest.TestCase):
             results = run_all(config)
         self.assertEqual(len(results), len(config.samples))
         self.assertEqual({result.pipeline for result in results}, {"diarization_asr"})
+        self.assertTrue(all("SPEAKER" in result.speaker_labels for result in results))
+
+    def test_mock_turn_level_diarization_asr_is_separate_pipeline(self):
+        config = load_config(Path("configs/mock.json"))
+        config.models.update(
+            {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
+        )
+        config.pipelines[:] = ["diarization_turn_asr"]
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = replace(config, output_dir=Path(tmpdir))
+            results = run_all(config)
+        self.assertEqual(len(results), len(config.samples))
+        self.assertEqual({result.pipeline for result in results}, {"diarization_turn_asr"})
+        self.assertTrue(all("turn_asr" in result.model for result in results))
         self.assertTrue(all("SPEAKER" in result.speaker_labels for result in results))
 
     def test_pyannote_diarizer_accepts_diarize_output_wrapper(self):

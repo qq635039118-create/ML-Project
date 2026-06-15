@@ -3,7 +3,7 @@
 These notes preserve manual observations that should not be lost when generated
 files under `outputs/` are refreshed.
 
-## Current Sample2 Three-Pipeline Run
+## Current Sample2 Four-Pipeline Run
 
 Current result directory:
 
@@ -13,27 +13,30 @@ outputs/all_pipelines/
 
 Metric-based summary:
 
-- Direct ASR has the best average primary CER/WER among the three current real
-  pipelines and is also the fastest.
-- Diarization ASR is useful for speaker-attributed subtitles, but its recognition
-  quality drops as overlap becomes stronger.
+- Diarization ASR has the best average primary CER/WER in the current four
+  pipeline run and gives speaker-attributed subtitles.
+- Direct ASR is the fastest pipeline and remains competitive for none, medium,
+  and heavy overlap.
 - Separation ASR performs poorly on most standard overlap cases because the
   separated audio introduces artifacts, but it performs best on the
   opposite-order overlap sample.
+- LLM/RAG refinement is constrained to formatting and terminology cleanup. It
+  slightly improves light overlap but does not recover words that ASR missed.
 - The biggest scoring change after the metric refactor is that diarization and
   separation outputs can now be evaluated with `speaker_block` scores, which are
   fairer when speaker labels are swapped or streams are not in timeline order.
 
 | Sample | Best Current Pipeline | Readability | Failure Type | Observation | Hallucination Risk |
 | --- | --- | ---: | --- | --- | --- |
-| sample2_no_overlap | diarization_asr | 5 | minor_asr_errors | Diarization gives a clean speaker-attributed transcript and slightly beats direct ASR on primary CER/WER. | low |
-| sample2_light_overlap | direct_asr | 4 | minor_missing_words | Direct ASR remains readable and has the best score; diarization helps structure but adds recognition errors. | low |
-| sample2_mid_overlap | direct_asr | 3 | speaker_mixing | Direct ASR is still the strongest scored output, but overlap starts to merge or mask speaker content. | low |
-| sample2_heavy_overlap | direct_asr | 3 | missing_words | Direct ASR remains better than the diarization and separation outputs in the current run, but trust drops. | medium |
+| sample2_no_overlap | direct_asr / diarization_asr / llm_rag_refine | 5 | minor_asr_errors | The three non-separation paths are effectively tied; diarization adds speaker labels with small runtime cost. | low |
+| sample2_light_overlap | llm_rag_refine | 4 | minor_missing_words | LLM/RAG gives the best score after constrained cleanup, but the gain over direct ASR is small. | low |
+| sample2_mid_overlap | direct_asr / diarization_asr / llm_rag_refine | 3 | speaker_mixing | The three non-separation paths are tied; overlap starts to merge or mask speaker content. | low |
+| sample2_heavy_overlap | direct_asr / diarization_asr / llm_rag_refine | 3 | missing_words | Direct-style transcription remains better than separation, but trust drops as overlap grows. | medium |
 | sample2_opposite_overlap | separation_asr | 4 | separation_artifact | Separation recovers the two speaker streams much better than timeline-based ASR, although some words are distorted. | medium |
 
-The current run does not include a real LLM/RAG refinement result, so
-hallucination risk for LLM post-correction still needs to be evaluated later.
+The current run includes real API LLM/RAG refinement. The prompt constrains the
+model not to add unsupported words, so the observed LLM risk is mostly failure
+to improve missing content rather than free-form hallucination.
 
 ## Earlier Manual Notes
 

@@ -1,0 +1,33 @@
+{
+  "extends": "base.json",
+  "description": "LLM/RAG-only comparison using SpeechBrain and PyAnnote diarization sources.",
+  "output_dir": "outputs/speaker_llm_pipeline",
+  "models": {
+    "asr": "faster-whisper:large-v3",
+    "diarization": "speechbrain",
+    "separation": "clearvoice:MossFormer2_SS_16K",
+    "llm": "api"
+  },
+  "asr_models": [
+    "faster-whisper:large-v3"
+  ],
+  "pipelines": [
+    "llm_rag_refine"
+  ],
+  "llm_rag_sources": [
+    {
+      "label": "speechbrain_diarization",
+      "pipeline": "diarization_asr",
+      "models": {
+        "diarization": "speechbrain"
+      }
+    },
+    {
+      "label": "pyannote_diarization",
+      "pipeline": "diarization_asr",
+      "models": {
+        "diarization": "pyannote:pyannote/speaker-diarization-community-1"
+      }
+    }
+  ]
+}

@@ -2,15 +2,23 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 import json
 from pathlib import Path
+import re
 import tempfile
 import time
 
-from .config import ExperimentConfig, Sample
+from .config import ExperimentConfig, LLMRAGSource, Sample
 from .metrics import cer, speaker_block_score, wer
 from .providers import make_asr, make_diarizer, make_llm_refiner, make_separator
+
+
+_SUBTITLE_PREFIX_RE = re.compile(
+    r"^\s*\d{2}:\d{2}:\d{2}(?:[.,]\d+)?\s*-->\s*"
+    r"\d{2}:\d{2}:\d{2}(?:[.,]\d+)?\s*"
+)
+_SPEAKER_PREFIX_RE = re.compile(r"^\s*\[[^\]]+\]\s*")
 
 
 class ProviderCache:
@@ -75,6 +83,28 @@ def _score(reference: str | None, text: str) -> tuple[float | None, float | None
     if not reference:
         return None, None
     return cer(reference, text), wer(reference, text)
+
+
+def _refined_text_for_scoring(text: str) -> str:
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return _spoken_text_from_subtitle(text)
+    if isinstance(data, dict):
+        refined = data.get("refined_text")
+        if isinstance(refined, str) and refined.strip():
+            return _spoken_text_from_subtitle(refined)
+    return _spoken_text_from_subtitle(text)
+
+
+def _spoken_text_from_subtitle(text: str) -> str:
+    spoken_lines = []
+    for line in text.splitlines():
+        line = _SUBTITLE_PREFIX_RE.sub("", line.strip())
+        line = _SPEAKER_PREFIX_RE.sub("", line).strip()
+        if line:
+            spoken_lines.append(line)
+    return " ".join(spoken_lines).strip()
 
 
 def _labels_from_segments(segments: list[dict[str, object]]) -> str:
@@ -254,7 +284,10 @@ def _transcribe_speaker_turns(
     language: str,
     prompt: str | None = None,
 ) -> list[dict[str, object]]:
-    ordered_turns = sorted(speaker_turns, key=lambda segment: float(segment.get("start", 0.0)))
+    ordered_turns = sorted(
+        speaker_turns,
+        key=lambda segment: float(segment.get("start", 0.0)),
+    )
     if getattr(asr, "name", "") == "mock_asr":
         transcript = asr.transcribe(audio_path, language, prompt=prompt)
         base_text = transcript.text.strip()
@@ -293,6 +326,56 @@ def _transcribe_speaker_turns(
                 }
             )
     return segments
+
+
+def _best_speaker_for_segment(
+    segment: dict[str, object],
+    speaker_turns: list[dict[str, object]],
+) -> str:
+    if not speaker_turns:
+        return "UNKNOWN"
+
+    start = float(segment.get("start", 0.0))
+    end = float(segment.get("end", start))
+    if end <= start:
+        end = start + 0.01
+
+    best_label = "UNKNOWN"
+    best_overlap = 0.0
+    for turn in speaker_turns:
+        turn_start = float(turn.get("start", 0.0))
+        turn_end = float(turn.get("end", turn_start))
+        overlap = max(0.0, min(end, turn_end) - max(start, turn_start))
+        if overlap > best_overlap:
+            best_overlap = overlap
+            best_label = str(turn.get("speaker", "UNKNOWN"))
+
+    if best_overlap > 0:
+        return best_label
+
+    midpoint = (start + end) / 2
+    nearest = min(
+        speaker_turns,
+        key=lambda turn: min(
+            abs(midpoint - float(turn.get("start", 0.0))),
+            abs(midpoint - float(turn.get("end", turn.get("start", 0.0)))),
+        ),
+    )
+    return str(nearest.get("speaker", "UNKNOWN"))
+
+
+def _label_transcript_segments(
+    transcript_segments: list[dict[str, object]],
+    speaker_turns: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    return [
+        {
+            **segment,
+            "speaker": _best_speaker_for_segment(segment, speaker_turns),
+        }
+        for segment in transcript_segments
+        if str(segment.get("text", "")).strip()
+    ]
 
 
 def _error_result(
@@ -370,6 +453,36 @@ def run_diarization_asr(
     sample: Sample,
     providers: ProviderCache | None = None,
 ) -> PipelineResult:
+    return _run_diarization_asr(
+        config,
+        sample,
+        pipeline="diarization_asr",
+        mode="full_asr_align",
+        providers=providers,
+    )
+
+
+def run_diarization_turn_asr(
+    config: ExperimentConfig,
+    sample: Sample,
+    providers: ProviderCache | None = None,
+) -> PipelineResult:
+    return _run_diarization_asr(
+        config,
+        sample,
+        pipeline="diarization_turn_asr",
+        mode="turn_asr",
+        providers=providers,
+    )
+
+
+def _run_diarization_asr(
+    config: ExperimentConfig,
+    sample: Sample,
+    pipeline: str,
+    mode: str,
+    providers: ProviderCache | None = None,
+) -> PipelineResult:
     started = time.perf_counter()
     asr_name = config.models.get("asr", "mock")
     diarizer_name = config.models.get("diarization", "mock")
@@ -381,13 +494,21 @@ def run_diarization_asr(
         if hasattr(diarizer, "release_gpu"):
             diarizer.release_gpu()
         asr = providers.asr() if providers else make_asr(asr_name)
-        segments = _transcribe_speaker_turns(
-            asr,
-            sample.audio_path,
-            speaker_turns,
-            config.language,
-            prompt=config.asr_prompt,
-        )
+        if mode == "turn_asr":
+            segments = _transcribe_speaker_turns(
+                asr,
+                sample.audio_path,
+                speaker_turns,
+                config.language,
+                prompt=config.asr_prompt,
+            )
+        else:
+            transcript = asr.transcribe(
+                sample.audio_path,
+                config.language,
+                prompt=config.asr_prompt,
+            )
+            segments = _label_transcript_segments(transcript.segments, speaker_turns)
         if hasattr(asr, "release_gpu"):
             asr.release_gpu()
         subtitle_text = _subtitle_text(segments)
@@ -402,8 +523,8 @@ def run_diarization_asr(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
             overlap_level=sample.overlap_level,
-            pipeline="diarization_asr",
-            model=f"{asr.name}+{diarizer.name}",
+            pipeline=pipeline,
+            model=f"{asr.name}+{diarizer.name}+{mode}",
             text=subtitle_text,
             speaker_labels=_labels_from_segments(segments),
             runtime_seconds=round(time.perf_counter() - started, 4),
@@ -411,7 +532,7 @@ def run_diarization_asr(
             segments=segments,
         )
     except Exception as exc:
-        return _error_result(sample, "diarization_asr", model_name, started, exc)
+        return _error_result(sample, pipeline, model_name, started, exc)
 
 
 def run_separation_asr(
@@ -497,7 +618,7 @@ def run_llm_rag_refine(
             if result.sample_id == sample.id and not result.error
         )
         refined = refiner.refine(source_text, config.rag_context)
-        score = _score_bundle(sample, refined)
+        score = _score_bundle(sample, _refined_text_for_scoring(refined))
         return PipelineResult(
             sample_id=sample.id,
             audio_path=str(sample.audio_path),
@@ -514,6 +635,58 @@ def run_llm_rag_refine(
         return _error_result(sample, "llm_rag_refine", llm_name, started, exc)
 
 
+def run_llm_rag_refine_from_source(
+    config: ExperimentConfig,
+    sample: Sample,
+    source: LLMRAGSource,
+) -> PipelineResult:
+    started = time.perf_counter()
+    source_config = replace(
+        config,
+        models={**config.models, **source.models},
+        pipelines=[source.pipeline],
+        llm_rag_sources=(),
+    )
+    source_result = _run_source_pipeline(source_config, sample, source.pipeline)
+    if source_result.error:
+        return _error_result(
+            sample,
+            "llm_rag_refine",
+            f"{config.models.get('llm', 'mock')}<-{source.label}:{source_result.model}",
+            started,
+            RuntimeError(f"source {source.label}: {source_result.error}"),
+        )
+
+    llm_result = run_llm_rag_refine(config, sample, [source_result])
+
+    llm_result.model = f"{llm_result.model}<-{source.label}:{source_result.model}"
+    llm_result.runtime_seconds = round(
+        source_result.runtime_seconds + llm_result.runtime_seconds,
+        4,
+    )
+    llm_result.speaker_labels = source_result.speaker_labels
+    llm_result.segments = source_result.segments
+    if source_result.error and not llm_result.error:
+        llm_result.error = f"source {source.label}: {source_result.error}"
+    return llm_result
+
+
+def _run_source_pipeline(
+    config: ExperimentConfig,
+    sample: Sample,
+    pipeline: str,
+) -> PipelineResult:
+    if pipeline == "direct_asr":
+        return run_direct_asr(config, sample)
+    if pipeline == "diarization_asr":
+        return run_diarization_asr(config, sample)
+    if pipeline == "diarization_turn_asr":
+        return run_diarization_turn_asr(config, sample)
+    if pipeline == "separation_asr":
+        return run_separation_asr(config, sample)
+    raise ValueError(f"Unsupported llm_rag source pipeline: {pipeline}")
+
+
 def run_all(config: ExperimentConfig) -> list[PipelineResult]:
     config.output_dir.mkdir(parents=True, exist_ok=True)
     providers = ProviderCache(config)
@@ -523,8 +696,14 @@ def run_all(config: ExperimentConfig) -> list[PipelineResult]:
             results.append(run_direct_asr(config, sample, providers))
         if "diarization_asr" in config.pipelines:
             results.append(run_diarization_asr(config, sample, providers))
+        if "diarization_turn_asr" in config.pipelines:
+            results.append(run_diarization_turn_asr(config, sample, providers))
         if "separation_asr" in config.pipelines:
             results.append(run_separation_asr(config, sample, providers))
         if "llm_rag_refine" in config.pipelines:
-            results.append(run_llm_rag_refine(config, sample, results, providers))
+            if config.llm_rag_sources:
+                for source in config.llm_rag_sources:
+                    results.append(run_llm_rag_refine_from_source(config, sample, source))
+            else:
+                results.append(run_llm_rag_refine(config, sample, results, providers))
     return results
