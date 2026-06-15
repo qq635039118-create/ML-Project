@@ -1,0 +1,222 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Run Summary</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:32px;line-height:1.4;color:#1f2933}
+h1{font-size:28px;margin-bottom:20px} h2{font-size:20px;margin-top:28px}
+table{border-collapse:collapse;width:100%;margin:12px 0 24px;font-size:14px}
+th,td{border:1px solid #d8dee4;padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f3f4f6;font-weight:650} td:nth-child(n+4){text-align:right}
+tr:nth-child(even) td{background:#fafafa}
+</style></head><body>
+<h1>Run Summary</h1>
+<h2>Pipeline Ranking</h2>
+<table>
+<thead><tr>
+<th>Rank</th>
+<th>Pipeline</th>
+<th>Runs</th>
+<th>Avg CER</th>
+<th>Avg WER</th>
+<th>Avg Runtime</th>
+<th>Wins</th>
+<th>Errors</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>5</td>
+<td>0.2084</td>
+<td>0.1968</td>
+<td>78.46s</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>5</td>
+<td>0.2089</td>
+<td>0.1968</td>
+<td>73.24s</td>
+<td>3</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<h2>Best By Overlap</h2>
+<table>
+<thead><tr>
+<th>Sample</th>
+<th>Overlap</th>
+<th>Best Pipeline</th>
+<th>CER</th>
+<th>WER</th>
+<th>Runtime</th>
+<th>Runner-Up</th>
+<th>Delta CER</th>
+</tr></thead><tbody>
+<tr>
+<td>sample2_no_overlap</td>
+<td>none</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0117</td>
+<td>0.0162</td>
+<td>55.34s</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.0000</td>
+</tr>
+<tr>
+<td>sample2_light_overlap</td>
+<td>light</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.0468</td>
+<td>0.0486</td>
+<td>72.57s</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0000</td>
+</tr>
+<tr>
+<td>sample2_mid_overlap</td>
+<td>medium</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.1218</td>
+<td>0.1336</td>
+<td>76.92s</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0984</td>
+</tr>
+<tr>
+<td>sample2_heavy_overlap</td>
+<td>heavy</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.1522</td>
+<td>0.1538</td>
+<td>80.79s</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.1007</td>
+</tr>
+<tr>
+<td>sample2_opposite_overlap</td>
+<td>opposite</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.6112</td>
+<td>0.5992</td>
+<td>68.41s</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0000</td>
+</tr>
+</tbody></table>
+<h2>Detailed Results</h2>
+<table>
+<thead><tr>
+<th>Sample</th>
+<th>Overlap</th>
+<th>Pipeline</th>
+<th>CER</th>
+<th>WER</th>
+<th>Runtime</th>
+<th>Basis</th>
+<th>Error</th>
+</tr></thead><tbody>
+<tr>
+<td>sample2_no_overlap</td>
+<td>none</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0117</td>
+<td>0.0162</td>
+<td>55.34s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_no_overlap</td>
+<td>none</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.0117</td>
+<td>0.0162</td>
+<td>72.54s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_light_overlap</td>
+<td>light</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.0468</td>
+<td>0.0486</td>
+<td>83.79s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_light_overlap</td>
+<td>light</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.0468</td>
+<td>0.0486</td>
+<td>72.57s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_mid_overlap</td>
+<td>medium</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.2201</td>
+<td>0.1660</td>
+<td>96.83s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_mid_overlap</td>
+<td>medium</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.1218</td>
+<td>0.1336</td>
+<td>76.92s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_heavy_overlap</td>
+<td>heavy</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.1522</td>
+<td>0.1538</td>
+<td>80.79s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_heavy_overlap</td>
+<td>heavy</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.2529</td>
+<td>0.1862</td>
+<td>75.77s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_opposite_overlap</td>
+<td>opposite</td>
+<td>llm_rag_refine (speechbrain_diarization)</td>
+<td>0.6112</td>
+<td>0.5992</td>
+<td>75.57s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+<tr>
+<td>sample2_opposite_overlap</td>
+<td>opposite</td>
+<td>llm_rag_refine (pyannote_diarization)</td>
+<td>0.6112</td>
+<td>0.5992</td>
+<td>68.41s</td>
+<td>timeline</td>
+<td></td>
+</tr>
+</tbody></table>
+</body></html>
