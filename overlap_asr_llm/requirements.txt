@@ -16,5 +16,6 @@ httpx[socks]>=0.28.0
 gradio>=4.0.0
 
 # Optional LLM/RAG helpers
+bert-score>=0.3.13
 transformers>=4.44.0
 sentence-transformers>=3.0.0
