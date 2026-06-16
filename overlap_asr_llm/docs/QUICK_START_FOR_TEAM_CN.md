@@ -2,6 +2,28 @@
 
 这份说明给第一次拿到项目的组员使用。目标是：先把项目跑通，再开始分工开发。
 
+## 当前项目状态
+
+当前项目已经完成 mock 流程和三条真实非 LLM pipeline 的 sample2 实验：
+
+- `direct_asr`：`faster-whisper:large-v3`
+- `diarization_asr`：`pyannote/speaker-diarization-community-1` + `faster-whisper:large-v3`
+- `separation_asr`：`clearvoice:MossFormer2_SS_16K` + `faster-whisper:large-v3`
+
+主结果目录：
+
+```text
+outputs/all_pipelines/
+```
+
+主结果表：
+
+```text
+outputs/all_pipelines/run_summary.md
+```
+
+还没完全完成的部分：真实 LLM/RAG 修正、自动 overlap-aware pipeline selector、当前 sample2 结果的完整人工可读性评分。
+
 ## 1. 拉取项目
 
 ```bash
@@ -23,13 +45,9 @@ git pull
 python3 --version
 ```
 
-本项目的 mock 模式只依赖 Python 标准库，不需要先安装大型模型。
-
-如果使用 Anaconda，建议先创建独立环境：
+本项目的 mock 模式只依赖 Python 标准库，不需要先安装大型模型。第一次使用时安装为可编辑包：
 
 ```bash
-conda create -n overlap-asr-llm python=3.10 -y
-conda activate overlap-asr-llm
 pip install -e .
 pip install pytest
 ```
@@ -39,7 +57,7 @@ pip install pytest
 mock 模式用于检查项目结构、代码流程、输出文件是否正常。
 
 ```bash
-PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
 ```
 
 运行成功后，终端会看到类似输出：
@@ -51,15 +69,15 @@ Wrote results to .../outputs
 生成结果在：
 
 ```text
-outputs/results.json
-outputs/results.csv
-outputs/run_summary.md
+outputs/mock/results.json
+outputs/mock/results.csv
+outputs/mock/run_summary.md
 ```
 
 ## 4. 跑 smoke test
 
 ```bash
-python3 scripts/smoke_test.py
+python scripts/smoke_test.py
 ```
 
 这个脚本用于快速确认项目最基本功能是否能跑通。
@@ -67,14 +85,19 @@ python3 scripts/smoke_test.py
 ## 5. 项目结构怎么看
 
 ```text
-configs/experiment.json         实验配置：样本、模型、输出路径
+configs/mock.json               mock/快速检查配置
+configs/base.json               当前 sample2 真实实验共享配置
+configs/direct_asr.json         direct_asr 实验配置
+configs/diarization_asr.json    diarization_asr 实验配置
+configs/separation_asr.json     separation_asr 实验配置
+configs/all_pipelines.json      最终全 pipeline 对比配置
 docs/                           项目文档、实验设计、讲解稿
 src/overlap_asr_llm/            核心代码
 tests/                          测试代码
 scripts/                        辅助脚本
 outputs/                        运行生成的结果
-README.md                       项目总体说明
 CONTRIBUTIONS.md                组员贡献记录
+REPOSITORY.md                   仓库和提交说明
 ```
 
 核心代码阅读顺序：
@@ -126,30 +149,37 @@ git push -u origin feature/<你的名字或任务名>
 提交前建议至少跑：
 
 ```bash
-PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
-python3 scripts/smoke_test.py
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
+python scripts/smoke_test.py
 ```
 
 如果安装了 pytest，也可以跑：
 
 ```bash
-PYTHONPATH=src pytest
+pytest
+```
+
+如果没有安装 pytest，可以直接跑 Python 自带的 unittest：
+
+```bash
+python -m unittest discover -s tests -q
 ```
 
 ## 8. 不要提交哪些文件
 
-一般不要提交：
+一般不要提交本地缓存、虚拟环境、大型临时结果：
 
 ```text
 __pycache__/
 .pytest_cache/
 .venv/
 venv/
-outputs/
+outputs/<临时实验目录>/
 *.zip
 ```
 
-这些通常是本地缓存、运行结果、虚拟环境或最终打包文件，不适合放进协作仓库。
+如果最终报告需要引用某个小型结果目录，可以保留精选输出，例如当前
+`outputs/all_pipelines/`。
 
 ## 9. 真模型模式
 
@@ -160,27 +190,36 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-然后修改：
+要改模型，直接改对应 pipeline 的配置：
 
 ```text
-configs/experiment.json
+configs/direct_asr.json
+configs/diarization_asr.json
+configs/separation_asr.json
+configs/all_pipelines.json
 ```
 
 可以配置的 provider 包括：
 
 ```text
-ASR:        mock, whisper, whisper:<model-name>, funasr
-Diarizer:   mock
-Separator:  mock, sepformer, sepformer:<huggingface-model-id>
+ASR:        mock, whisper, whisper:<model-name>, faster-whisper, faster-whisper:<model-name>, funasr
+Diarizer:   mock, pyannote, pyannote:<huggingface-model-id>
+Separator:  mock, sepformer, sepformer:<huggingface-model-id>, clearvoice, clearvoice:<model-name>
 LLM:        mock
 ```
 
 真实模型可能需要 GPU、较大下载量和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
 
-当前配置已经接入 5 个真实混合音频样本。人工听写参考文本见：
+当前 sample2 配置已经接入 5 个真实混合音频样本，并填入整段参考文本和按说话人分块的参考文本：
 
 ```text
-docs/REFERENCE_TRANSCRIPTION_CN.md
+configs/base.json
+```
+
+运行当前真实实验的命令是：
+
+```bash
+python -m overlap_asr_llm.cli run --config configs/all_pipelines.json --incremental
 ```
 
 ## 10. 每个人要更新贡献记录
@@ -208,16 +247,16 @@ CONTRIBUTIONS.md
 ModuleNotFoundError: No module named 'overlap_asr_llm'
 ```
 
-说明没有设置 `PYTHONPATH`。请使用：
-
-```bash
-PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
-```
-
-或者安装为可编辑包：
+说明项目还没有安装到当前 Python 环境。先安装为可编辑包：
 
 ```bash
 pip install -e .
+```
+
+然后再运行：
+
+```bash
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
 ```
 
 ### 真实模型导入失败
@@ -229,15 +268,16 @@ pip install -e .
 先确认是否都使用了同一个配置文件：
 
 ```text
-configs/experiment.json
+configs/mock.json
+configs/all_pipelines.json
 ```
 
-如果有人改了模型、样本或 reference，结果会不一样。
+当前真实实验以 `configs/all_pipelines.json` 为入口，共享内容在 `configs/base.json`。如果有人改了模型、样本、prompt 或 reference，结果会不一样。
 
 ## 最短运行命令
 
 只想确认项目能跑时，用这一条：
 
 ```bash
-PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
 ```

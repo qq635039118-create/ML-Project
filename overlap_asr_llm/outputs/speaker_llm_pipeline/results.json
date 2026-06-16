@@ -1,0 +1,2052 @@
+[
+  {
+    "sample_id": "sample2_no_overlap",
+    "audio_path": "no_overlap.wav",
+    "overlap_level": "none",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-speechbrain_diarization:faster-whisper+speechbrain+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.160 [SPEAKER_A] 关于这次的产品架构升级，我已经重申过无数次了。\\n00:00:06.900 --> 00:00:10.900 [SPEAKER_A] 市场留给我们的时间窗口，最多只剩两周。\\n00:00:11.620 --> 00:00:19.260 [SPEAKER_A] 我们必须砍掉那些华而不实的人情化设计，全面向自动化和高效率妥协。\\n00:00:19.860 --> 00:00:27.540 [SPEAKER_A] 你所谓的坚持情怀，在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:32.940 [SPEAKER_A] 用户要的是好用、快解决问题，\\n00:00:32.940 --> 00:00:37.840 [SPEAKER_A] 而不是对着一个功能去感悟什么设计者的灵魂。\\n00:00:37.840 --> 00:00:43.060 [SPEAKER_A] 你不要再拿那些理想主义的借口来拖延进度了。\\n00:00:43.060 --> 00:00:45.700 [SPEAKER_A] 商场就是战场。\\n00:00:45.700 --> 00:00:50.460 [SPEAKER_A] 收洗你那套多余的同情心和艺术追求吧。\\n00:00:51.080 --> 00:00:54.540 [SPEAKER_A] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.120 [SPEAKER_A] 所有人必须听我指挥。\\n00:00:58.120 --> 00:00:59.360 [SPEAKER_A] 出了问题，\\n00:00:59.360 --> 00:01:01.140 [SPEAKER_A] 我一个人来扛。\\n00:01:01.140 --> 00:01:04.260 [SPEAKER_A] 你现在必须给我闭嘴，\\n00:01:04.260 --> 00:01:06.440 [SPEAKER_A] 立刻执行命令！\\n00:01:06.440 --> 00:01:08.640 [SPEAKER_B] 你以为只有你看到了数据吗？\\n00:01:08.640 --> 00:01:10.780 [SPEAKER_B] 但你有没有想过，\\n00:01:10.780 --> 00:01:13.020 [SPEAKER_B] 盲目追求速度的后果，\\n00:01:13.020 --> 00:01:16.380 [SPEAKER_B] 就是失去我们最核心的忠实用户。\\n00:01:16.380 --> 00:01:18.260 [SPEAKER_B] 这根本不是什么\\n00:01:18.260 --> 00:01:19.460 [SPEAKER_B] 华而不实的情怀，\\n00:01:19.460 --> 00:01:20.860 [SPEAKER_B] 这是我们品牌\\n00:01:20.860 --> 00:01:22.700 [SPEAKER_B] 能活到今天的底层逻辑，\\n00:01:22.700 --> 00:01:25.720 [SPEAKER_B] 是冰冷的算法永远给不了的温度。\\n00:01:25.720 --> 00:01:30.460 [SPEAKER_B] 你每次都用这种粗暴的功利主义来绑架整个团队，\\n00:01:30.460 --> 00:01:33.000 [SPEAKER_B] 把大家没日没夜的心血，\\n00:01:33.000 --> 00:01:35.720 [SPEAKER_B] 当成可以随意揉捏的数字工具。\\n00:01:35.720 --> 00:01:38.560 [SPEAKER_B] 我绝不可能看着你把这个产品\\n00:01:38.560 --> 00:01:41.120 [SPEAKER_B] 变成没有灵魂的流水线废物。\\n00:01:41.120 --> 00:01:43.560 [SPEAKER_B] 你就不叫对结果负责，\\n00:01:43.560 --> 00:01:46.960 [SPEAKER_B] 你就叫盲目自大和毁灭整个项目。\\n00:01:46.960 --> 00:01:49.460 [SPEAKER_B] 今天就算闹到老板那里，\\n00:01:49.460 --> 00:01:51.060 [SPEAKER_B] 我也绝对不会妥协。\\n00:01:51.060 --> 00:01:52.920 [SPEAKER_B] 你想强行上线，\\n00:01:52.920 --> 00:01:55.600 [SPEAKER_B] 就先从我的团队头上踩过去！\",\n  \"changes\": [\n    \"Replaced all original [SPEAKER_1] labels with [SPEAKER_A] for turns before 00:01:06.440 and with [SPEAKER_B] for turns after, to reflect the two-speaker conflict scenario.\",\n    \"Added Chinese punctuation (commas, periods, question marks, exclamation marks) to improve readability.\",\n    \"Inserted a slight pause (、) in '好用、快解决问题' for natural reading, but the original wording '好用快解决问题' is preserved.\"\n  ],\n  \"uncertain_spans\": [\n    \"00:00:45.700 [SPEAKER_A] '收洗你那套' – likely a homophone error for '收起你那套' (put away your...), but kept as-is to avoid word invention.\",\n    \"00:01:41.120 [SPEAKER_B] '你就不叫对结果负责' – phrasing is ambiguous; could be intended as '你这不是对结果负责' (this is not taking responsibility).\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_1",
+    "runtime_seconds": 55.3415,
+    "cer": 0.0117096018735363,
+    "wer": 0.016194331983805668,
+    "text_cer": 0.0117096018735363,
+    "text_wer": 0.016194331983805668,
+    "flat_cer": 0.0117096018735363,
+    "flat_wer": 0.016194331983805668,
+    "timeline_cer": 0.0117096018735363,
+    "timeline_wer": 0.016194331983805668,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.16,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 6.9,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 11.620000000000001,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 19.86,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 27.54,
+        "end": 32.94,
+        "text": "用户要的是好用快解决问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 32.94,
+        "end": 37.84,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 37.84,
+        "end": 43.06,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 43.06,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 45.7,
+        "end": 50.46,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 54.54,
+        "end": 58.12,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 58.12,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 59.36,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 66.44,
+        "end": 68.64,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 68.64,
+        "end": 70.78,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 70.78,
+        "end": 73.02,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 73.02,
+        "end": 76.38,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 76.38,
+        "end": 78.25999999999999,
+        "text": "这根本不是什么",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 78.25999999999999,
+        "end": 79.46000000000001,
+        "text": "华而不实的情怀",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 79.46000000000001,
+        "end": 80.86,
+        "text": "这是我们品牌",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 80.86,
+        "end": 82.7,
+        "text": "能活到今天的底层逻辑",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 82.7,
+        "end": 85.72,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 85.72,
+        "end": 90.46000000000001,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 90.46000000000001,
+        "end": 93.0,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 93.0,
+        "end": 95.72,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 95.72,
+        "end": 98.56,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 98.56,
+        "end": 101.12,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 101.12,
+        "end": 103.56,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 103.56,
+        "end": 106.96000000000001,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 106.96000000000001,
+        "end": 109.46000000000001,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 109.46000000000001,
+        "end": 111.06,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 111.06,
+        "end": 112.92,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 112.92,
+        "end": 115.60000000000001,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_1"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_no_overlap",
+    "audio_path": "no_overlap.wav",
+    "overlap_level": "none",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-pyannote_diarization:faster-whisper+pyannote+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.160 [SPEAKER_00] 关于这次的产品架构升级，我已经重申过无数次了。\\n00:00:06.900 --> 00:00:10.900 [SPEAKER_00] 市场留给我们的时间窗口，最多只剩两周。\\n00:00:11.620 --> 00:00:19.260 [SPEAKER_00] 我们必须砍掉那些华而不实的人情化设计，全面向自动化和高效率妥协。\\n00:00:19.860 --> 00:00:27.540 [SPEAKER_00] 你所谓的坚持情怀，在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:32.940 [SPEAKER_00] 用户要的是好用，快解决问题，\\n00:00:32.940 --> 00:00:37.840 [SPEAKER_00] 而不是对着一个功能去感悟什么设计者的灵魂。\\n00:00:37.840 --> 00:00:43.060 [SPEAKER_00] 你不要再拿那些理想主义的借口来拖延进度了。\\n00:00:43.060 --> 00:00:45.700 [SPEAKER_00] 商场就是战场。\\n00:00:45.700 --> 00:00:50.460 [SPEAKER_00] 收洗你那套多余的同情心和艺术追求吧。\\n00:00:51.080 --> 00:00:54.540 [SPEAKER_00] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.120 [SPEAKER_00] 所有人必须听我指挥。\\n00:00:58.120 --> 00:00:59.360 [SPEAKER_00] 出了问题，\\n00:00:59.360 --> 00:01:01.140 [SPEAKER_00] 我一个人来扛。\\n00:01:01.140 --> 00:01:04.260 [SPEAKER_00] 你现在必须给我闭嘴。\\n00:01:04.260 --> 00:01:06.440 [SPEAKER_00] 立刻执行命令。\\n00:01:06.440 --> 00:01:08.640 [SPEAKER_01] 你以为只有你看到了数据吗？\\n00:01:08.640 --> 00:01:10.780 [SPEAKER_01] 但你有没有想过，\\n00:01:10.780 --> 00:01:13.020 [SPEAKER_01] 盲目追求速度的后果，\\n00:01:13.020 --> 00:01:16.380 [SPEAKER_01] 就是失去我们最核心的忠实用户。\\n00:01:16.380 --> 00:01:18.260 [SPEAKER_01] 这根本不是什么，\\n00:01:18.260 --> 00:01:19.460 [SPEAKER_01] 华而不实的情怀，\\n00:01:19.460 --> 00:01:20.860 [SPEAKER_01] 这是我们品牌，\\n00:01:20.860 --> 00:01:22.700 [SPEAKER_01] 能活到今天的底层逻辑。\\n00:01:22.700 --> 00:01:25.720 [SPEAKER_01] 是冰冷的算法永远给不了的温度。\\n00:01:25.720 --> 00:01:30.460 [SPEAKER_01] 你每次都用这种粗暴的功利主义来绑架整个团队。\\n00:01:30.460 --> 00:01:33.000 [SPEAKER_01] 把大家没日没夜的心血，\\n00:01:33.000 --> 00:01:35.720 [SPEAKER_01] 当成可以随意揉捏的数字工具。\\n00:01:35.720 --> 00:01:38.560 [SPEAKER_01] 我绝不可能看着你把这个产品，\\n00:01:38.560 --> 00:01:41.120 [SPEAKER_01] 变成没有灵魂的流水线废物。\\n00:01:41.120 --> 00:01:43.560 [SPEAKER_01] 你就不叫对结果负责，\\n00:01:43.560 --> 00:01:46.960 [SPEAKER_01] 你就叫盲目自大和毁灭整个项目。\\n00:01:46.960 --> 00:01:49.460 [SPEAKER_01] 今天就算闹到老板那里，\\n00:01:49.460 --> 00:01:51.060 [SPEAKER_01] 我也绝对不会妥协。\\n00:01:51.060 --> 00:01:52.920 [SPEAKER_01] 你想强行上线，\\n00:01:52.920 --> 00:01:55.600 [SPEAKER_01] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added terminal punctuation (periods, commas, question marks) to segments that previously lacked them for readability and consistency.\",\n    \"Inserted a comma after '用户要的是好用' to clarify the listing structure.\",\n    \"All original words preserved; no paraphrasing or word additions.\"\n  ],\n  \"uncertain_spans\": [\n    \"收洗 (00:00:45.700 --> 00:00:50.460) likely misheard for 收起, left unaltered per instruction.\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_00,SPEAKER_01",
+    "runtime_seconds": 72.536,
+    "cer": 0.0117096018735363,
+    "wer": 0.016194331983805668,
+    "text_cer": 0.0117096018735363,
+    "text_wer": 0.016194331983805668,
+    "flat_cer": 0.0117096018735363,
+    "flat_wer": 0.016194331983805668,
+    "timeline_cer": 0.0117096018735363,
+    "timeline_wer": 0.016194331983805668,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.16,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 6.9,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 11.620000000000001,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 19.86,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 27.54,
+        "end": 32.94,
+        "text": "用户要的是好用快解决问题",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 32.94,
+        "end": 37.84,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 37.84,
+        "end": 43.06,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 43.06,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 45.7,
+        "end": 50.46,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 54.54,
+        "end": 58.12,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 58.12,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 59.36,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 66.44,
+        "end": 68.64,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 68.64,
+        "end": 70.78,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 70.78,
+        "end": 73.02,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 73.02,
+        "end": 76.38,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 76.38,
+        "end": 78.25999999999999,
+        "text": "这根本不是什么",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 78.25999999999999,
+        "end": 79.46000000000001,
+        "text": "华而不实的情怀",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 79.46000000000001,
+        "end": 80.86,
+        "text": "这是我们品牌",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 80.86,
+        "end": 82.7,
+        "text": "能活到今天的底层逻辑",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 82.7,
+        "end": 85.72,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 85.72,
+        "end": 90.46000000000001,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 90.46000000000001,
+        "end": 93.0,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 93.0,
+        "end": 95.72,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 95.72,
+        "end": 98.56,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 98.56,
+        "end": 101.12,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 101.12,
+        "end": 103.56,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 103.56,
+        "end": 106.96000000000001,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 106.96000000000001,
+        "end": 109.46000000000001,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 109.46000000000001,
+        "end": 111.06,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 111.06,
+        "end": 112.92,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 112.92,
+        "end": 115.60000000000001,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_01"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_light_overlap",
+    "audio_path": "light_overlap.wav",
+    "overlap_level": "light",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-speechbrain_diarization:faster-whisper+speechbrain+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.120 [SPEAKER_1] 关于这次的产品架构升级,我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_1] 市场留给我们的时间窗口,最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_1] 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。\\n00:00:20.260 --> 00:00:27.540 [SPEAKER_1] 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.780 [SPEAKER_1] 用户要的是好用，\\n00:00:30.780 --> 00:00:31.560 [SPEAKER_1] 快，\\n00:00:31.560 --> 00:00:32.920 [SPEAKER_1] 解决问题，\\n00:00:32.920 --> 00:00:37.820 [SPEAKER_1] 而不是对着一个功能去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:43.020 [SPEAKER_1] 你不要再拿那些理想主义的借口来拖延进度了。\\n00:00:43.020 --> 00:00:45.700 [SPEAKER_1] 商场就是战场。\\n00:00:45.700 --> 00:00:50.440 [SPEAKER_1] 收洗你那套多余的同情心和艺术追求吧！\\n00:00:51.080 --> 00:00:54.540 [SPEAKER_1] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.100 [SPEAKER_1] 所有人必须听我指挥。\\n00:00:58.100 --> 00:00:59.360 [SPEAKER_1] 出了问题，\\n00:00:59.360 --> 00:01:01.160 [SPEAKER_1] 我一个人来扛。\\n00:01:01.160 --> 00:01:03.180 [SPEAKER_1] 你以为只有你看到了数据吗？\\n00:01:03.180 --> 00:01:05.280 [SPEAKER_1] 但你有没有想过，\\n00:01:05.280 --> 00:01:07.620 [SPEAKER_1] 盲目追求速度的后果，\\n00:01:07.620 --> 00:01:10.980 [SPEAKER_1] 就是失去我们最核心的忠实用户。\\n00:01:10.980 --> 00:01:14.060 [SPEAKER_1] 这根本不是什么华而不实的情怀。\\n00:01:14.060 --> 00:01:17.300 [SPEAKER_1] 这是我们品牌能活到今天的底层逻辑。\\n00:01:17.300 --> 00:01:20.320 [SPEAKER_1] 是冰冷的算法永远给不了的温度。\\n00:01:20.320 --> 00:01:23.780 [SPEAKER_1] 你每次都用这种粗暴的功利主义，\\n00:01:23.780 --> 00:01:25.060 [SPEAKER_1] 来绑架整个团队。\\n00:01:25.060 --> 00:01:27.600 [SPEAKER_1] 把大家没日没夜的心血，\\n00:01:27.600 --> 00:01:30.320 [SPEAKER_1] 当成可以随意揉捏的数字工具。\\n00:01:30.320 --> 00:01:33.180 [SPEAKER_1] 我绝不可能看着你把这个产品，\\n00:01:33.180 --> 00:01:35.720 [SPEAKER_1] 变成没有灵魂的流水线废物。\\n00:01:35.720 --> 00:01:38.160 [SPEAKER_1] 你就不叫对结果负责。\\n00:01:38.160 --> 00:01:41.560 [SPEAKER_1] 你就叫盲目自大和毁灭整个项目。\\n00:01:41.560 --> 00:01:44.060 [SPEAKER_1] 今天就算闹到老板那里，\\n00:01:44.060 --> 00:01:45.660 [SPEAKER_1] 我也绝对不会妥协。\\n00:01:45.660 --> 00:01:47.520 [SPEAKER_1] 你想强行上线，\\n00:01:47.520 --> 00:01:50.060 [SPEAKER_1] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added closing punctuation (。 ! ？) to 24 segments that lacked it.\",\n    \"Added 9 commas within or at the ends of segments to mark natural pauses and list continuity (e.g., 好用， / 快， / 解决问题，).\",\n    \"No words or speaker labels were altered; all original wording preserved.\"\n  ],\n  \"uncertain_spans\": [\n    \"收洗你那套多余的同情心和艺术追求吧 (possible ASR error: 收洗 -> 收起 or 收拾)\",\n    \"你就不叫对结果负责 (possible ASR error: missing 是 or 这)\",\n    \"你就叫盲目自大和毁灭整个项目 (parallel odd phrasing, likely same issue as above)\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_1",
+    "runtime_seconds": 83.7895,
+    "cer": 0.0468384074941452,
+    "wer": 0.048582995951417005,
+    "text_cer": 0.0468384074941452,
+    "text_wer": 0.048582995951417005,
+    "flat_cer": 0.0468384074941452,
+    "flat_wer": 0.048582995951417005,
+    "timeline_cer": 0.0468384074941452,
+    "timeline_wer": 0.048582995951417005,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 27.54,
+        "end": 30.78,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 30.78,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 32.92,
+        "end": 37.82,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 37.82,
+        "end": 43.019999999999996,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 45.7,
+        "end": 50.44,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 58.1,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 59.36,
+        "end": 61.16,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 61.16,
+        "end": 63.18,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 63.18,
+        "end": 65.28,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 65.28,
+        "end": 67.62,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 67.62,
+        "end": 70.98,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 70.98,
+        "end": 74.06,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 74.06,
+        "end": 77.3,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 77.3,
+        "end": 80.32,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 80.32,
+        "end": 83.78,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 83.78,
+        "end": 85.06,
+        "text": "来绑架整个团队",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 85.06,
+        "end": 87.6,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 87.6,
+        "end": 90.32000000000001,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 90.32000000000001,
+        "end": 93.18,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 93.18,
+        "end": 95.72,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 95.72,
+        "end": 98.16,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 98.16,
+        "end": 101.56,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 101.56,
+        "end": 104.06,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 104.06,
+        "end": 105.66,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 105.66,
+        "end": 107.52000000000001,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 107.52000000000001,
+        "end": 110.06,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_1"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_light_overlap",
+    "audio_path": "light_overlap.wav",
+    "overlap_level": "light",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-pyannote_diarization:faster-whisper+pyannote+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.120 [SPEAKER_01] 关于这次的产品架构升级，我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_01] 市场留给我们的时间窗口，最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_01] 我们必须砍掉那些华而不实的人情化设计，全面向自动化和高效率妥协。\\n00:00:20.260 --> 00:00:27.540 [SPEAKER_01] 你所谓的坚持情怀，在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.780 [SPEAKER_01] 用户要的是好用，\\n00:00:30.780 --> 00:00:31.560 [SPEAKER_01] 快，\\n00:00:31.560 --> 00:00:32.920 [SPEAKER_01] 解决问题，\\n00:00:32.920 --> 00:00:37.820 [SPEAKER_01] 而不是对着一个功能去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:43.020 [SPEAKER_01] 你不要再拿那些理想主义的借口来拖延进度了。\\n00:00:43.020 --> 00:00:45.700 [SPEAKER_01] 商场就是战场。\\n00:00:45.700 --> 00:00:50.440 [SPEAKER_01] 收洗你那套多余的同情心和艺术追求吧。\\n00:00:51.080 --> 00:00:54.540 [SPEAKER_01] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.100 [SPEAKER_01] 所有人必须听我指挥。\\n00:00:58.100 --> 00:00:59.360 [SPEAKER_01] 出了问题，\\n00:00:59.360 --> 00:01:01.160 [SPEAKER_01] 我一个人来扛。\\n00:01:01.160 --> 00:01:03.180 [SPEAKER_00] 你以为只有你看到了数据吗？\\n00:01:03.180 --> 00:01:05.280 [SPEAKER_01] 但你有没有想过？\\n00:01:05.280 --> 00:01:07.620 [SPEAKER_00] 盲目追求速度的后果，\\n00:01:07.620 --> 00:01:10.980 [SPEAKER_00] 就是失去我们最核心的忠实用户。\\n00:01:10.980 --> 00:01:14.060 [SPEAKER_00] 这根本不是什么华而不实的情怀。\\n00:01:14.060 --> 00:01:17.300 [SPEAKER_00] 这是我们品牌能活到今天的底层逻辑。\\n00:01:17.300 --> 00:01:20.320 [SPEAKER_00] 是冰冷的算法永远给不了的温度。\\n00:01:20.320 --> 00:01:23.780 [SPEAKER_00] 你每次都用这种粗暴的功利主义，\\n00:01:23.780 --> 00:01:25.060 [SPEAKER_00] 来绑架整个团队。\\n00:01:25.060 --> 00:01:27.600 [SPEAKER_00] 把大家没日没夜的心血，\\n00:01:27.600 --> 00:01:30.320 [SPEAKER_00] 当成可以随意揉捏的数字工具。\\n00:01:30.320 --> 00:01:33.180 [SPEAKER_00] 我绝不可能看着你把这个产品，\\n00:01:33.180 --> 00:01:35.720 [SPEAKER_00] 变成没有灵魂的流水线废物。\\n00:01:35.720 --> 00:01:38.160 [SPEAKER_00] 你就不叫对结果负责。\\n00:01:38.160 --> 00:01:41.560 [SPEAKER_00] 你就叫盲目自大和毁灭整个项目。\\n00:01:41.560 --> 00:01:44.060 [SPEAKER_00] 今天就算闹到老板那里，\\n00:01:44.060 --> 00:01:45.660 [SPEAKER_00] 我也绝对不会妥协。\\n00:01:45.660 --> 00:01:47.520 [SPEAKER_00] 你想强行上线，\\n00:01:47.520 --> 00:01:50.060 [SPEAKER_00] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added punctuation (commas, periods, question marks) to improve readability; preserved all original words, speaker labels, and timestamps.\"\n  ],\n  \"uncertain_spans\": [\n    \"00:00:45.700-00:00:50.440: '收洗' might be a misrecognition of '收起'\",\n    \"00:01:35.720-00:01:38.160: '你就不叫对结果负责' unclear phrasing\",\n    \"00:01:38.160-00:01:41.560: '你就叫盲目自大' unclear phrasing, possibly '你就是盲目自大'\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_01,SPEAKER_00",
+    "runtime_seconds": 72.5661,
+    "cer": 0.0468384074941452,
+    "wer": 0.048582995951417005,
+    "text_cer": 0.0468384074941452,
+    "text_wer": 0.048582995951417005,
+    "flat_cer": 0.0468384074941452,
+    "flat_wer": 0.048582995951417005,
+    "timeline_cer": 0.0468384074941452,
+    "timeline_wer": 0.048582995951417005,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 27.54,
+        "end": 30.78,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 30.78,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 32.92,
+        "end": 37.82,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 37.82,
+        "end": 43.019999999999996,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 45.7,
+        "end": 50.44,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 58.1,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 59.36,
+        "end": 61.16,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 61.16,
+        "end": 63.18,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 63.18,
+        "end": 65.28,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 65.28,
+        "end": 67.62,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 67.62,
+        "end": 70.98,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 70.98,
+        "end": 74.06,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 74.06,
+        "end": 77.3,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 77.3,
+        "end": 80.32,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 80.32,
+        "end": 83.78,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 83.78,
+        "end": 85.06,
+        "text": "来绑架整个团队",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 85.06,
+        "end": 87.6,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 87.6,
+        "end": 90.32000000000001,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 90.32000000000001,
+        "end": 93.18,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 93.18,
+        "end": 95.72,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 95.72,
+        "end": 98.16,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 98.16,
+        "end": 101.56,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 101.56,
+        "end": 104.06,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 104.06,
+        "end": 105.66,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 105.66,
+        "end": 107.52000000000001,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 107.52000000000001,
+        "end": 110.06,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_00"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_mid_overlap",
+    "audio_path": "mid_overlap.wav",
+    "overlap_level": "medium",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-speechbrain_diarization:faster-whisper+speechbrain+full_asr_align",
+    "text": "{\n  \"refined_text\": \"diarization_asr: 00:00:00.000 --> 00:00:05.120 [SPEAKER_1] 关于这次的产品架构升级，我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_1] 市场留给我们的时间窗口，最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_1] 我们必须砍掉那些华而不实的人情化设计，全面向自动化和高效率妥协。\\n00:00:20.240 --> 00:00:27.540 [SPEAKER_1] 你所谓的坚持情怀，在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.760 [SPEAKER_1] 用户要的是好用，\\n00:00:30.760 --> 00:00:31.560 [SPEAKER_1] 快，\\n00:00:31.560 --> 00:00:32.920 [SPEAKER_1] 解决问题，\\n00:00:32.920 --> 00:00:35.000 [SPEAKER_1] 而不是对着一个功能\\n00:00:35.000 --> 00:00:37.820 [SPEAKER_1] 去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:41.420 [SPEAKER_1] 你不要再拿那些理想主义的借口，\\n00:00:41.420 --> 00:00:43.020 [SPEAKER_1] 来拖延进度了。\\n00:00:43.020 --> 00:00:45.700 [SPEAKER_1] 商场就是战场。\\n00:00:45.700 --> 00:00:48.680 [SPEAKER_1] 收洗你那套多余的同情心，\\n00:00:48.680 --> 00:00:50.440 [SPEAKER_1] 和艺术追求吧。\\n00:00:50.440 --> 00:00:55.200 [SPEAKER_1] 下周一必须切断旧借口。\\n00:00:55.200 --> 00:00:58.060 [SPEAKER_1] 但你有没有想过，\\n00:00:58.060 --> 00:00:59.780 [SPEAKER_1] 盲目追求速度的后果？\\n00:00:59.780 --> 00:01:03.120 [SPEAKER_1] 就是失去我们最核心的忠实用户。\\n00:01:03.120 --> 00:01:06.280 [SPEAKER_1] 这根本不是什么华而不实的情怀。\\n00:01:06.280 --> 00:01:09.520 [SPEAKER_1] 这是我们品牌能活到今天的底层逻辑。\\n00:01:09.520 --> 00:01:12.520 [SPEAKER_1] 是冰冷的算法永远给不了的温度。\\n00:01:12.520 --> 00:01:15.980 [SPEAKER_1] 你每次都用这种粗暴的功利主义，\\n00:01:15.980 --> 00:01:17.260 [SPEAKER_1] 来绑架整个团队。\\n00:01:17.260 --> 00:01:19.820 [SPEAKER_1] 把大家没日没夜的心血，\\n00:01:19.820 --> 00:01:22.500 [SPEAKER_1] 当成可以随意揉捏的数字工具。\\n00:01:22.500 --> 00:01:25.380 [SPEAKER_1] 我绝不可能看着你把这个产品，\\n00:01:25.380 --> 00:01:27.920 [SPEAKER_1] 变成没有灵魂的流水线废物！\\n00:01:27.920 --> 00:01:30.360 [SPEAKER_1] 你就不叫对结果负责，\\n00:01:30.360 --> 00:01:33.760 [SPEAKER_1] 你就叫盲目自大和毁灭整个项目！\\n00:01:33.760 --> 00:01:36.280 [SPEAKER_1] 今天就算闹到老板那里，\\n00:01:36.280 --> 00:01:37.860 [SPEAKER_1] 我也绝对不会妥协！\\n00:01:37.860 --> 00:01:39.720 [SPEAKER_1] 你想强行上线，\\n00:01:39.720 --> 00:01:42.260 [SPEAKER_1] 就先从我的团队头上踩过去！\",\n  \"changes\": [\n    \"Converted ASCII punctuation to full‑width Chinese punctuation for consistency.\",\n    \"Added missing punctuation (commas, periods, question/exclamation marks) to segment breaks to improve readability.\",\n    \"Marked four uncertain spans that likely contain ASR errors: '人情化设计', '收洗', '切断旧借口', '你就不叫对结果负责'.\"\n  ],\n  \"uncertain_spans\": [\n    \"人情化设计\",\n    \"收洗\",\n    \"切断旧借口\",\n    \"你就不叫对结果负责\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_1",
+    "runtime_seconds": 96.8302,
+    "cer": 0.22014051522248243,
+    "wer": 0.1659919028340081,
+    "text_cer": 0.22014051522248243,
+    "text_wer": 0.1659919028340081,
+    "flat_cer": 0.22014051522248243,
+    "flat_wer": 0.1659919028340081,
+    "timeline_cer": 0.22014051522248243,
+    "timeline_wer": 0.1659919028340081,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 20.240000000000002,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 41.42,
+        "end": 43.019999999999996,
+        "text": "来拖延进度了",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 45.7,
+        "end": 48.68,
+        "text": "收洗你那套多余的同情心",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 48.68,
+        "end": 50.44,
+        "text": "和艺术追求吧",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 50.44,
+        "end": 55.2,
+        "text": "下周一必须切断旧借口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 55.2,
+        "end": 58.06,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 58.06,
+        "end": 59.78,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 59.78,
+        "end": 63.120000000000005,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 63.120000000000005,
+        "end": 66.28,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 66.28,
+        "end": 69.52000000000001,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 69.52000000000001,
+        "end": 72.52000000000001,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 72.52000000000001,
+        "end": 75.98,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 75.98,
+        "end": 77.26,
+        "text": "来绑架整个团队",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 77.26,
+        "end": 79.82000000000001,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 79.82000000000001,
+        "end": 82.5,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 82.5,
+        "end": 85.38,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 85.38,
+        "end": 87.92,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 87.92,
+        "end": 90.36,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 90.36,
+        "end": 93.76,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 93.76,
+        "end": 96.28,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 96.28,
+        "end": 97.86,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 97.86,
+        "end": 99.72,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 99.72,
+        "end": 102.26,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_1"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_mid_overlap",
+    "audio_path": "mid_overlap.wav",
+    "overlap_level": "medium",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-pyannote_diarization:faster-whisper+pyannote+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.120 [SPEAKER_01] 关于这次的产品架构升级，我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_01] 市场留给我们的时间窗口，最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_01] 我们必须砍掉那些华而不实的人情化设计，全面向自动化和高效率妥协。\\n00:00:20.240 --> 00:00:27.540 [SPEAKER_01] 你所谓的坚持情怀，在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.760 [SPEAKER_01] 用户要的是好用、\\n00:00:30.760 --> 00:00:31.560 [SPEAKER_01] 快、\\n00:00:31.560 --> 00:00:32.920 [SPEAKER_01] 解决问题，\\n00:00:32.920 --> 00:00:35.000 [SPEAKER_01] 而不是对着一个功能\\n00:00:35.000 --> 00:00:37.820 [SPEAKER_01] 去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:41.420 [SPEAKER_01] 你不要再拿那些理想主义的借口\\n00:00:41.420 --> 00:00:43.020 [SPEAKER_01] 来拖延进度了。\\n00:00:43.020 --> 00:00:45.700 [SPEAKER_01] 商场就是战场。\\n00:00:45.700 --> 00:00:48.680 [SPEAKER_01] 收洗你那套多余的同情心\\n00:00:48.680 --> 00:00:50.440 [SPEAKER_01] 和艺术追求吧。\\n00:00:50.440 --> 00:00:55.200 [SPEAKER_01] 下周一必须切断旧借口。\\n00:00:55.200 --> 00:00:58.060 [SPEAKER_01] 但你有没有想过？\\n00:00:58.060 --> 00:00:59.780 [SPEAKER_00] 盲目追求速度的后果，\\n00:00:59.780 --> 00:01:03.120 [SPEAKER_00] 就是失去我们最核心的忠实用户。\\n00:01:03.120 --> 00:01:06.280 [SPEAKER_00] 这根本不是什么华而不实的情怀，\\n00:01:06.280 --> 00:01:09.520 [SPEAKER_00] 这是我们品牌能活到今天的底层逻辑。\\n00:01:09.520 --> 00:01:12.520 [SPEAKER_00] 是冰冷的算法永远给不了的温度。\\n00:01:12.520 --> 00:01:15.980 [SPEAKER_00] 你每次都用这种粗暴的功利主义\\n00:01:15.980 --> 00:01:17.260 [SPEAKER_00] 来绑架整个团队，\\n00:01:17.260 --> 00:01:19.820 [SPEAKER_00] 把大家没日没夜的心血\\n00:01:19.820 --> 00:01:22.500 [SPEAKER_00] 当成可以随意揉捏的数字工具。\\n00:01:22.500 --> 00:01:25.380 [SPEAKER_00] 我绝不可能看着你把这个产品\\n00:01:25.380 --> 00:01:27.920 [SPEAKER_00] 变成没有灵魂的流水线废物。\\n00:01:27.920 --> 00:01:30.360 [SPEAKER_00] 你就不叫对结果负责，\\n00:01:30.360 --> 00:01:33.760 [SPEAKER_00] 你就叫盲目自大和毁灭整个项目。\\n00:01:33.760 --> 00:01:36.280 [SPEAKER_00] 今天就算闹到老板那里，\\n00:01:36.280 --> 00:01:37.860 [SPEAKER_00] 我也绝对不会妥协。\\n00:01:37.860 --> 00:01:39.720 [SPEAKER_00] 你想强行上线，\\n00:01:39.720 --> 00:01:42.260 [SPEAKER_00] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added comma after '产品架构升级'\",\n    \"Added period after '无数次了'\",\n    \"Added comma after '时间窗口'\",\n    \"Added period after '两周'\",\n    \"Added comma after '人情化设计'\",\n    \"Added period after '妥协'\",\n    \"Added comma after '情怀'\",\n    \"Added period after '一文不值'\",\n    \"Added enumeration commas in '好用、快、解决问题'\",\n    \"Added comma after '解决问题'\",\n    \"Added period after '灵魂'\",\n    \"Added comma after '借口'\",\n    \"Added period after '了'\",\n    \"Added period after '战场'\",\n    \"Added period after '吧'\",\n    \"Added period after '旧借口'\",\n    \"Added question mark after '想过'\",\n    \"Added comma after '后果'\",\n    \"Added period after '用户'\",\n    \"Added comma after '情怀'\",\n    \"Added period after '逻辑'\",\n    \"Added period after '温度'\",\n    \"Added comma after '团队'\",\n    \"Added period after '工具'\",\n    \"Added comma after '废物'\",\n    \"Added period after '负责'\",\n    \"Added period after '整个项目'\",\n    \"Added comma after '老板那里'\",\n    \"Added period after '妥协'\",\n    \"Added comma after '上线'\",\n    \"Added period after '踩过去'\"\n  ],\n  \"uncertain_spans\": [\n    \"收洗你那套多余的同情心 (possibly '收起')\",\n    \"下周一必须切断旧借口 (possibly '旧接口')\",\n    \"华而不实的人情化设计 (possibly '人性化设计')\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_01,SPEAKER_00",
+    "runtime_seconds": 76.918,
+    "cer": 0.12177985948477751,
+    "wer": 0.13360323886639677,
+    "text_cer": 0.12177985948477751,
+    "text_wer": 0.13360323886639677,
+    "flat_cer": 0.12177985948477751,
+    "flat_wer": 0.13360323886639677,
+    "timeline_cer": 0.12177985948477751,
+    "timeline_wer": 0.13360323886639677,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 20.240000000000002,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 41.42,
+        "end": 43.019999999999996,
+        "text": "来拖延进度了",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 45.7,
+        "end": 48.68,
+        "text": "收洗你那套多余的同情心",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 48.68,
+        "end": 50.44,
+        "text": "和艺术追求吧",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 50.44,
+        "end": 55.2,
+        "text": "下周一必须切断旧借口",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 55.2,
+        "end": 58.06,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 58.06,
+        "end": 59.78,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 59.78,
+        "end": 63.120000000000005,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 63.120000000000005,
+        "end": 66.28,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 66.28,
+        "end": 69.52000000000001,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 69.52000000000001,
+        "end": 72.52000000000001,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 72.52000000000001,
+        "end": 75.98,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 75.98,
+        "end": 77.26,
+        "text": "来绑架整个团队",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 77.26,
+        "end": 79.82000000000001,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 79.82000000000001,
+        "end": 82.5,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 82.5,
+        "end": 85.38,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 85.38,
+        "end": 87.92,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 87.92,
+        "end": 90.36,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 90.36,
+        "end": 93.76,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 93.76,
+        "end": 96.28,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 96.28,
+        "end": 97.86,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 97.86,
+        "end": 99.72,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 99.72,
+        "end": 102.26,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_00"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_heavy_overlap",
+    "audio_path": "heavy_overlap.wav",
+    "overlap_level": "heavy",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-speechbrain_diarization:faster-whisper+speechbrain+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:05.120 [SPEAKER_1] 关于这次的产品架构升级,我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_1] 市场留给我们的时间窗口,最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_1] 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。\\n00:00:20.260 --> 00:00:27.540 [SPEAKER_1] 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.760 [SPEAKER_1] 用户要的是好用，\\n00:00:30.760 --> 00:00:32.920 [SPEAKER_1] 快解决问题，\\n00:00:32.920 --> 00:00:35.000 [SPEAKER_1] 而不是对着一个功能，\\n00:00:35.000 --> 00:00:37.820 [SPEAKER_1] 去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:41.420 [SPEAKER_1] 你不要再拿那些理想主义的借口，\\n00:00:41.420 --> 00:00:43.000 [SPEAKER_1] 来拖延进度了。\\n00:00:43.000 --> 00:00:45.880 [SPEAKER_1] 商场就是战场。\\n00:00:45.880 --> 00:00:47.840 [SPEAKER_1] 你以为只有你看到了数据吗？\\n00:00:47.840 --> 00:00:50.260 [SPEAKER_1] 但你有没有想过，\\n00:00:50.260 --> 00:00:52.320 [SPEAKER_1] 盲目追求速度的后果，\\n00:00:52.320 --> 00:00:55.640 [SPEAKER_1] 就是失去我们最核心的忠实用户。\\n00:00:55.640 --> 00:00:58.700 [SPEAKER_1] 这根本不是什么华而不实的情怀，\\n00:00:58.700 --> 00:01:01.980 [SPEAKER_1] 这是我们品牌能活到今天的底层逻辑。\\n00:01:01.980 --> 00:01:05.020 [SPEAKER_1] 是冰冷的算法永远给不了的温度。\\n00:01:05.020 --> 00:01:09.760 [SPEAKER_1] 你每次都用这种粗暴的功利主义来绑架整个团队，\\n00:01:09.760 --> 00:01:12.300 [SPEAKER_1] 把大家没日没夜的心血，\\n00:01:12.300 --> 00:01:15.000 [SPEAKER_1] 当成可以随意揉捏的数字工具。\\n00:01:15.000 --> 00:01:17.880 [SPEAKER_1] 我绝不可能看着你把这个产品，\\n00:01:17.880 --> 00:01:20.420 [SPEAKER_1] 变成没有灵魂的流水线废物。\\n00:01:20.420 --> 00:01:22.860 [SPEAKER_1] 你就不叫对结果负责，\\n00:01:22.860 --> 00:01:26.260 [SPEAKER_1] 你就叫盲目自大和毁灭整个项目。\\n00:01:26.260 --> 00:01:28.760 [SPEAKER_1] 今天就算闹到老板那里，\\n00:01:28.760 --> 00:01:30.360 [SPEAKER_1] 我也绝对不会妥协。\\n00:01:30.360 --> 00:01:32.220 [SPEAKER_1] 你想强行上线，\\n00:01:32.220 --> 00:01:34.760 [SPEAKER_1] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added commas, periods, and a question mark to segment endings to reflect sentence boundaries and improve readability (e.g., commas after '好用' and '快解决问题', period after '灵魂', question mark after '吗', etc.).\"\n  ],\n  \"uncertain_spans\": [\n    \"Speaker label 'SPEAKER_1' is used for all turns. Retrieved context indicates a two-speaker debate; likely diarization error. No label change applied per constraints.\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_1",
+    "runtime_seconds": 80.7936,
+    "cer": 0.1522248243559719,
+    "wer": 0.15384615384615385,
+    "text_cer": 0.1522248243559719,
+    "text_wer": 0.15384615384615385,
+    "flat_cer": 0.1522248243559719,
+    "flat_wer": 0.15384615384615385,
+    "timeline_cer": 0.1522248243559719,
+    "timeline_wer": 0.15384615384615385,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 32.92,
+        "text": "快解决问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 41.42,
+        "end": 43.0,
+        "text": "来拖延进度了",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 43.0,
+        "end": 45.879999999999995,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 45.879999999999995,
+        "end": 47.84,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 47.84,
+        "end": 50.26,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 50.26,
+        "end": 52.32,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 52.32,
+        "end": 55.64,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 55.64,
+        "end": 58.7,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 58.7,
+        "end": 61.980000000000004,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 61.980000000000004,
+        "end": 65.02,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 65.02,
+        "end": 69.76,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 69.76,
+        "end": 72.3,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 72.3,
+        "end": 75.0,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 75.0,
+        "end": 77.88,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 77.88,
+        "end": 80.42,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 80.42,
+        "end": 82.86,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 82.86,
+        "end": 86.26,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 86.26,
+        "end": 88.76,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 88.76,
+        "end": 90.36,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 90.36,
+        "end": 92.22,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 92.22,
+        "end": 94.76,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_1"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_heavy_overlap",
+    "audio_path": "heavy_overlap.wav",
+    "overlap_level": "heavy",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-pyannote_diarization:faster-whisper+pyannote+full_asr_align",
+    "text": "{\n  \"refined_text\": \"diarization_asr: 00:00:00.000 --> 00:00:05.120 [SPEAKER_01] 关于这次的产品架构升级,我已经重申过无数次了。\\n00:00:06.920 --> 00:00:10.900 [SPEAKER_01] 市场留给我们的时间窗口,最多只剩两周。\\n00:00:11.360 --> 00:00:19.260 [SPEAKER_01] 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。\\n00:00:20.260 --> 00:00:27.540 [SPEAKER_01] 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。\\n00:00:27.540 --> 00:00:30.760 [SPEAKER_01] 用户要的是好用，\\n00:00:30.760 --> 00:00:32.920 [SPEAKER_01] 快解决问题，\\n00:00:32.920 --> 00:00:35.000 [SPEAKER_01] 而不是对着一个功能\\n00:00:35.000 --> 00:00:37.820 [SPEAKER_01] 去感悟什么设计者的灵魂。\\n00:00:37.820 --> 00:00:41.420 [SPEAKER_01] 你不要再拿那些理想主义的借口，\\n00:00:41.420 --> 00:00:43.000 [SPEAKER_01] 来拖延进度了。\\n00:00:43.000 --> 00:00:45.880 [SPEAKER_01] 商场就是战场。\\n00:00:45.880 --> 00:00:47.840 [SPEAKER_01] 你以为只有你看到了数据吗？\\n00:00:47.840 --> 00:00:50.260 [SPEAKER_01] 但你有没有想过，\\n00:00:50.260 --> 00:00:52.320 [SPEAKER_00] 盲目追求速度的后果，\\n00:00:52.320 --> 00:00:55.640 [SPEAKER_00] 就是失去我们最核心的忠实用户。\\n00:00:55.640 --> 00:00:58.700 [SPEAKER_00] 这根本不是什么华而不实的情怀，\\n00:00:58.700 --> 00:01:01.980 [SPEAKER_00] 这是我们品牌能活到今天的底层逻辑，\\n00:01:01.980 --> 00:01:05.020 [SPEAKER_00] 是冰冷的算法永远给不了的温度。\\n00:01:05.020 --> 00:01:09.760 [SPEAKER_00] 你每次都用这种粗暴的功利主义来绑架整个团队，\\n00:01:09.760 --> 00:01:12.300 [SPEAKER_00] 把大家没日没夜的心血，\\n00:01:12.300 --> 00:01:15.000 [SPEAKER_00] 当成可以随意揉捏的数字工具。\\n00:01:15.000 --> 00:01:17.880 [SPEAKER_00] 我绝不可能看着你把这个产品，\\n00:01:17.880 --> 00:01:20.420 [SPEAKER_00] 变成没有灵魂的流水线废物。\\n00:01:20.420 --> 00:01:22.860 [SPEAKER_00] 你就不叫对结果负责，\\n00:01:22.860 --> 00:01:26.260 [SPEAKER_00] 你就叫盲目自大和毁灭整个项目。\\n00:01:26.260 --> 00:01:28.760 [SPEAKER_00] 今天就算闹到老板那里，\\n00:01:28.760 --> 00:01:30.360 [SPEAKER_00] 我也绝对不会妥协。\\n00:01:30.360 --> 00:01:32.220 [SPEAKER_00] 你想强行上线，\\n00:01:32.220 --> 00:01:34.760 [SPEAKER_00] 就先从我的团队头上踩过去。\",\n  \"changes\": [\n    \"Added missing punctuation (commas, periods, question mark) to clarify sentence boundaries and connections between segments; no words altered.\"\n  ],\n  \"uncertain_spans\": [],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_01,SPEAKER_00",
+    "runtime_seconds": 75.7658,
+    "cer": 0.2529274004683841,
+    "wer": 0.1862348178137652,
+    "text_cer": 0.2529274004683841,
+    "text_wer": 0.1862348178137652,
+    "flat_cer": 0.2529274004683841,
+    "flat_wer": 0.1862348178137652,
+    "timeline_cer": 0.2529274004683841,
+    "timeline_wer": 0.1862348178137652,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 32.92,
+        "text": "快解决问题",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 41.42,
+        "end": 43.0,
+        "text": "来拖延进度了",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 43.0,
+        "end": 45.879999999999995,
+        "text": "商场就是战场",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 45.879999999999995,
+        "end": 47.84,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 47.84,
+        "end": 50.26,
+        "text": "但你有没有想过",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 50.26,
+        "end": 52.32,
+        "text": "盲目追求速度的后果",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 52.32,
+        "end": 55.64,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 55.64,
+        "end": 58.7,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 58.7,
+        "end": 61.980000000000004,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 61.980000000000004,
+        "end": 65.02,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 65.02,
+        "end": 69.76,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 69.76,
+        "end": 72.3,
+        "text": "把大家没日没夜的心血",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 72.3,
+        "end": 75.0,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 75.0,
+        "end": 77.88,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 77.88,
+        "end": 80.42,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 80.42,
+        "end": 82.86,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 82.86,
+        "end": 86.26,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 86.26,
+        "end": 88.76,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 88.76,
+        "end": 90.36,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 90.36,
+        "end": 92.22,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 92.22,
+        "end": 94.76,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_00"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_opposite_overlap",
+    "audio_path": "opposite_overlap.wav",
+    "overlap_level": "opposite",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-speechbrain_diarization:faster-whisper+speechbrain+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:02.660 [SPEAKER_2] 你以为只有你看到了数据吗？\\n00:00:02.660 --> 00:00:10.040 [SPEAKER_2] 但你有没有想过，盲目追求速度的后果，就是失去我们最核心的忠实用户。\\n00:00:10.040 --> 00:00:19.500 [SPEAKER_2] 这根本不是什么华而不实的情怀，这是我们品牌能活到今天的底层逻辑，是冰冷的算法永远给不了的温度。\\n00:00:19.500 --> 00:00:29.500 [SPEAKER_2] 你每次都用这种粗暴的功利主义来绑架整个团队，把大家没日没夜的心血，当成可以随意揉捏的数字工具。\\n00:00:29.500 --> 00:00:32.040 [SPEAKER_2] 我绝不可能看着你把这个产品\\n00:00:32.040 --> 00:00:34.400 [SPEAKER_2] 变成没有灵魂的流水线废物。\\n00:00:34.400 --> 00:00:37.000 [SPEAKER_2] 你就不叫对结果负责，\\n00:00:37.000 --> 00:00:38.780 [SPEAKER_2] 你就叫盲目自大，\\n00:00:38.780 --> 00:00:40.860 [SPEAKER_2] 和毁灭整个项目。\\n00:00:40.860 --> 00:00:42.940 [SPEAKER_2] 今天就算闹到老板那里，\\n00:00:42.940 --> 00:00:44.520 [SPEAKER_2] 我也绝对不会妥协。\\n00:00:44.520 --> 00:00:46.340 [SPEAKER_2] 你想强行上线，\\n00:00:46.340 --> 00:00:48.940 [SPEAKER_2] 就先从我的团队头上踩过去。\\n00:00:48.940 --> 00:00:54.540 [SPEAKER_1] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.100 [SPEAKER_1] 所有人必须听我指挥。\\n00:00:58.100 --> 00:00:59.380 [SPEAKER_1] 出了问题，\\n00:00:59.380 --> 00:01:01.140 [SPEAKER_1] 我一个人来扛。\\n00:01:01.140 --> 00:01:04.260 [SPEAKER_1] 你现在必须给我闭嘴，\\n00:01:04.260 --> 00:01:06.440 [SPEAKER_1] 立刻执行命令。\",\n  \"changes\": [\n    \"Standardized Chinese punctuation: replaced half-width commas with full-width commas, half-width question mark with full-width question mark, added periods and commas as appropriate to improve readability and sentence completion.\"\n  ],\n  \"uncertain_spans\": [],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_2,SPEAKER_1",
+    "runtime_seconds": 75.5684,
+    "cer": 0.6112412177985949,
+    "wer": 0.5991902834008097,
+    "text_cer": 0.6112412177985949,
+    "text_wer": 0.5991902834008097,
+    "flat_cer": 0.6112412177985949,
+    "flat_wer": 0.5991902834008097,
+    "timeline_cer": 0.6112412177985949,
+    "timeline_wer": 0.5991902834008097,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 2.66,
+        "text": "你以为只有你看到了数据吗?",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 2.66,
+        "end": 10.040000000000001,
+        "text": "但你有没有想过,盲目追求速度的后果,就是失去我们最核心的忠实用户。",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 10.040000000000001,
+        "end": 19.5,
+        "text": "这根本不是什么华而不实的情怀,这是我们品牌能活到今天的底层逻辑,是冰冷的算法永远给不了的温度。",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 19.5,
+        "end": 29.5,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队,把大家没日没夜的心血,当成可以随意揉捏的数字工具。",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 29.5,
+        "end": 32.04,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 32.04,
+        "end": 34.4,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 34.4,
+        "end": 37.0,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 37.0,
+        "end": 38.78,
+        "text": "你就叫盲目自大",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 38.78,
+        "end": 40.86,
+        "text": "和毁灭整个项目",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 40.86,
+        "end": 42.94,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 42.94,
+        "end": 44.519999999999996,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 44.519999999999996,
+        "end": 46.34,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 46.34,
+        "end": 48.94,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_2"
+      },
+      {
+        "start": 48.94,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 58.1,
+        "end": 59.379999999999995,
+        "text": "出了问题",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 59.38,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "SPEAKER_1"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "SPEAKER_1"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_opposite_overlap",
+    "audio_path": "opposite_overlap.wav",
+    "overlap_level": "opposite",
+    "pipeline": "llm_rag_refine",
+    "model": "api_llm_refiner<-pyannote_diarization:faster-whisper+pyannote+full_asr_align",
+    "text": "{\n  \"refined_text\": \"00:00:00.000 --> 00:00:02.660 [SPEAKER_00] 你以为只有你看到了数据吗？\\n00:00:02.660 --> 00:00:10.040 [SPEAKER_00] 但你有没有想过，盲目追求速度的后果，就是失去我们最核心的忠实用户。\\n00:00:10.040 --> 00:00:19.500 [SPEAKER_00] 这根本不是什么华而不实的情怀，这是我们品牌能活到今天的底层逻辑，是冰冷的算法永远给不了的温度。\\n00:00:19.500 --> 00:00:29.500 [SPEAKER_00] 你每次都用这种粗暴的功利主义来绑架整个团队，把大家没日没夜的心血，当成可以随意揉捏的数字工具。\\n00:00:29.500 --> 00:00:32.040 [SPEAKER_00] 我绝不可能看着你把这个产品，\\n00:00:32.040 --> 00:00:34.400 [SPEAKER_00] 变成没有灵魂的流水线废物。\\n00:00:34.400 --> 00:00:37.000 [SPEAKER_01] 你就不叫对结果负责。\\n00:00:37.000 --> 00:00:38.780 [SPEAKER_00] 你就叫盲目自大，\\n00:00:38.780 --> 00:00:40.860 [SPEAKER_00] 和毁灭整个项目。\\n00:00:40.860 --> 00:00:42.940 [SPEAKER_00] 今天就算闹到老板那里，\\n00:00:42.940 --> 00:00:44.520 [SPEAKER_00] 我也绝对不会妥协。\\n00:00:44.520 --> 00:00:46.340 [SPEAKER_00] 你想强行上线，\\n00:00:46.340 --> 00:00:48.940 [SPEAKER_00] 就先从我的团队头上踩过去。\\n00:00:48.940 --> 00:00:54.540 [SPEAKER_01] 下周一必须切断旧接口。\\n00:00:54.540 --> 00:00:58.100 [SPEAKER_01] 所有人必须听我指挥。\\n00:00:58.100 --> 00:00:59.380 [SPEAKER_01] 出了问题，\\n00:00:59.380 --> 00:01:01.140 [SPEAKER_01] 我一个人来扛。\\n00:01:01.140 --> 00:01:04.260 [SPEAKER_01] 你现在必须给我闭嘴，\\n00:01:04.260 --> 00:01:06.440 [SPEAKER_01] 立刻执行命令！\",\n  \"changes\": [\n    \"Replaced all half-width commas (,) with full-width commas (，) for Chinese text consistency.\",\n    \"Replaced half-width question mark (?) with full-width (？).\",\n    \"Added period (。) at end of lines that were missing sentence-ending punctuation (e.g., after '废物', '负责', '项目', '妥协', '接口', '指挥', '扛', '过去').\",\n    \"Added comma after '产品' to connect with the following line spoken by the same speaker.\",\n    \"Added comma after '自大' to connect with '和毁灭整个项目'.\",\n    \"Added comma after '那里' to connect with '我也绝对不会妥协'.\",\n    \"Added comma after '上线' to connect with '就先从我的团队头上踩过去'.\",\n    \"Added comma after '问题' to connect with '我一个人来扛'.\",\n    \"Added comma after '闭嘴' and exclamation mark (!) at the end of the final command for emphasis.\"\n  ],\n  \"uncertain_spans\": [\n    \"00:00:34.400 --> 00:00:37.000 [SPEAKER_01] 你就不叫对结果负责  (possibly mis-transcribed; could be intended as '你这就叫对结果负责' or similar, but retained as is)\"\n  ],\n  \"hallucination_risk\": \"low\"\n}",
+    "speaker_labels": "SPEAKER_00,SPEAKER_01",
+    "runtime_seconds": 68.4129,
+    "cer": 0.6112412177985949,
+    "wer": 0.5991902834008097,
+    "text_cer": 0.6112412177985949,
+    "text_wer": 0.5991902834008097,
+    "flat_cer": 0.6112412177985949,
+    "flat_wer": 0.5991902834008097,
+    "timeline_cer": 0.6112412177985949,
+    "timeline_wer": 0.5991902834008097,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 2.66,
+        "text": "你以为只有你看到了数据吗?",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 2.66,
+        "end": 10.040000000000001,
+        "text": "但你有没有想过,盲目追求速度的后果,就是失去我们最核心的忠实用户。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 10.040000000000001,
+        "end": 19.5,
+        "text": "这根本不是什么华而不实的情怀,这是我们品牌能活到今天的底层逻辑,是冰冷的算法永远给不了的温度。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 19.5,
+        "end": 29.5,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队,把大家没日没夜的心血,当成可以随意揉捏的数字工具。",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 29.5,
+        "end": 32.04,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 32.04,
+        "end": 34.4,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 34.4,
+        "end": 37.0,
+        "text": "你就不叫对结果负责",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 37.0,
+        "end": 38.78,
+        "text": "你就叫盲目自大",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 38.78,
+        "end": 40.86,
+        "text": "和毁灭整个项目",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 40.86,
+        "end": 42.94,
+        "text": "今天就算闹到老板那里",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 42.94,
+        "end": 44.519999999999996,
+        "text": "我也绝对不会妥协",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 44.519999999999996,
+        "end": 46.34,
+        "text": "你想强行上线",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 46.34,
+        "end": 48.94,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "SPEAKER_00"
+      },
+      {
+        "start": 48.94,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 58.1,
+        "end": 59.379999999999995,
+        "text": "出了问题",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 59.38,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "SPEAKER_01"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "SPEAKER_01"
+      }
+    ]
+  }
+]

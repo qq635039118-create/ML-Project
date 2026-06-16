@@ -16,53 +16,61 @@ transcript?
 
 ## Quick Start
 
-Run the full pipeline in mock mode. This requires only Python standard library
-modules and is useful for checking the project structure before installing GPU
-dependencies.
-
-Chinese team quick start: `docs/QUICK_START_FOR_TEAM_CN.md`
+Chinese team quick start:
+`overlap_asr_llm/docs/QUICK_START_FOR_TEAM_CN.md`
 
 ```bash
-cd project/overlap_asr_llm
-PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
+cd overlap_asr_llm
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
 ```
 
 The command writes:
 
-- `outputs/results.json`
-- `outputs/results.csv`
-- `outputs/run_summary.md`
-- `outputs/qualitative_review_template.csv`
+- `outputs/mock/results.json`
+- `outputs/mock/results.csv`
+- `outputs/mock/run_summary.md`
 
 ## Real Model Mode
 
-Install optional dependencies in a GPU environment before running real models.
+Install real-model dependencies before running real experiments:
 
 ```bash
 pip install -r requirements.txt
 pip install -e .
 ```
 
-Then edit `configs/experiment.json` so each sample points to a real audio file.
-Run:
+The current real experiment configs are:
+
+- `configs/direct_asr.json`
+- `configs/diarization_asr.json`
+- `configs/separation_asr.json`
+- `configs/all_pipelines.json`
+
+Each experiment config has its own `models` block, so models can be changed
+directly in that file. Shared sample paths, prompt, and references are in
+`configs/base.json`.
+
+Run the final comparison:
 
 ```bash
-overlap-asr-llm run --config configs/experiment.json
+python -m overlap_asr_llm.cli run --config configs/all_pipelines.json --incremental
 ```
 
 ## Smoke Test
 
-Run the stdlib-only smoke test:
+Run the smoke test inside the project environment:
 
 ```bash
-python3 scripts/smoke_test.py
+python scripts/smoke_test.py
 ```
 
 Supported provider values:
 
-- ASR: `mock`, `whisper`, `whisper:<model-name>`, `funasr`
-- Diarization: `mock`
-- Separation: `mock`, `sepformer`, `sepformer:<huggingface-model-id>`
+- ASR: `mock`, `whisper`, `whisper:<model-name>`,
+  `faster-whisper`, `faster-whisper:<model-name>`, `funasr`
+- Diarization: `mock`, `pyannote`, `pyannote:<huggingface-model-id>`
+- Separation: `mock`, `sepformer`, `sepformer:<huggingface-model-id>`,
+  `clearvoice`, `clearvoice:<model-name>`
 - LLM/RAG refinement: `mock`
 
 The current implementation supports graceful failure. If a requested real model
@@ -72,14 +80,19 @@ the whole experiment.
 ## Repository Layout
 
 ```text
-configs/experiment.json         Experiment definition
-data/samples/                   Small sample placeholders or metadata
-docs/VIDEO_SCRIPT.md            English video outline
-docs/EXPERIMENT_DESIGN.md       One-page experiment design
-src/overlap_asr_llm/            Experiment code
-tests/                          Lightweight tests
-CONTRIBUTIONS.md                Team task/contribution template
-REPOSITORY.md                   GitHub repository URL template
+overlap_asr_llm/configs/base.json               Shared sample2 data, prompt, and references
+overlap_asr_llm/configs/direct_asr.json         Direct ASR experiment
+overlap_asr_llm/configs/diarization_asr.json    Diarization + ASR experiment
+overlap_asr_llm/configs/separation_asr.json     Separation + ASR experiment
+overlap_asr_llm/configs/all_pipelines.json      Final comparison experiment
+overlap_asr_llm/configs/mock.json               Mock smoke-test config
+overlap_asr_llm/data/samples2/                  Current five-condition Mandarin audio set
+overlap_asr_llm/docs/VIDEO_SCRIPT.md            English video outline
+overlap_asr_llm/docs/EXPERIMENT_DESIGN.md       One-page experiment design
+overlap_asr_llm/src/overlap_asr_llm/            Experiment code
+overlap_asr_llm/tests/                          Lightweight tests
+overlap_asr_llm/CONTRIBUTIONS.md                Team task/contribution template
+overlap_asr_llm/REPOSITORY.md                   GitHub repository URL template
 ```
 
 ## Four Pipelines
@@ -93,16 +106,14 @@ REPOSITORY.md                   GitHub repository URL template
 
 If a reference transcript is available, the runner computes:
 
-- CER: character error rate
-- WER: word error rate
+- Primary CER/WER: selected by `score_basis`
+- Flat CER/WER: plain flattened transcript scoring
+- Timeline CER/WER: segment text sorted by time
+- Speaker-block CER/WER: speaker-attributed scoring with best speaker mapping
 - Runtime in seconds
 
 If no reference is available, metrics are left empty and the output can still be
 used for qualitative analysis.
-
-The qualitative review template is for manual readability scores and failure
-cases such as missing words, speaker mixing, separation artifacts, and LLM
-hallucination risk.
 
 ## Submission Checklist
 

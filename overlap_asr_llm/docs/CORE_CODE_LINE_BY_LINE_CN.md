@@ -63,7 +63,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
 这段开始读取 JSON 配置。
 
 - `Path(path).resolve()`：把传入路径变成绝对路径。
-- `config_path.parent.parent`：如果配置在 `configs/experiment.json`，上一级的上一级就是项目根目录。
+- `config_path.parent.parent`：如果配置在 `configs/mock.json`，上一级的上一级就是项目根目录。
 - `json.load(f)`：把 JSON 文件读成 Python 字典 `raw`。
 
 ```python
@@ -114,7 +114,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
 
 这段返回完整实验配置。
 
-简单说：`load_config()` 的任务就是把 `configs/experiment.json` 变成后面代码能直接使用的 `ExperimentConfig`。
+简单说：`load_config()` 的任务就是把 `configs/mock.json` 变成后面代码能直接使用的 `ExperimentConfig`。
 
 ## `providers.py`：模型封装
 
@@ -865,7 +865,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser = subparsers.add_parser("run", help="Run all experiment pipelines.")
     run_parser.add_argument(
         "--config",
-        default="configs/experiment.json",
+        default="configs/mock.json",
         help="Path to the JSON experiment config.",
     )
     run_parser.add_argument(
@@ -881,7 +881,7 @@ def build_parser() -> argparse.ArgumentParser:
 项目支持这样的命令：
 
 ```bash
-python3 -m overlap_asr_llm.cli run --config configs/experiment.json --mock
+python -m overlap_asr_llm.cli run --config configs/mock.json --mock
 ```
 
 其中：

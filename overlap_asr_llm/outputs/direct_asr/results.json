@@ -1,0 +1,1027 @@
+[
+  {
+    "sample_id": "sample2_no_overlap",
+    "audio_path": "data/samples2/no_overlap.wav",
+    "overlap_level": "none",
+    "pipeline": "direct_asr",
+    "model": "faster-whisper",
+    "text": "关于这次的产品架构升级,我已经重申过无数次了。 市场留给我们的时间窗口,最多只剩两周。 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。 用户要的是好用快解决问题 而不是对着一个功能去感悟什么设计者的灵魂 你不要再拿那些理想主义的借口来拖延进度了 商场就是战场 收洗你那套多余的同情心和艺术追求吧 下周一必须切断旧接口 所有人必须听我指挥 出了问题 我一个人来扛 你现在必须给我闭嘴 立刻执行命令 你以为只有你看到了数据吗 但你有没有想过 盲目追求速度的后果 就是失去我们最核心的忠实用户 这根本不是什么 华而不实的情怀 这是我们品牌 能活到今天的底层逻辑 是冰冷的算法永远给不了的温度 你每次都用这种粗暴的功利主义来绑架整个团队 把大家没日没夜的心血 当成可以随意揉捏的数字工具 我绝不可能看着你把这个产品 变成没有灵魂的流水线废物 你就不叫对结果负责 你就叫盲目自大和毁灭整个项目 今天就算闹到老板那里 我也绝对不会妥协 你想强行上线 就先从我的团队头上踩过去",
+    "speaker_labels": "UNKNOWN",
+    "runtime_seconds": 9.6417,
+    "cer": 0.0117096018735363,
+    "wer": 0.016194331983805668,
+    "text_cer": 0.0117096018735363,
+    "text_wer": 0.016194331983805668,
+    "flat_cer": 0.0117096018735363,
+    "flat_wer": 0.016194331983805668,
+    "timeline_cer": 0.0117096018735363,
+    "timeline_wer": 0.016194331983805668,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.16,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 6.9,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 11.620000000000001,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 19.86,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 27.54,
+        "end": 32.94,
+        "text": "用户要的是好用快解决问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 32.94,
+        "end": 37.84,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 37.84,
+        "end": 43.06,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 43.06,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 45.7,
+        "end": 50.46,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 54.54,
+        "end": 58.12,
+        "text": "所有人必须听我指挥",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 58.12,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 59.36,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 66.44,
+        "end": 68.64,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 68.64,
+        "end": 70.78,
+        "text": "但你有没有想过",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 70.78,
+        "end": 73.02,
+        "text": "盲目追求速度的后果",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 73.02,
+        "end": 76.38,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 76.38,
+        "end": 78.25999999999999,
+        "text": "这根本不是什么",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 78.25999999999999,
+        "end": 79.46000000000001,
+        "text": "华而不实的情怀",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 79.46000000000001,
+        "end": 80.86,
+        "text": "这是我们品牌",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 80.86,
+        "end": 82.7,
+        "text": "能活到今天的底层逻辑",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 82.7,
+        "end": 85.72,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 85.72,
+        "end": 90.46000000000001,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 90.46000000000001,
+        "end": 93.0,
+        "text": "把大家没日没夜的心血",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 93.0,
+        "end": 95.72,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 95.72,
+        "end": 98.56,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 98.56,
+        "end": 101.12,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 101.12,
+        "end": 103.56,
+        "text": "你就不叫对结果负责",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 103.56,
+        "end": 106.96000000000001,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 106.96000000000001,
+        "end": 109.46000000000001,
+        "text": "今天就算闹到老板那里",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 109.46000000000001,
+        "end": 111.06,
+        "text": "我也绝对不会妥协",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 111.06,
+        "end": 112.92,
+        "text": "你想强行上线",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 112.92,
+        "end": 115.60000000000001,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "UNKNOWN"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_light_overlap",
+    "audio_path": "data/samples2/light_overlap.wav",
+    "overlap_level": "light",
+    "pipeline": "direct_asr",
+    "model": "faster-whisper",
+    "text": "关于这次的产品架构升级,我已经重申过无数次了。 市场留给我们的时间窗口,最多只剩两周。 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。 用户要的是好用 快 解决问题 而不是对着一个功能去感悟什么设计者的灵魂 你不要再拿那些理想主义的借口来拖延进度了 商场就是战场 收洗你那套多余的同情心和艺术追求吧 下周一必须切断旧接口 所有人必须听我指挥 出了问题 我一个人来扛 你以为只有你看到了数据吗 但你有没有想过 盲目追求速度的后果 就是失去我们最核心的忠实用户 这根本不是什么华而不实的情怀 这是我们品牌能活到今天的底层逻辑 是冰冷的算法永远给不了的温度 你每次都用这种粗暴的功利主义 来绑架整个团队 把大家没日没夜的心血 当成可以随意揉捏的数字工具 我绝不可能看着你把这个产品 变成没有灵魂的流水线废物 你就不叫对结果负责 你就叫盲目自大和毁灭整个项目 今天就算闹到老板那里 我也绝对不会妥协 你想强行上线 就先从我的团队头上踩过去",
+    "speaker_labels": "UNKNOWN",
+    "runtime_seconds": 8.6593,
+    "cer": 0.0468384074941452,
+    "wer": 0.048582995951417005,
+    "text_cer": 0.0468384074941452,
+    "text_wer": 0.048582995951417005,
+    "flat_cer": 0.0468384074941452,
+    "flat_wer": 0.048582995951417005,
+    "timeline_cer": 0.0468384074941452,
+    "timeline_wer": 0.048582995951417005,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 27.54,
+        "end": 30.78,
+        "text": "用户要的是好用",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 30.78,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 32.92,
+        "end": 37.82,
+        "text": "而不是对着一个功能去感悟什么设计者的灵魂",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 37.82,
+        "end": 43.019999999999996,
+        "text": "你不要再拿那些理想主义的借口来拖延进度了",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 45.7,
+        "end": 50.44,
+        "text": "收洗你那套多余的同情心和艺术追求吧",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 51.08,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 58.1,
+        "end": 59.36,
+        "text": "出了问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 59.36,
+        "end": 61.16,
+        "text": "我一个人来扛",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 61.16,
+        "end": 63.18,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 63.18,
+        "end": 65.28,
+        "text": "但你有没有想过",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 65.28,
+        "end": 67.62,
+        "text": "盲目追求速度的后果",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 67.62,
+        "end": 70.98,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 70.98,
+        "end": 74.06,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 74.06,
+        "end": 77.3,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 77.3,
+        "end": 80.32,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 80.32,
+        "end": 83.78,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 83.78,
+        "end": 85.06,
+        "text": "来绑架整个团队",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 85.06,
+        "end": 87.6,
+        "text": "把大家没日没夜的心血",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 87.6,
+        "end": 90.32000000000001,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 90.32000000000001,
+        "end": 93.18,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 93.18,
+        "end": 95.72,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 95.72,
+        "end": 98.16,
+        "text": "你就不叫对结果负责",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 98.16,
+        "end": 101.56,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 101.56,
+        "end": 104.06,
+        "text": "今天就算闹到老板那里",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 104.06,
+        "end": 105.66,
+        "text": "我也绝对不会妥协",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 105.66,
+        "end": 107.52000000000001,
+        "text": "你想强行上线",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 107.52000000000001,
+        "end": 110.06,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "UNKNOWN"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_mid_overlap",
+    "audio_path": "data/samples2/mid_overlap.wav",
+    "overlap_level": "medium",
+    "pipeline": "direct_asr",
+    "model": "faster-whisper",
+    "text": "关于这次的产品架构升级,我已经重申过无数次了。 市场留给我们的时间窗口,最多只剩两周。 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。 用户要的是好用 快 解决问题 而不是对着一个功能 去感悟什么设计者的灵魂 你不要再拿那些理想主义的借口 来拖延进度了 商场就是战场 收洗你那套多余的同情心 和艺术追求吧 下周一必须切断旧借口 但你有没有想过 盲目追求速度的后果 就是失去我们最核心的忠实用户 这根本不是什么华而不实的情怀 这是我们品牌能活到今天的底层逻辑 是冰冷的算法永远给不了的温度 你每次都用这种粗暴的功利主义 来绑架整个团队 把大家没日没夜的心血 当成可以随意揉捏的数字工具 我绝不可能看着你把这个产品 变成没有灵魂的流水线废物 你就不叫对结果负责 你就叫盲目自大和毁灭整个项目 今天就算闹到老板那里 我也绝对不会妥协 你想强行上线 就先从我的团队头上踩过去",
+    "speaker_labels": "UNKNOWN",
+    "runtime_seconds": 8.3421,
+    "cer": 0.12177985948477751,
+    "wer": 0.13360323886639677,
+    "text_cer": 0.12177985948477751,
+    "text_wer": 0.13360323886639677,
+    "flat_cer": 0.12177985948477751,
+    "flat_wer": 0.13360323886639677,
+    "timeline_cer": 0.12177985948477751,
+    "timeline_wer": 0.13360323886639677,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 20.240000000000002,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 31.56,
+        "text": "快",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 31.56,
+        "end": 32.92,
+        "text": "解决问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 41.42,
+        "end": 43.019999999999996,
+        "text": "来拖延进度了",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 43.019999999999996,
+        "end": 45.7,
+        "text": "商场就是战场",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 45.7,
+        "end": 48.68,
+        "text": "收洗你那套多余的同情心",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 48.68,
+        "end": 50.44,
+        "text": "和艺术追求吧",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 50.44,
+        "end": 55.2,
+        "text": "下周一必须切断旧借口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 55.2,
+        "end": 58.06,
+        "text": "但你有没有想过",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 58.06,
+        "end": 59.78,
+        "text": "盲目追求速度的后果",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 59.78,
+        "end": 63.120000000000005,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 63.120000000000005,
+        "end": 66.28,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 66.28,
+        "end": 69.52000000000001,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 69.52000000000001,
+        "end": 72.52000000000001,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 72.52000000000001,
+        "end": 75.98,
+        "text": "你每次都用这种粗暴的功利主义",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 75.98,
+        "end": 77.26,
+        "text": "来绑架整个团队",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 77.26,
+        "end": 79.82000000000001,
+        "text": "把大家没日没夜的心血",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 79.82000000000001,
+        "end": 82.5,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 82.5,
+        "end": 85.38,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 85.38,
+        "end": 87.92,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 87.92,
+        "end": 90.36,
+        "text": "你就不叫对结果负责",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 90.36,
+        "end": 93.76,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 93.76,
+        "end": 96.28,
+        "text": "今天就算闹到老板那里",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 96.28,
+        "end": 97.86,
+        "text": "我也绝对不会妥协",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 97.86,
+        "end": 99.72,
+        "text": "你想强行上线",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 99.72,
+        "end": 102.26,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "UNKNOWN"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_heavy_overlap",
+    "audio_path": "data/samples2/heavy_overlap.wav",
+    "overlap_level": "heavy",
+    "pipeline": "direct_asr",
+    "model": "faster-whisper",
+    "text": "关于这次的产品架构升级,我已经重申过无数次了。 市场留给我们的时间窗口,最多只剩两周。 我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。 你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。 用户要的是好用 快解决问题 而不是对着一个功能 去感悟什么设计者的灵魂 你不要再拿那些理想主义的借口 来拖延进度了 商场就是战场 你以为只有你看到了数据吗 但你有没有想过 盲目追求速度的后果 就是失去我们最核心的忠实用户 这根本不是什么华而不实的情怀 这是我们品牌能活到今天的底层逻辑 是冰冷的算法永远给不了的温度 你每次都用这种粗暴的功利主义来绑架整个团队 把大家没日没夜的心血 当成可以随意揉捏的数字工具 我绝不可能看着你把这个产品 变成没有灵魂的流水线废物 你就不叫对结果负责 你就叫盲目自大和毁灭整个项目 今天就算闹到老板那里 我也绝对不会妥协 你想强行上线 就先从我的团队头上踩过去",
+    "speaker_labels": "UNKNOWN",
+    "runtime_seconds": 8.1757,
+    "cer": 0.1522248243559719,
+    "wer": 0.15384615384615385,
+    "text_cer": 0.1522248243559719,
+    "text_wer": 0.15384615384615385,
+    "flat_cer": 0.1522248243559719,
+    "flat_wer": 0.15384615384615385,
+    "timeline_cer": 0.1522248243559719,
+    "timeline_wer": 0.15384615384615385,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 5.12,
+        "text": "关于这次的产品架构升级,我已经重申过无数次了。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 6.92,
+        "end": 10.9,
+        "text": "市场留给我们的时间窗口,最多只剩两周。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 11.36,
+        "end": 19.26,
+        "text": "我们必须砍掉那些华而不实的人情化设计,全面向自动化和高效率妥协。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 20.26,
+        "end": 27.54,
+        "text": "你所谓的坚持情怀,在不断下滑的日活数据面前根本一文不值。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 27.54,
+        "end": 30.759999999999998,
+        "text": "用户要的是好用",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 30.759999999999998,
+        "end": 32.92,
+        "text": "快解决问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 32.92,
+        "end": 35.0,
+        "text": "而不是对着一个功能",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 35.0,
+        "end": 37.82,
+        "text": "去感悟什么设计者的灵魂",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 37.82,
+        "end": 41.42,
+        "text": "你不要再拿那些理想主义的借口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 41.42,
+        "end": 43.0,
+        "text": "来拖延进度了",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 43.0,
+        "end": 45.879999999999995,
+        "text": "商场就是战场",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 45.879999999999995,
+        "end": 47.84,
+        "text": "你以为只有你看到了数据吗",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 47.84,
+        "end": 50.26,
+        "text": "但你有没有想过",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 50.26,
+        "end": 52.32,
+        "text": "盲目追求速度的后果",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 52.32,
+        "end": 55.64,
+        "text": "就是失去我们最核心的忠实用户",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 55.64,
+        "end": 58.7,
+        "text": "这根本不是什么华而不实的情怀",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 58.7,
+        "end": 61.980000000000004,
+        "text": "这是我们品牌能活到今天的底层逻辑",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 61.980000000000004,
+        "end": 65.02,
+        "text": "是冰冷的算法永远给不了的温度",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 65.02,
+        "end": 69.76,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 69.76,
+        "end": 72.3,
+        "text": "把大家没日没夜的心血",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 72.3,
+        "end": 75.0,
+        "text": "当成可以随意揉捏的数字工具",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 75.0,
+        "end": 77.88,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 77.88,
+        "end": 80.42,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 80.42,
+        "end": 82.86,
+        "text": "你就不叫对结果负责",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 82.86,
+        "end": 86.26,
+        "text": "你就叫盲目自大和毁灭整个项目",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 86.26,
+        "end": 88.76,
+        "text": "今天就算闹到老板那里",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 88.76,
+        "end": 90.36,
+        "text": "我也绝对不会妥协",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 90.36,
+        "end": 92.22,
+        "text": "你想强行上线",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 92.22,
+        "end": 94.76,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "UNKNOWN"
+      }
+    ]
+  },
+  {
+    "sample_id": "sample2_opposite_overlap",
+    "audio_path": "data/samples2/opposite_overlap.wav",
+    "overlap_level": "opposite",
+    "pipeline": "direct_asr",
+    "model": "faster-whisper",
+    "text": "你以为只有你看到了数据吗? 但你有没有想过,盲目追求速度的后果,就是失去我们最核心的忠实用户。 这根本不是什么华而不实的情怀,这是我们品牌能活到今天的底层逻辑,是冰冷的算法永远给不了的温度。 你每次都用这种粗暴的功利主义来绑架整个团队,把大家没日没夜的心血,当成可以随意揉捏的数字工具。 我绝不可能看着你把这个产品 变成没有灵魂的流水线废物 你就不叫对结果负责 你就叫盲目自大 和毁灭整个项目 今天就算闹到老板那里 我也绝对不会妥协 你想强行上线 就先从我的团队头上踩过去 下周一必须切断旧接口 所有人必须听我指挥 出了问题 我一个人来扛 你现在必须给我闭嘴 立刻执行命令",
+    "speaker_labels": "UNKNOWN",
+    "runtime_seconds": 6.089,
+    "cer": 0.6112412177985949,
+    "wer": 0.5991902834008097,
+    "text_cer": 0.6112412177985949,
+    "text_wer": 0.5991902834008097,
+    "flat_cer": 0.6112412177985949,
+    "flat_wer": 0.5991902834008097,
+    "timeline_cer": 0.6112412177985949,
+    "timeline_wer": 0.5991902834008097,
+    "speaker_block_cer": null,
+    "speaker_block_wer": null,
+    "best_speaker_mapping": "",
+    "score_basis": "timeline",
+    "error": null,
+    "segments": [
+      {
+        "start": 0.0,
+        "end": 2.66,
+        "text": "你以为只有你看到了数据吗?",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 2.66,
+        "end": 10.040000000000001,
+        "text": "但你有没有想过,盲目追求速度的后果,就是失去我们最核心的忠实用户。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 10.040000000000001,
+        "end": 19.5,
+        "text": "这根本不是什么华而不实的情怀,这是我们品牌能活到今天的底层逻辑,是冰冷的算法永远给不了的温度。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 19.5,
+        "end": 29.5,
+        "text": "你每次都用这种粗暴的功利主义来绑架整个团队,把大家没日没夜的心血,当成可以随意揉捏的数字工具。",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 29.5,
+        "end": 32.04,
+        "text": "我绝不可能看着你把这个产品",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 32.04,
+        "end": 34.4,
+        "text": "变成没有灵魂的流水线废物",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 34.4,
+        "end": 37.0,
+        "text": "你就不叫对结果负责",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 37.0,
+        "end": 38.78,
+        "text": "你就叫盲目自大",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 38.78,
+        "end": 40.86,
+        "text": "和毁灭整个项目",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 40.86,
+        "end": 42.94,
+        "text": "今天就算闹到老板那里",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 42.94,
+        "end": 44.519999999999996,
+        "text": "我也绝对不会妥协",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 44.519999999999996,
+        "end": 46.34,
+        "text": "你想强行上线",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 46.34,
+        "end": 48.94,
+        "text": "就先从我的团队头上踩过去",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 48.94,
+        "end": 54.54,
+        "text": "下周一必须切断旧接口",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 54.54,
+        "end": 58.1,
+        "text": "所有人必须听我指挥",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 58.1,
+        "end": 59.379999999999995,
+        "text": "出了问题",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 59.38,
+        "end": 61.14,
+        "text": "我一个人来扛",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 61.14,
+        "end": 64.26,
+        "text": "你现在必须给我闭嘴",
+        "speaker": "UNKNOWN"
+      },
+      {
+        "start": 64.26,
+        "end": 66.44,
+        "text": "立刻执行命令",
+        "speaker": "UNKNOWN"
+      }
+    ]
+  }
+]
