@@ -24,9 +24,10 @@ opposite-order overlap.
 
 ## 5:00-7:30 Pipeline Comparison
 
-Compare direct ASR, diarization ASR, separation ASR, and LLM/RAG refinement.
-Show runtime, readable examples, and manual readability scores. If reference
-text exists for selected samples, also show CER/WER.
+Compare direct ASR, diarization ASR, turn-level diarization ASR, separation ASR,
+and LLM/RAG refinement. Show runtime, readable examples, CER/WER, and the
+post-run readability metrics from `readability_summary.md`: BERTScore F2, TRS
+text, and TRS speaker.
 
 ## 7:30-9:30 Failure Cases
 

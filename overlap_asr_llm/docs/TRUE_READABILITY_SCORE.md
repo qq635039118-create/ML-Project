@@ -4,18 +4,8 @@ This note defines the readability evaluation used by this project after an ASR
 experiment has already produced `results.json`. It is a post-run evaluation
 layer, not a replacement for the existing CER/WER pipeline metrics.
 
-The implementation lives in `src/overlap_asr_llm/readability.py` and is exposed
-through:
-
-```bash
-overlap-asr-llm evaluate \
-  --config configs/all_pipelines.json \
-  --results outputs/all_pipelines/results.json \
-  --device cuda \
-  --batch-size 1
-```
-
-The command writes the following files next to `results.json`:
+The implementation lives in `src/overlap_asr_llm/readability.py`. It writes the
+following files next to `results.json`:
 
 - `readability_results.json`
 - `readability_results.csv`
@@ -90,6 +80,7 @@ sample-level OVR estimate because direct ASR has no speaker-time segments.
 
 The output field `ovr_source` is currently:
 
+- `config`: read from sample metadata in the experiment config,
 - `estimated`: computed from available result segments,
 - `unavailable`: no usable timestamped segments were found.
 
@@ -174,7 +165,7 @@ Project interpretation:
   Lower values indicate missed clauses.
 - `BERT F1`: balanced semantic faithfulness.
 
-The implementation defaults to `bert-base-chinese` and `batch_size=1`.
+The current reports use `bert-base-chinese` for BERTScore.
 
 ## Recall-Weighted Coverage
 
@@ -216,7 +207,11 @@ more strongly than in balanced F1.
 ## Speaker Consistency
 
 For speaker-attributed outputs, the existing project speaker-block score is
-converted into a higher-is-better consistency value:
+converted into a higher-is-better consistency value. Speaker-block scoring first
+groups hypothesis text by predicted speaker, then tries the best mapping between
+predicted labels and reference speakers before computing CER/WER. This matters
+because diarization systems often use arbitrary labels: a predicted `SPEAKER_00`
+may correspond to reference `speaker_2`, not `speaker_1`.
 
 $$
 \mathrm{SpeakerConsistency}
@@ -310,8 +305,8 @@ implementation does not treat missing speaker metrics as zero.
 | --- | --- |
 | `sample_id` | Sample identifier |
 | `overlap_level` | Existing config label such as `none`, `light`, `medium`, `heavy` |
-| `ovr` | Estimated overlap ratio |
-| `ovr_source` | `estimated` or `unavailable` |
+| `ovr` | Overlap ratio from config metadata or estimated segments |
+| `ovr_source` | `config`, `estimated`, or `unavailable` |
 | `pipeline` | Pipeline name |
 | `model` | Model label from original result |
 | `cer` | Existing primary CER |
@@ -344,39 +339,17 @@ For medium and high OVR, compare whether diarization or separation improves
 `bert_recall`, `bert_f2`, and `TRS_speaker` without causing hallucinated
 insertions.
 
-## Running On 8 GB VRAM / 32 GB RAM
+Current server-run interpretation:
 
-The evaluation is designed to run after the ASR process exits. This matters on
-an 8 GB VRAM laptop because ASR, diarization, separation, and BERTScore can all
-use GPU memory.
-
-Recommended local or server command:
-
-```bash
-overlap-asr-llm evaluate \
-  --config configs/all_pipelines.json \
-  --results outputs/all_pipelines/results.json \
-  --device cuda \
-  --batch-size 1
-```
-
-If GPU memory is tight, use CPU:
-
-```bash
-overlap-asr-llm evaluate \
-  --config configs/all_pipelines.json \
-  --results outputs/all_pipelines/results.json \
-  --device cpu \
-  --batch-size 1
-```
-
-The first real run requires the optional dependency:
-
-```bash
-pip install -r requirements.txt
-```
-
-The dependency list includes `bert-score>=0.3.13`.
+- Best average text readability: `diarization_asr`, avg TRS text `85.8221`.
+- Best average speaker-aware readability: `diarization_asr`, avg TRS speaker
+  `85.4050`.
+- Best by TRS text per sample: `diarization_turn_asr` for no overlap,
+  `llm_rag_refine` for light/medium/heavy overlap, and `separation_asr` for the
+  opposite-order overlap sample.
+- High-overlap review: for `sample2_heavy_overlap`, `llm_rag_refine` is the
+  best TRS-text candidate; for `sample2_opposite_overlap`, `separation_asr` is
+  the best TRS-text and BERT F2 candidate.
 
 ## References
 

@@ -4,7 +4,7 @@
 
 1. `config.py`：读取实验配置。
 2. `providers.py`：封装 ASR、说话人标注、语音分离、LLM 修正。
-3. `pipelines.py`：组织四条实验流水线。
+3. `pipelines.py`：组织 direct、diarization、turn-level diarization、separation、LLM/RAG 等实验流水线。
 4. `metrics.py`：计算 CER/WER。
 5. `io.py`：写出结果文件。
 6. `cli.py`：命令行入口。
@@ -393,6 +393,7 @@ def make_asr(kind: str):
 - `"mock"` 创建 `MockASR`。
 - `"whisper"` 创建默认 Whisper `large-v3`。
 - `"whisper:base"` 这种写法会加载指定 Whisper 模型。
+- `"faster-whisper"` 或 `"faster-whisper:large-v3"` 使用 faster-whisper。
 - `"funasr"` 创建 FunASR。
 - 其他值直接报错。
 
@@ -400,10 +401,15 @@ def make_asr(kind: str):
 def make_diarizer(kind: str):
     if kind == "mock":
         return MockDiarizer()
+    if kind.startswith("pyannote"):
+        ...
+    if kind.startswith("speechbrain"):
+        ...
     raise ValueError(f"Unsupported diarization provider: {kind}")
 ```
 
-当前说话人标注只支持 mock。
+当前说话人标注支持 mock、pyannote 和 SpeechBrain。pyannote 更适合主实验的
+speaker diarization，SpeechBrain 主要用于 speaker embedding/聚类式对比。
 
 ```python
 def make_separator(kind: str):
@@ -413,6 +419,8 @@ def make_separator(kind: str):
         parts = kind.split(":", 1)
         model_id = parts[1] if len(parts) == 2 else "speechbrain/sepformer-whamr16k"
         return SpeechBrainSeparator(model_id=model_id)
+    if kind.startswith("clearvoice"):
+        ...
     raise ValueError(f"Unsupported separation provider: {kind}")
 ```
 
@@ -421,17 +429,23 @@ def make_separator(kind: str):
 - `"mock"` 创建假分离器。
 - `"sepformer"` 使用默认 SepFormer。
 - `"sepformer:xxx"` 使用指定 Hugging Face 模型 id。
+- `"clearvoice"` 或 `"clearvoice:xxx"` 使用 ClearVoice 分离模型。
 
 ```python
 def make_llm_refiner(kind: str):
     if kind == "mock":
         return MockLLMRefiner()
+    if kind == "api":
+        return ApiLLMRefiner()
+    if kind.startswith("api:"):
+        return ApiLLMRefiner(model_name=kind.split(":", 1)[1])
     raise ValueError(f"Unsupported LLM provider: {kind}")
 ```
 
-当前 LLM 修正只支持 mock。
+当前 LLM 修正支持 mock 和 OpenAI-compatible API。`api` 会使用环境变量中的
+`OPENAI_API_KEY`，`api:<model-name>` 可以指定模型。
 
-## `pipelines.py`：四条实验流水线
+## `pipelines.py`：实验流水线
 
 ### 结果结构
 
@@ -703,8 +717,9 @@ def run_all(config: ExperimentConfig) -> list[PipelineResult]:
 
 1. `direct_asr`
 2. `diarization_asr`
-3. `separation_asr`
-4. `llm_rag_refine`
+3. `diarization_turn_asr`（如果配置中启用）
+4. `separation_asr`
+5. `llm_rag_refine`
 
 最后返回所有结果。
 
@@ -769,8 +784,8 @@ CER 是字符错误率。
 
 ```python
 def wer(reference: str, hypothesis: str) -> float:
-    ref = normalize_text(reference).split()
-    hyp = normalize_text(hypothesis).split()
+    ref = tokenize_words(reference)
+    hyp = tokenize_words(hypothesis)
     if not ref:
         return 0.0 if not hyp else 1.0
     return edit_distance(ref, hyp) / len(ref)
@@ -779,7 +794,39 @@ def wer(reference: str, hypothesis: str) -> float:
 WER 是词错误率。
 
 - 和 CER 类似，但比较单位从“字符”变成“词”。
-- `split()` 会按空格切词。
+- 英文主要按空格切词。
+- 中文会优先用 `jieba` 分词；如果环境里没有 `jieba`，就退回到简单 token 匹配。
+
+### speaker-block CER/WER 是什么意思
+
+普通 `timeline_cer` 会把分段按时间顺序拼起来比较，适合看“整段时间线文本像不像参考答案”。
+但说话人标注任务还关心另一个问题：模型有没有把两个人各自说的话分清楚。
+
+speaker-block 的做法是：
+
+1. 参考答案里有按说话人分块的文本，例如 `speaker_1` 一整段、`speaker_2` 一整段。
+2. 模型输出里也把文本按预测 speaker label 分组，例如 `SPEAKER_00`、`SPEAKER_01`。
+3. 评分时不会假设 `SPEAKER_00` 一定等于 `speaker_1`，而是尝试所有合理映射。
+4. 选择 CER/WER 最低的映射，作为 `speaker_block_cer` 和 `speaker_block_wer`。
+
+这样做是为了公平。很多 diarization 模型的 speaker label 是任意编号，可能这次把第一个人叫
+`SPEAKER_00`，下次叫 `SPEAKER_01`。如果两个说话人的内容分得对，只是 label 名字反了，
+speaker-block 评分不会把它当成严重错误。
+
+一个简化例子：
+
+```text
+参考:
+speaker_1: 今天必须上线
+speaker_2: 不能牺牲用户体验
+
+模型:
+SPEAKER_00: 不能牺牲用户体验
+SPEAKER_01: 今天必须上线
+```
+
+如果强行按名字比，两个 speaker 都像错了；但 speaker-block 会发现最佳映射是
+`SPEAKER_00 -> speaker_2`、`SPEAKER_01 -> speaker_1`，所以主要评价文本内容和说话人归属是否正确。
 
 ## `io.py`：结果怎么写到文件
 
@@ -989,7 +1036,7 @@ Sample(
 )
 ```
 
-然后 `run_all(config)` 会对这个样本依次跑四条流水线。
+然后 `run_all(config)` 会按配置对这个样本依次跑启用的流水线。
 
 ## 整体运行链路
 
