@@ -145,7 +145,7 @@ def evaluate_results(
     results_path = Path(results_path)
     rows = _load_result_rows(results_path)
     samples_by_id = {sample.id: sample for sample in config.samples}
-    ovr_by_sample = _sample_overlap_ratios(rows)
+    ovr_by_sample = _sample_overlap_ratios(rows, config.samples)
 
     scoring_jobs: list[tuple[int, str, str]] = []
     output_rows: list[dict[str, object]] = []
@@ -226,7 +226,13 @@ def _load_result_rows(results_path: Path) -> list[dict[str, object]]:
 
 def _sample_overlap_ratios(
     rows: list[dict[str, object]],
+    samples: list[Sample],
 ) -> dict[str, tuple[float | None, str]]:
+    configured = {
+        sample.id: sample.overlap_ratio
+        for sample in samples
+        if sample.overlap_ratio is not None
+    }
     by_sample: dict[str, list[dict[str, object]]] = {}
     for row in rows:
         sample_id = str(row.get("sample_id", ""))
@@ -236,6 +242,10 @@ def _sample_overlap_ratios(
     ratios: dict[str, tuple[float | None, str]] = {}
     priority = ["diarization_asr", "diarization_turn_asr", "separation_asr"]
     for sample_id, sample_rows in by_sample.items():
+        if sample_id in configured:
+            ratios[sample_id] = (configured[sample_id], "config")
+            continue
+
         selected_ratio: float | None = None
         selected_source = "unavailable"
         for pipeline in priority:

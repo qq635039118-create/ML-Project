@@ -150,6 +150,69 @@ class TestReadability(unittest.TestCase):
             self.assertIsNone(evaluation.rows[0]["trs_speaker"])
             self.assertIsNotNone(evaluation.rows[1]["trs_speaker"])
 
+    def test_evaluate_results_prefers_configured_overlap_ratio(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            config = ExperimentConfig(
+                project_name="test",
+                output_dir=tmp_path,
+                language="zh",
+                asr_prompt=None,
+                models={},
+                asr_models=[],
+                pipelines=[],
+                llm_rag_sources=(),
+                rag_context=[],
+                samples=[
+                    Sample(
+                        id="sample1",
+                        audio_path=tmp_path / "sample.wav",
+                        overlap_level="heavy",
+                        speakers=2,
+                        overlap_ratio=0.42,
+                        reference="你好 世界",
+                    )
+                ],
+                base_dir=tmp_path,
+            )
+            results_path = tmp_path / "results.json"
+            results_path.write_text(
+                json.dumps(
+                    [
+                        {
+                            "sample_id": "sample1",
+                            "overlap_level": "heavy",
+                            "pipeline": "diarization_asr",
+                            "model": "mock",
+                            "text": "你好 世界",
+                            "runtime_seconds": 1.0,
+                            "cer": 0.0,
+                            "wer": 0.0,
+                            "speaker_block_cer": None,
+                            "error": None,
+                            "segments": [
+                                {"speaker": "A", "start": 0, "end": 10, "text": "你好"},
+                                {"speaker": "B", "start": 5, "end": 15, "text": "世界"},
+                            ],
+                        },
+                    ],
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            evaluation = evaluate_results(
+                config,
+                results_path,
+                device="cpu",
+                bert_model="mock-bert",
+                batch_size=1,
+                scorer=lambda hypotheses, references, **kwargs: [(0.9, 0.8, 0.85)],
+            )
+
+            self.assertAlmostEqual(evaluation.rows[0]["ovr"], 0.42)
+            self.assertEqual(evaluation.rows[0]["ovr_source"], "config")
+
     def test_evaluate_cli_passes_arguments(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
