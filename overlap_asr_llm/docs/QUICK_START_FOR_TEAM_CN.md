@@ -4,11 +4,14 @@
 
 ## 当前项目状态
 
-当前项目已经完成 mock 流程和三条真实非 LLM pipeline 的 sample2 实验：
+当前项目已经完成 mock 流程，以及服务器上的 `whisper:large-v3`
+主实验结果。当前 sample2 主实验包含 5 个重叠条件和 5 条对比路径：
 
-- `direct_asr`：`faster-whisper:large-v3`
-- `diarization_asr`：`pyannote/speaker-diarization-community-1` + `faster-whisper:large-v3`
-- `separation_asr`：`clearvoice:MossFormer2_SS_16K` + `faster-whisper:large-v3`
+- `direct_asr`：`whisper:large-v3`
+- `diarization_asr`：`pyannote/speaker-diarization-community-1` + `whisper:large-v3`
+- `diarization_turn_asr`：先 pyannote 分说话人片段，再用 `whisper:large-v3` 转写
+- `separation_asr`：`clearvoice:MossFormer2_SS_16K` + `whisper:large-v3`
+- `llm_rag_refine`：基于前面 pipeline 输出的 API LLM/RAG 受限修正
 
 主结果目录：
 
@@ -20,9 +23,24 @@ outputs/all_pipelines/
 
 ```text
 outputs/all_pipelines/run_summary.md
+outputs/all_pipelines/readability_summary.md
 ```
 
-还没完全完成的部分：真实 LLM/RAG 修正、自动 overlap-aware pipeline selector、当前 sample2 结果的完整人工可读性评分。
+GitHub 当前保留 `outputs/all_pipelines/` 中的 CSV/JSON/Markdown 结果、分离音频，
+以及 `outputs/direct_asr/`、`outputs/diarization_asr/`、
+`outputs/separation_asr/`、`outputs/speaker_llm_pipeline/` 这些单独 pipeline
+结果目录。模型缓存、临时输出目录、无关 PDF/PPT 资料，以及
+`outputs/all_pipelines/run_summary.html` 不放进 GitHub。
+
+当前结果摘要：
+
+- 平均 CER/WER 最好：`diarization_asr`，CER `0.1532`，WER `0.1563`。
+- 平均 TRS Text 最好：`diarization_asr`，TRS Text `85.8221`。
+- 平均最快：`direct_asr`，`6.72s`。
+- `sample2_opposite_overlap` 例外：`separation_asr` 最好，CER `0.0632`，WER `0.0769`，TRS Text `89.0998`。
+- LLM/RAG 在 light、medium、heavy 的 TRS Text 上表现好，但它主要是受限清理和格式化，不应解释为能可靠补回 ASR 漏掉的语音内容。
+
+还没完全完成的部分：自动 overlap-aware pipeline selector、最终团队成员姓名/提交证据、正式汇报材料整合。
 
 ## 1. 拉取项目
 
@@ -95,7 +113,7 @@ docs/                           项目文档、实验设计、讲解稿
 src/overlap_asr_llm/            核心代码
 tests/                          测试代码
 scripts/                        辅助脚本
-outputs/                        运行生成的结果
+outputs/                        精选实验结果；本地临时结果和模型缓存不提交
 CONTRIBUTIONS.md                组员贡献记录
 REPOSITORY.md                   仓库和提交说明
 ```
@@ -105,7 +123,7 @@ REPOSITORY.md                   仓库和提交说明
 ```text
 config.py       读取配置
 providers.py    模型封装，包括 ASR、分离、说话人标注、LLM 修正
-pipelines.py    四条实验流水线
+pipelines.py    direct、diarization、separation、LLM/RAG 等实验流水线
 metrics.py      CER/WER 指标
 io.py           写出 JSON、CSV、Markdown 结果
 cli.py          命令行入口
@@ -167,19 +185,25 @@ python -m unittest discover -s tests -q
 
 ## 8. 不要提交哪些文件
 
-一般不要提交本地缓存、虚拟环境、大型临时结果：
+一般不要提交本地缓存、虚拟环境、大型临时结果、无关课程资料：
 
 ```text
 __pycache__/
 .pytest_cache/
 .venv/
 venv/
+outputs/caches/
 outputs/<临时实验目录>/
+xutong_code/
+xutong_paper.pdf
+AdamMaytoussi.pdf
+AdamMaytoussi.pptx
+AdamMaytoussi.url
 *.zip
 ```
 
-如果最终报告需要引用某个小型结果目录，可以保留精选输出，例如当前
-`outputs/all_pipelines/`。
+当前仓库保留精选输出：`outputs/all_pipelines/` 的主结果和分离音频，以及每个单独
+pipeline 的结果目录。`outputs/all_pipelines/run_summary.html` 不提交。
 
 ## 9. 真模型模式
 
@@ -205,10 +229,14 @@ configs/all_pipelines.json
 ASR:        mock, whisper, whisper:<model-name>, faster-whisper, faster-whisper:<model-name>, funasr
 Diarizer:   mock, pyannote, pyannote:<huggingface-model-id>
 Separator:  mock, sepformer, sepformer:<huggingface-model-id>, clearvoice, clearvoice:<model-name>
-LLM:        mock
+LLM:        mock, api, api:<model-name>
 ```
 
-真实模型可能需要 GPU、较大下载量和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
+`--mock` 会强制所有 provider 使用 mock，所以 smoke test 里的 LLM/RAG 是 mock。
+真实 LLM/RAG 修正使用 OpenAI-compatible `api` provider，需要设置
+`OPENAI_API_KEY`，也可以用 `api:<model-name>` 指定模型。
+
+真实模型可能需要 GPU、较大下载量、API key 和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
 
 当前 sample2 配置已经接入 5 个真实混合音频样本，并填入整段参考文本和按说话人分块的参考文本：
 

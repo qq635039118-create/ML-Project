@@ -20,6 +20,7 @@ class Sample:
     audio_path: Path
     overlap_level: str
     speakers: int
+    overlap_ratio: float | None = None
     reference: str | None = None
     reference_speakers: tuple[ReferenceSpeaker, ...] = ()
     reference_mode: str = "flat"
@@ -77,6 +78,7 @@ def load_config(path: str | Path) -> ExperimentConfig:
                 audio_path=(base_dir / item["audio_path"]).resolve(),
                 overlap_level=item.get("overlap_level", "unknown"),
                 speakers=int(item.get("speakers", 1)),
+                overlap_ratio=_optional_ratio(item.get("overlap_ratio")),
                 reference=_reference_text(item.get("reference", default_reference)),
                 reference_speakers=reference_speakers,
                 reference_mode=item.get(
@@ -160,6 +162,15 @@ def _reference_text(value: Any) -> str | None:
         return text or None
     text = str(value).strip()
     return text or None
+
+
+def _optional_ratio(value: Any) -> float | None:
+    if value is None or value == "":
+        return None
+    ratio = float(value)
+    if not 0.0 <= ratio <= 1.0:
+        raise ValueError("overlap_ratio must be between 0.0 and 1.0.")
+    return ratio
 
 
 def _load_llm_rag_sources(raw: Any) -> tuple[LLMRAGSource, ...]:

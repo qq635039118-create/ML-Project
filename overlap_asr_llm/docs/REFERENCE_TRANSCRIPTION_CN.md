@@ -31,6 +31,11 @@
 speaker-block 评分会自动寻找预测 speaker label 和参考 speaker label 的最佳映射，因此
 `SPEAKER_00`、`SPEAKER_01`、`SPEAKER1`、`SPEAKER2` 即使顺序不同，也可以公平比较。
 
+换句话说，speaker-block 不是按时间顺序逐句比较，而是先把同一个说话人的文本合成
+一个整体 block，再和参考答案中每个说话人的 block 做比较。这样可以回答一个更适合
+说话人归属的问题：模型有没有把 speaker 1 和 speaker 2 的内容分清楚？如果模型只是
+把两个说话人的标签名字对调了，最佳映射会自动修正这个对调，不会把它算成严重错误。
+
 ## 建议格式
 
 - 尽量逐字听写，不要替 ASR 或 LLM 做润色。

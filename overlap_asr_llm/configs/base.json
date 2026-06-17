@@ -30,30 +30,35 @@
       "id": "sample2_no_overlap",
       "audio_path": "data/samples2/no_overlap.wav",
       "overlap_level": "none",
+      "overlap_ratio": 0.0,
       "speakers": 2
     },
     {
       "id": "sample2_light_overlap",
       "audio_path": "data/samples2/light_overlap.wav",
       "overlap_level": "light",
+      "overlap_ratio": 0.0304,
       "speakers": 2
     },
     {
       "id": "sample2_mid_overlap",
       "audio_path": "data/samples2/mid_overlap.wav",
       "overlap_level": "medium",
+      "overlap_ratio": 0.0959,
       "speakers": 2
     },
     {
       "id": "sample2_heavy_overlap",
       "audio_path": "data/samples2/heavy_overlap.wav",
       "overlap_level": "heavy",
+      "overlap_ratio": 0.1572,
       "speakers": 2
     },
     {
       "id": "sample2_opposite_overlap",
       "audio_path": "data/samples2/opposite_overlap.wav",
       "overlap_level": "opposite",
+      "overlap_ratio": 0.468,
       "speakers": 2
     }
   ]

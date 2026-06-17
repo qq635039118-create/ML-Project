@@ -22,7 +22,31 @@ venv/
 .env.*
 
 # Generated experiment outputs
-outputs/
+outputs/*
+!outputs/all_pipelines/
+outputs/all_pipelines/*
+!outputs/all_pipelines/results.csv
+!outputs/all_pipelines/results.json
+!outputs/all_pipelines/run_summary.md
+!outputs/all_pipelines/readability_summary.md
+!outputs/all_pipelines/readability_results.csv
+!outputs/all_pipelines/readability_results.json
+!outputs/all_pipelines/diarization_segments.csv
+!outputs/all_pipelines/diarization_segments.json
+!outputs/all_pipelines/separation_segments.csv
+!outputs/all_pipelines/separation_segments.json
+!outputs/all_pipelines/separated_audio/
+!outputs/all_pipelines/separated_audio/**
+outputs/all_pipelines/run_summary.html
+!outputs/direct_asr/
+!outputs/direct_asr/**
+!outputs/diarization_asr/
+!outputs/diarization_asr/**
+!outputs/separation_asr/
+!outputs/separation_asr/**
+!outputs/speaker_llm_pipeline/
+!outputs/speaker_llm_pipeline/**
+outputs/caches/
 
 # Downloaded model/cache directories
 pretrained_*/

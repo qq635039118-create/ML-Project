@@ -1,83 +1,54 @@
 # Team Contributions
 
-This file records the planned team split and the current evidence that can be
-checked in the repository. Replace the member placeholders with real names
-before final submission.
+Replace the placeholders with real names before final submission.
 
-## Current Project Status
+## Contribution Split
 
-The current repository has moved beyond the mock prototype stage. The main
-sample2 experiment has been run with five overlap conditions, four pipeline
-families, and a diarization-order ablation:
+| Member | Main Work | Evidence | Share |
+| --- | --- | --- | ---: |
+| Zheng Jiabao | Core implementation: pipeline design, main experiments, metrics/TRS, and result analysis | Pipeline code in `src/overlap_asr_llm/`; final config in `configs/all_pipelines.json`; result tables in `outputs/all_pipelines/`; TRS notes in `docs/TRUE_READABILITY_SCORE.md` | 25% |
+| Member 2 | Audio samples and reference text | Sample audio in `data/samples2/`; shared references in `configs/base.json`; reference notes in `docs/REFERENCE_TRANSCRIPTION_CN.md` |  |
+| Member 3 | Direct ASR baseline and model comparison | Direct-ASR config in `configs/direct_asr.json`; baseline outputs in `outputs/direct_asr/`; model comparison script in `scripts/compare_asr_models.py` |  |
+| Member 4 | Diarization and separation experiments | Diarization config/output in `configs/diarization_asr.json` and `outputs/diarization_asr/`; separation config/output in `configs/separation_asr.json` and `outputs/separation_asr/` |  |
+| Member 5 | LLM integration and evaluation | Speaker/LLM config in `configs/speaker_llm_pipeline.json`; LLM source outputs in `outputs/speaker_llm_pipeline/`; readability results in `outputs/all_pipelines/readability_*` |  |
+| Member 6 | Video script, slides, and final presentation video | Video outline in `docs/VIDEO_SCRIPT.md`; presentation slides; final recorded video/demo |  |
 
-- Direct ASR: `faster-whisper:large-v3`
-- Diarization ASR: full-audio `faster-whisper:large-v3` aligned to
-  `pyannote/speaker-diarization-community-1`
-- Turn-level diarization ASR: pyannote turns transcribed separately with
-  `faster-whisper:large-v3`
-- Separation ASR: `clearvoice:MossFormer2_SS_16K` plus
-  `faster-whisper:large-v3`
-- LLM/RAG refinement: constrained OpenAI-compatible API refiner over previous
-  pipeline outputs
+## Final Checks
 
-The current result set is stored under:
+- Fill in real member names.
+- Add commit, branch, or PR evidence if required by the instructor.
+- Confirm every member's contribution share is acceptable to the team.
 
-```text
-outputs/all_pipelines/
-```
+## Step 1 Evidence
 
-The main summary file is:
-
-```text
-outputs/all_pipelines/run_summary.md
-```
-
-Core metrics have also been refactored. In addition to the primary `cer` and
-`wer`, the output now records `flat_*`, `timeline_*`, and `speaker_block_*`
-scores, plus `score_basis` and `best_speaker_mapping`.
-
-## Planned Responsibility Split
-
-| Member | Main Responsibility | Evidence | Contribution |
-| --- | --- | --- | --- |
-| Member 1 | Literature review and research question | `docs/EXPERIMENT_DESIGN.md`, related work notes, presentation slides | 16.7% |
-| Member 2 | Dataset construction and reference annotation | `data/samples2/`, `configs/base.json`, speaker references | 16.7% |
-| Member 3 | Direct ASR baseline and prompt tuning | `providers.py`, direct ASR results in `run_summary.md` | 16.7% |
-| Member 4 | Diarization and separation experiments | `providers.py`, `pipelines.py`, diarization and separation segment outputs | 16.7% |
-| Member 5 | Metrics, scoring, and LLM/RAG refinement path | `metrics.py`, `pipelines.py`, `providers.py`, `tests/test_metrics.py`, `outputs/all_pipelines/run_summary.md` | 16.7% |
-| Member 6 | Documentation, video, final packaging | `docs/`, `CONTRIBUTIONS.md`, `REPOSITORY.md`, final archive or release | 16.5% |
-
-## Current Completion Notes
-
-Completed:
-
-- Five controlled overlap conditions are available: none, light, medium, heavy,
-  and opposite-order overlap.
-- Four real pipeline families plus the diarization-order ablation have been run
-  and compared.
-- Speaker-aware scoring has been added for diarization and separation outputs.
-- Result writers export summary tables and segment-level CSV/JSON files.
-- The unit-test suite passes with `unittest`.
-- Real LLM/RAG refinement has been run through the configured API provider.
-
-Still to finish:
-
-- Replace member placeholders with real names and commit or PR evidence.
-- Add a formal overlap-aware pipeline selector instead of relying only on manual
-  analysis.
-- Replace member placeholders with real names and commit or PR evidence.
-
-## Individual Step 1 Evidence
-
-Each member should record evidence that they used an AI tool to star and fork:
+Evidence for the required star/fork step:
 
 `https://github.com/zhangqi444/open-forge`
 
-| Member | Star/Fork Evidence | Notes |
-| --- | --- | --- |
-| Member 1 | TODO | TODO |
-| Member 2 | TODO | TODO |
-| Member 3 | TODO | TODO |
-| Member 4 | TODO | TODO |
-| Member 5 | TODO | TODO |
-| Member 6 | TODO | TODO |
+### Zheng Jiabao
+
+Star verified via GitHub API; fork verified as `Coco-Spot/open-forge`.
+
+![Zheng Jiabao star/fork API verification](../image/ai_fork.png)
+
+![Zheng Jiabao fork screenshot](../image/open-forge-fork.png)
+
+### Member 2
+
+TODO: add star/fork screenshot.
+
+### Member 3
+
+TODO: add star/fork screenshot.
+
+### Member 4
+
+TODO: add star/fork screenshot.
+
+### Member 5
+
+TODO: add star/fork screenshot.
+
+### Member 6
+
+TODO: add star/fork screenshot.

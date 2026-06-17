@@ -15,7 +15,8 @@ and an LLM/RAG refinement path.
 Current implemented status:
 
 - Mock pipeline framework is complete.
-- Real direct ASR is supported through Whisper and faster-whisper providers.
+- Real direct ASR is supported through Whisper and faster-whisper providers; the
+  current main config uses `whisper:large-v3` for the server result set.
 - Real speaker diarization is supported through pyannote.
 - Real speech separation is supported through ClearVoice and SpeechBrain
   SepFormer providers.
@@ -28,10 +29,30 @@ Current main experiment:
 ```text
 configs/all_pipelines.json
 outputs/all_pipelines/run_summary.md
+outputs/all_pipelines/readability_summary.md
 ```
 
 The latest result table includes primary CER/WER, speaker-block CER/WER,
 timeline CER/WER, runtime, and the score basis used for each row.
+The readability summary adds BERTScore F2, text-only TRS, and speaker-aware TRS.
+
+The GitHub repository intentionally keeps the selected server outputs needed for
+review: the `all_pipelines` CSV/JSON/Markdown summaries, generated separated
+audio, and the single-pipeline result directories for `direct_asr`,
+`diarization_asr`, `separation_asr`, and `speaker_llm_pipeline`. It does not
+track local model caches, unrelated reference materials, temporary output
+directories, or `outputs/all_pipelines/run_summary.html`.
+
+Latest server-run headline results:
+
+- `diarization_asr` has the best average primary CER/WER and average TRS text:
+  CER `0.1532`, WER `0.1563`, TRS text `85.8221`.
+- `direct_asr` is the fastest path, averaging `6.72s`.
+- `separation_asr` is poor on most standard overlap conditions but is clearly
+  best on `sample2_opposite_overlap`.
+- `llm_rag_refine` improves several sample-level TRS text scores, but the
+  current result should be interpreted as constrained readability cleanup, not
+  evidence that the LLM recovers speech that ASR missed.
 
 ## Important Paths
 
@@ -43,7 +64,7 @@ src/overlap_asr_llm/metrics.py     CER, WER, and speaker-block scoring
 src/overlap_asr_llm/io.py          CSV, JSON, Markdown, and segment writers
 configs/                           Experiment configurations
 data/samples2/                     Current five-condition Mandarin audio set
-outputs/                           Generated experiment results
+outputs/                           Selected experiment results, excluding caches
 docs/                              Project design and reporting notes
 tests/                             Unit tests
 ```
@@ -75,4 +96,6 @@ Before final submission:
   `CONTRIBUTIONS.md`.
 - Confirm the final result directory and summary file are referenced in the
   report or video.
-- Package only the intended code, docs, configs, and selected outputs.
+- Package only the intended code, docs, configs, selected outputs, and sample
+  audio. Do not add local model caches, unrelated PDFs/PPTs, or temporary
+  experiment folders.

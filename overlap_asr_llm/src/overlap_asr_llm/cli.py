@@ -10,6 +10,7 @@ from pathlib import Path
 from .config import load_config
 from .io import write_results
 from .pipelines import run_all
+from .readability import DEFAULT_BERT_MODEL, evaluate_results
 
 
 def _load_env_file(path: Path) -> None:
@@ -46,6 +47,38 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Write outputs after each sample so long experiments keep partial results.",
     )
+
+    evaluate_parser = subparsers.add_parser(
+        "evaluate",
+        help="Compute post-run readability metrics for an existing results.json.",
+    )
+    evaluate_parser.add_argument(
+        "--config",
+        default="configs/all_pipelines.json",
+        help="Path to the JSON experiment config used for the run.",
+    )
+    evaluate_parser.add_argument(
+        "--results",
+        required=True,
+        help="Path to an existing results.json file.",
+    )
+    evaluate_parser.add_argument(
+        "--device",
+        choices=["auto", "cuda", "cpu"],
+        default="auto",
+        help="Device for BERTScore evaluation.",
+    )
+    evaluate_parser.add_argument(
+        "--bert-model",
+        default=DEFAULT_BERT_MODEL,
+        help="Model name passed to BERTScore.",
+    )
+    evaluate_parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1,
+        help="Batch size for BERTScore evaluation.",
+    )
     return parser
 
 
@@ -71,6 +104,20 @@ def main(argv: list[str] | None = None) -> int:
             results = run_all(config)
         write_results(results, config.output_dir, config.base_dir)
         print(f"Wrote results to {config.output_dir}")
+        return 0
+
+    if args.command == "evaluate":
+        config_path = Path(args.config)
+        _load_env_file(config_path.resolve().parent.parent / ".env")
+        config = load_config(config_path)
+        evaluation = evaluate_results(
+            config=config,
+            results_path=Path(args.results),
+            device=args.device,
+            bert_model=args.bert_model,
+            batch_size=args.batch_size,
+        )
+        print(f"Wrote readability evaluation to {evaluation.output_dir}")
         return 0
 
     parser.error(f"Unsupported command: {args.command}")
