@@ -9,7 +9,7 @@ Replace the placeholders with real names before final submission.
 | Zheng Jiabao | Core implementation: pipeline design, main experiments, metrics/TRS, and result analysis | Pipeline code in `src/overlap_asr_llm/`; final config in `configs/all_pipelines.json`; result tables in `outputs/all_pipelines/`; TRS notes in `docs/TRUE_READABILITY_SCORE.md` | 25% |
 | Member 2 | Audio samples and reference text | Sample audio in `data/samples2/`; shared references in `configs/base.json`; reference notes in `docs/REFERENCE_TRANSCRIPTION_CN.md` |  |
 | Member 3 | Direct ASR baseline and model comparison | Direct-ASR config in `configs/direct_asr.json`; baseline outputs in `outputs/direct_asr/`; model comparison script in `scripts/compare_asr_models.py` |  |
-| Member 4 | Diarization and separation experiments | Diarization config/output in `configs/diarization_asr.json` and `outputs/diarization_asr/`; separation config/output in `configs/separation_asr.json` and `outputs/separation_asr/` |  |
+| Jiang Weiji | Diarization and separation experiments | Diarization config/output in `configs/diarization_asr.json` and `outputs/diarization_asr/`; separation config/output in `configs/separation_asr.json` and `outputs/separation_asr/` | 15% |
 | Member 5 | LLM integration and evaluation | Speaker/LLM config in `configs/speaker_llm_pipeline.json`; LLM source outputs in `outputs/speaker_llm_pipeline/`; readability results in `outputs/all_pipelines/readability_*` |  |
 | Member 6 | Video script, slides, and final presentation video | Video outline in `docs/VIDEO_SCRIPT.md`; presentation slides; final recorded video/demo |  |
 
@@ -43,7 +43,8 @@ TODO: add star/fork screenshot.
 
 ### Member 4
 
-TODO: add star/fork screenshot.
+![Jiang Weiji fork screenshot](../image/fork4.png)
+![Jiang Weiji star screenshot](../image/star4.png)
 
 ### Member 5
 
