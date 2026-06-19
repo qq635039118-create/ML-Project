@@ -35,7 +35,8 @@ Star verified via GitHub API; fork verified as `Coco-Spot/open-forge`.
 
 ### Member 2
 
-TODO: add star/fork screenshot.
+![Yan Jiahao fork screenshoot](../image/Yan-sys37-fork,png)
+![Yan Jiahao star screenshoot](../image/Yan-sys37-star.png)
 
 ### Member 3
 
