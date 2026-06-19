@@ -3,7 +3,7 @@
 GitHub repository URL:
 
 ```text
-TODO: https://github.com/<org-or-user>/<repo>
+https://github.com/Coco-Spot/ML-Project
 ```
 
 ## Current Repository State
@@ -74,10 +74,21 @@ tests/                             Unit tests
 Basic unit tests can be run with:
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests -q
+make test
 ```
 
 If `pytest` is installed, the same tests can also be run through `pytest`.
+
+Common repository-root shortcuts:
+
+```bash
+make app
+make mock
+make smoke
+make exp
+make eval
+make package
+```
 
 ## Collaboration Workflow
 
@@ -91,11 +102,12 @@ contributed. Recommended workflow:
 
 Before final submission:
 
-- Replace the GitHub URL placeholder above.
 - Make sure all team member names and contribution evidence are filled in
   `CONTRIBUTIONS.md`.
 - Confirm the final result directory and summary file are referenced in the
   report or video.
+- Build the archive with `make package`, or preview it with
+  `python overlap_asr_llm/scripts/package_submission.py --dry-run`.
 - Package only the intended code, docs, configs, selected outputs, and sample
-  audio. Do not add local model caches, unrelated PDFs/PPTs, or temporary
-  experiment folders.
+  audio. Do not add local secrets, model caches, virtual environments,
+  unrelated PDFs/PPTs, frontend uploads, or temporary experiment folders.

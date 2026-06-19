@@ -54,6 +54,19 @@ Headline results from `outputs/all_pipelines/run_summary.md` and
 For team members, the Chinese quick start is:
 `overlap_asr_llm/docs/QUICK_START_FOR_TEAM_CN.md`
 
+From the repository root, the common workflows now have short commands:
+
+```bash
+make app                    # open the frontend
+make mock                   # run the lightweight mock pipeline
+make smoke                  # run the smoke test
+make exp                    # run configs/all_pipelines.json
+make exp CONFIG=direct_asr  # run one experiment config
+make eval                   # evaluate outputs/all_pipelines/results.json
+make test                   # run unit tests
+make package                # build a safe submission zip
+```
+
 Run the local mock pipeline first. It uses only lightweight mock providers and
 is meant to verify that the repository works:
 
@@ -94,7 +107,48 @@ pip install -e .
 Real ASR, diarization, separation, and readability evaluation may require GPU
 memory, large model downloads, and API credentials.
 
+## Environment Setup
+
+Before running real-model experiments or the frontend, create
+`overlap_asr_llm/.env` and put your own credentials there. This file is local
+only: do not commit it and do not include it in submission packages.
+
+Minimum example:
+
+```bash
+# Required for pyannote diarization.
+# Get this from the original Hugging Face website after accepting the model terms.
+HF_TOKEN=hf_your_token_here
+
+# Required for OpenAI-compatible LLM/RAG cleanup.
+# DeepSeek is recommended for this project; use your own API key.
+OPENAI_API_KEY=sk_your_deepseek_api_key_here
+OPENAI_BASE_URL=https://api.deepseek.com
+OPENAI_MODEL=deepseek-v4-pro
+```
+
+Important pyannote note: `pyannote/speaker-diarization-community-1` is a gated
+Hugging Face model. You must log in on the original Hugging Face model page,
+accept the user conditions, create a Hugging Face access token, and then place
+that token in `.env` as `HF_TOKEN` or `HUGGINGFACE_TOKEN`. Do not rely on mirror
+sites for this model, because mirrors cannot grant the required model access
+permission to your Hugging Face account.
+
+Important LLM note: the `api` LLM provider reads `OPENAI_API_KEY`,
+`OPENAI_BASE_URL`, and `OPENAI_MODEL` from `.env`. For DeepSeek V4 Pro, use the
+OpenAI-compatible endpoint above and set `OPENAI_MODEL=deepseek-v4-pro`.
+
 ## Running Experiments
+
+Short version from the repository root:
+
+```bash
+make exp
+make exp CONFIG=direct_asr
+make exp CONFIG=diarization_asr
+make exp CONFIG=separation_asr
+make exp CONFIG=speaker_llm_pipeline
+```
 
 Run the current final comparison:
 
@@ -113,6 +167,12 @@ python3 -m overlap_asr_llm.cli run --config configs/speaker_llm_pipeline.json --
 ```
 
 Run post-hoc readability evaluation after a result JSON exists:
+
+```bash
+make eval
+```
+
+The long equivalent is:
 
 ```bash
 python3 -m overlap_asr_llm.cli evaluate \
@@ -141,7 +201,9 @@ Supported provider values:
 The `--mock` flag deliberately forces all providers to mock mode. Real LLM/RAG
 refinement uses the OpenAI-compatible `api` provider and requires
 `OPENAI_API_KEY`. Optional `OPENAI_BASE_URL` and `OPENAI_MODEL` environment
-variables are also supported.
+variables are also supported. For the current recommended DeepSeek setup, put
+`OPENAI_BASE_URL=https://api.deepseek.com` and
+`OPENAI_MODEL=deepseek-v4-pro` in `overlap_asr_llm/.env`.
 
 ## Outputs Kept In GitHub
 
@@ -271,14 +333,13 @@ in `overlap_asr_llm/docs/TRUE_READABILITY_SCORE.md`.
 Run the unit tests with:
 
 ```bash
-cd overlap_asr_llm
-PYTHONPATH=src python3 -m unittest discover -s tests -q
+make test
 ```
 
 If `pytest` is installed:
 
 ```bash
-pytest
+make pytest
 ```
 
 ## Submission Notes
@@ -286,6 +347,10 @@ pytest
 Before final submission:
 
 - Fill in final team contribution evidence in `overlap_asr_llm/CONTRIBUTIONS.md`.
-- Replace the placeholder GitHub URL in `overlap_asr_llm/REPOSITORY.md`.
+- Confirm `overlap_asr_llm/.env` exists locally for real-model runs, but do not
+  commit it.
+- Build the safe submission archive with `make package`. The packaging script
+  excludes `.env`, virtual environments, model caches, temporary frontend
+  outputs, and temporary experiment outputs.
 - Keep only intended code, configs, docs, sample audio, and selected outputs in
   GitHub.

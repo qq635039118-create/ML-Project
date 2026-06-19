@@ -22,6 +22,9 @@ Show the five debate-audio samples. Explain that they use the same debate
 material but change speaker timing to create no, light, medium, heavy, and
 opposite-order overlap.
 
+Briefly mention reproducibility setup: mock runs use `make mock`, the full
+experiment uses `make exp`, and the frontend launches with `make app`.
+
 ## 5:00-7:30 Pipeline Comparison
 
 Compare direct ASR, diarization ASR, turn-level diarization ASR, separation ASR,
@@ -42,4 +45,6 @@ content.
 Propose an overlap-aware strategy: low overlap uses direct ASR, heavier overlap
 uses separation plus ASR, and LLM/RAG is restricted to formatting and terminology
 correction. Summarize engineering trade-offs, team contributions, and future
-work.
+work. Note that final packaging uses `make package`, which excludes local
+secrets, model caches, virtual environments, frontend uploads, and temporary
+experiment outputs.

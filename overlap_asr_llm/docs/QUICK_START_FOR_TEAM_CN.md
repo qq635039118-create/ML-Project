@@ -55,6 +55,18 @@ cd <仓库目录>/overlap_asr_llm
 git pull
 ```
 
+如果在仓库根目录，也可以直接用短命令，不用每次输入完整 Python 模块路径：
+
+```bash
+make app                    # 打开前端，默认 http://127.0.0.1:7861
+make mock                   # 跑 mock 快速实验
+make exp                    # 跑 configs/all_pipelines.json
+make exp CONFIG=direct_asr  # 跑单个实验配置
+make eval                   # 评估 outputs/all_pipelines/results.json
+make test                   # 跑单元测试
+make smoke                  # 跑 smoke test
+```
+
 ## 2. 确认 Python 版本
 
 建议使用 Python 3.10 或更高版本：
@@ -70,9 +82,23 @@ pip install -e .
 pip install pytest
 ```
 
+从仓库根目录也可以写成：
+
+```bash
+make install
+```
+
 ## 3. 先跑 mock 版本
 
 mock 模式用于检查项目结构、代码流程、输出文件是否正常。
+
+仓库根目录短命令：
+
+```bash
+make mock
+```
+
+完整命令：
 
 ```bash
 python -m overlap_asr_llm.cli run --config configs/mock.json --mock
@@ -93,6 +119,14 @@ outputs/mock/run_summary.md
 ```
 
 ## 4. 跑 smoke test
+
+仓库根目录短命令：
+
+```bash
+make smoke
+```
+
+完整命令：
 
 ```bash
 python scripts/smoke_test.py
@@ -167,20 +201,20 @@ git push -u origin feature/<你的名字或任务名>
 提交前建议至少跑：
 
 ```bash
-python -m overlap_asr_llm.cli run --config configs/mock.json --mock
-python scripts/smoke_test.py
+make mock
+make smoke
 ```
 
 如果安装了 pytest，也可以跑：
 
 ```bash
-pytest
+make pytest
 ```
 
 如果没有安装 pytest，可以直接跑 Python 自带的 unittest：
 
 ```bash
-python -m unittest discover -s tests -q
+make test
 ```
 
 ## 8. 不要提交哪些文件
@@ -233,10 +267,10 @@ LLM:        mock, api, api:<model-name>
 ```
 
 `--mock` 会强制所有 provider 使用 mock，所以 smoke test 里的 LLM/RAG 是 mock。
-真实 LLM/RAG 修正使用 OpenAI-compatible `api` provider，需要设置
-`OPENAI_API_KEY`，也可以用 `api:<model-name>` 指定模型。
+真实 LLM/RAG 修正使用 OpenAI-compatible `api` provider，也可以用
+`api:<model-name>` 指定模型。
 
-真实模型可能需要 GPU、较大下载量、API key 和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
+真实模型可能需要 GPU、较大下载量和额外依赖。如果只是协作写代码或文档，优先使用 mock 模式。
 
 当前 sample2 配置已经接入 5 个真实混合音频样本，并填入整段参考文本和按说话人分块的参考文本：
 
@@ -247,6 +281,13 @@ configs/base.json
 运行当前真实实验的命令是：
 
 ```bash
+make exp
+```
+
+完整等价命令是：
+
+```bash
+cd overlap_asr_llm
 python -m overlap_asr_llm.cli run --config configs/all_pipelines.json --incremental
 ```
 
@@ -265,7 +306,32 @@ CONTRIBUTIONS.md
 - 证据，例如代码文件、文档、实验结果、视频部分
 - 贡献比例
 
-## 11. 常见问题
+## 11. 打包提交
+
+最终提交前，从仓库根目录运行：
+
+```bash
+make package
+```
+
+它会生成：
+
+```text
+overlap_asr_llm/overlap_asr_llm_submission.zip
+```
+
+打包脚本会排除本地秘密文件、虚拟环境、Python 缓存、模型缓存、
+`checkpoints/`、`models/`、`outputs/caches/`、`outputs/mock/`、
+`outputs/speaker_app/`、临时 HTML summary 和已有 zip 文件。
+
+如果想先看会打包哪些文件，不生成 zip：
+
+```bash
+cd overlap_asr_llm
+python scripts/package_submission.py --dry-run
+```
+
+## 12. 常见问题
 
 ### 找不到 `overlap_asr_llm` 模块
 
@@ -278,13 +344,13 @@ ModuleNotFoundError: No module named 'overlap_asr_llm'
 说明项目还没有安装到当前 Python 环境。先安装为可编辑包：
 
 ```bash
-pip install -e .
+make install
 ```
 
 然后再运行：
 
 ```bash
-python -m overlap_asr_llm.cli run --config configs/mock.json --mock
+make mock
 ```
 
 ### 真实模型导入失败
@@ -307,5 +373,5 @@ configs/all_pipelines.json
 只想确认项目能跑时，用这一条：
 
 ```bash
-python -m overlap_asr_llm.cli run --config configs/mock.json --mock
+make mock
 ```
