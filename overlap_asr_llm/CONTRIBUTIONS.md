@@ -10,7 +10,7 @@ Replace the placeholders with real names before final submission.
 | Yan Jiahao | Audio samples and reference text | Sample audio in `data/samples2/`; shared references in `configs/base.json`; reference notes in `docs/REFERENCE_TRANSCRIPTION_CN.md` | 15% |
 | Member 3 | Direct ASR baseline and model comparison | Direct-ASR config in `configs/direct_asr.json`; baseline outputs in `outputs/direct_asr/`; model comparison script in `scripts/compare_asr_models.py` |  |
 | Jiang Weiji | Diarization and separation experiments | Diarization config/output in `configs/diarization_asr.json` and `outputs/diarization_asr/`; separation config/output in `configs/separation_asr.json` and `outputs/separation_asr/` | 15% |
-| Member 5 | LLM integration and evaluation | Speaker/LLM config in `configs/speaker_llm_pipeline.json`; LLM source outputs in `outputs/speaker_llm_pipeline/`; readability results in `outputs/all_pipelines/readability_*` |  |
+| Shao Qian | LLM integration and evaluation | Speaker/LLM config in `configs/speaker_llm_pipeline.json`; LLM source outputs in `outputs/speaker_llm_pipeline/`; readability results in `outputs/all_pipelines/readability_*` |  |
 | Member 6 | Video script, slides, and final presentation video | Video outline in `docs/VIDEO_SCRIPT.md`; presentation slides; final recorded video/demo |  |
 
 ## Final Checks
@@ -29,23 +29,23 @@ Evidence for the required star/fork step:
 
 Star verified via GitHub API; fork verified as `Coco-Spot/open-forge`.
 
-![Zheng Jiabao star/fork API verification](../image/ai_fork.png)
+![Zheng Jiabao star/fork API verification](../image/zjb_ai_fork.png)
 
-![Zheng Jiabao fork screenshot](../image/open-forge-fork.png)
+![Zheng Jiabao fork screenshot](../image/zjb_open-forge-fork.png)
 
-### Member 2
+### Yan Jiahao
 
-![Yan Jiahao fork screenshoot](../image/Yan-sys37-fork,png)
+![Yan Jiahao fork screenshoot](../image/Yan-sys37-fork.png)
 ![Yan Jiahao star screenshoot](../image/Yan-sys37-star.png)
 
 ### Member 3
 
 TODO: add star/fork screenshot.
 
-### Member 4
+### Jiang Weiji
 
-![Jiang Weiji fork screenshot](../image/fork4.png)
-![Jiang Weiji star screenshot](../image/star4.png)
+![Jiang Weiji fork screenshot](../image/jwj_fork4.png)
+![Jiang Weiji star screenshot](../image/jwj_star4.png)
 
 ### Member 5
 
