@@ -442,8 +442,8 @@ def make_llm_refiner(kind: str):
     raise ValueError(f"Unsupported LLM provider: {kind}")
 ```
 
-当前 LLM 修正支持 mock 和 OpenAI-compatible API。`api` 会使用环境变量中的
-`OPENAI_API_KEY`，`api:<model-name>` 可以指定模型。
+当前 LLM 修正支持 mock 和 OpenAI-compatible API。`api:<model-name>` 可以指定模型。
+具体运行凭据配置集中写在根目录 README，避免多份文档重复维护。
 
 ## `pipelines.py`：实验流水线
 
@@ -920,22 +920,38 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Force all providers to mock mode for local smoke tests.",
     )
+    run_parser.add_argument(
+        "--incremental",
+        action="store_true",
+        help="Write outputs after each sample so long experiments keep partial results.",
+    )
+
+    evaluate_parser = subparsers.add_parser(
+        "evaluate",
+        help="Compute post-run readability metrics for an existing results.json.",
+    )
+    evaluate_parser.add_argument("--config", default="configs/all_pipelines.json")
+    evaluate_parser.add_argument("--results", required=True)
     return parser
 ```
 
-这段定义命令行参数。
+这段定义命令行参数。当前 CLI 有两个主要子命令：
 
 项目支持这样的命令：
 
 ```bash
 python -m overlap_asr_llm.cli run --config configs/mock.json --mock
+python -m overlap_asr_llm.cli evaluate --config configs/all_pipelines.json --results outputs/all_pipelines/results.json
 ```
 
 其中：
 
 - `run`：运行实验。
+- `evaluate`：对已有 `results.json` 做 readability / TRS 后处理评估。
 - `--config`：指定配置文件。
 - `--mock`：强制所有 provider 使用 mock 模式。
+- `--incremental`：长实验时每跑完一个 sample 就写一次输出，避免中途失败时完全丢结果。
+- `--results`：评估时指定已有结果文件。
 
 ```python
 def main(argv: list[str] | None = None) -> int:
@@ -943,14 +959,25 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "run":
+        config_path = Path(args.config)
         config = load_config(Path(args.config))
         if args.mock:
             config.models.update(
                 {"asr": "mock", "diarization": "mock", "separation": "mock", "llm": "mock"}
             )
-        results = run_all(config)
+        if args.incremental:
+            ...
+        else:
+            results = run_all(config)
         write_results(results, config.output_dir)
         print(f"Wrote results to {config.output_dir}")
+        return 0
+
+    if args.command == "evaluate":
+        config_path = Path(args.config)
+        config = load_config(config_path)
+        evaluation = evaluate_results(config=config, results_path=Path(args.results))
+        print(f"Wrote readability evaluation to {evaluation.output_dir}")
         return 0
 
     parser.error(f"Unsupported command: {args.command}")
@@ -963,9 +990,16 @@ def main(argv: list[str] | None = None) -> int:
 
 1. 读取配置。
 2. 如果有 `--mock`，把所有模型强制改成 mock。
-3. 调用 `run_all(config)` 跑全部流水线。
+3. 如果有 `--incremental`，每个 sample 跑完就写一次结果；否则一次性跑完。
 4. 调用 `write_results(...)` 写结果。
 5. 返回 0 表示成功。
+
+执行 `evaluate` 时：
+
+1. 读取实验配置。
+2. 读取已有 `results.json`。
+3. 计算 BERTScore / TRS 等 readability 指标。
+4. 把 `readability_results.*` 和 `readability_summary.md` 写到结果目录。
 
 ```python
 if __name__ == "__main__":
@@ -975,6 +1009,69 @@ if __name__ == "__main__":
 这段表示：当你直接运行这个文件或用 `python -m overlap_asr_llm.cli` 时，执行 `main()`。
 
 `SystemExit(main())` 会把 `main()` 返回的数字作为程序退出码。
+
+### 根目录 `Makefile`：短命令包装
+
+为了不用每次输入很长的 Python 模块路径，仓库根目录有 `Makefile`：
+
+```bash
+make app
+make mock
+make smoke
+make test
+make exp
+make eval
+make package
+```
+
+它们本质上还是调用上面的 Python 脚本。例如：
+
+```makefile
+mock:
+	cd overlap_asr_llm && PYTHONPATH=src python3 -m overlap_asr_llm.cli run --config configs/mock.json --mock
+
+app:
+	cd overlap_asr_llm && PYTHONPATH=src python3 scripts/launch_speaker_app.py --host "127.0.0.1" --port "7861" --ui "web"
+```
+
+所以如果 `make mock` 失败，排查方向仍然是 CLI、配置文件和 provider。
+
+## `scripts/package_submission.py`：安全打包脚本
+
+这个脚本用于生成最终提交 zip：
+
+```bash
+make package
+```
+
+或者直接运行：
+
+```bash
+cd overlap_asr_llm
+python scripts/package_submission.py
+```
+
+生成的文件是：
+
+```text
+overlap_asr_llm/overlap_asr_llm_submission.zip
+```
+
+它的核心设计是“只打包该提交的东西，不打包本地秘密和缓存”。脚本会跳过：
+
+- 本地秘密文件
+- `.venv/`、`venv/`、`env/`
+- `__pycache__/`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
+- `models/`、`checkpoints/`、`pretrained_*`
+- `outputs/caches/`、`outputs/mock/`、`outputs/speaker_app/`
+- 临时 HTML summary、已有 zip、build/dist/egg-info
+
+如果想先检查 zip 里会有哪些文件，可以用：
+
+```bash
+cd overlap_asr_llm
+python scripts/package_submission.py --dry-run
+```
 
 ## `__init__.py`：包信息
 

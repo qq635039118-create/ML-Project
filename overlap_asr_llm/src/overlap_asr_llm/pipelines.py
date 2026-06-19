@@ -12,6 +12,7 @@ import time
 from .config import ExperimentConfig, LLMRAGSource, Sample
 from .metrics import cer, speaker_block_score, wer
 from .providers import make_asr, make_diarizer, make_llm_refiner, make_separator
+from .rag import infer_domain_tags, retrieve_rag_context, tags_for_sample
 
 
 _SUBTITLE_PREFIX_RE = re.compile(
@@ -617,7 +618,10 @@ def run_llm_rag_refine(
             for result in source_results
             if result.sample_id == sample.id and not result.error
         )
-        refined = refiner.refine(source_text, config.rag_context)
+        rag_tags = tags_for_sample(sample.overlap_level, "llm_rag_refine")
+        rag_tags.extend(infer_domain_tags("\n".join((config.asr_prompt or "", source_text))))
+        rag_context = retrieve_rag_context(rag_tags, config.rag_context)
+        refined = refiner.refine(source_text, rag_context)
         score = _score_bundle(sample, _refined_text_for_scoring(refined))
         return PipelineResult(
             sample_id=sample.id,

@@ -8,11 +8,12 @@ The current completion level is about 90-95% of the full plan:
 
 - Completed: controlled sample set, direct ASR, two diarization-ASR orders,
   separation ASR, API LLM/RAG refinement, reference-based scoring, segment
-  exports, runtime measurement, and unit tests.
+  exports, runtime measurement, unit tests, repository URL documentation,
+  short Makefile commands, and safe submission packaging.
 - Partially complete: speaker-label consistency analysis, qualitative
   failure-case notes, and overlap-aware routing rules.
-- Not yet complete: final team metadata, repository URL, and any optional
-  production implementation of an automatic overlap-aware selector.
+- Not yet complete: final team metadata and any optional production
+  implementation of an automatic overlap-aware selector.
 
 The main current output is:
 
@@ -149,4 +150,5 @@ TRS text, TRS speaker, and overlap-ratio reporting.
 For GitHub, the repository keeps the current selected `all_pipelines` CSV/JSON
 and Markdown outputs, the generated separated audio, and the single-pipeline
 result directories. Local model caches, temporary experiment folders, unrelated
-reference materials, and `outputs/all_pipelines/run_summary.html` are excluded.
+reference materials, frontend uploads, local secrets, virtual environments, zip
+archives, and HTML summaries are excluded from commits and submission packages.

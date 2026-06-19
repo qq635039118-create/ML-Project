@@ -301,10 +301,8 @@ class PyannoteDiarizer:
         _configure_torch_tf32(self.torch)
         if self.device.startswith("cuda"):
             self.pipeline.to(self.torch.device(self.device))
-        diarization_result = self.pipeline(
-            {"audio": str(audio_path)},
-            num_speakers=max(speakers, 1),
-        )
+        kwargs = {"num_speakers": int(speakers)} if int(speakers) > 0 else {}
+        diarization_result = self.pipeline({"audio": str(audio_path)}, **kwargs)
         diarization = self._speaker_diarization_annotation(diarization_result)
         return [
             {
