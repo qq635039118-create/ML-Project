@@ -51,6 +51,6 @@ TODO: add star/fork screenshot.
 
 TODO: add star/fork screenshot.
 
-### Member 6
+### Chen Duding
 
-TODO: add star/fork screenshot.
+[TODO: add star/fork screenshot.](https://www.bilibili.com/video/BV14xjk6VESu)
