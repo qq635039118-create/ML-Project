@@ -11,7 +11,7 @@ Replace the placeholders with real names before final submission.
 | Member 3 | Direct ASR baseline and model comparison | Direct-ASR config in `configs/direct_asr.json`; baseline outputs in `outputs/direct_asr/`; model comparison script in `scripts/compare_asr_models.py` |  |
 | Jiang Weiji | Diarization and separation experiments | Diarization config/output in `configs/diarization_asr.json` and `outputs/diarization_asr/`; separation config/output in `configs/separation_asr.json` and `outputs/separation_asr/` | 15% |
 | Shao Qian | LLM integration and evaluation | Speaker/LLM config in `configs/speaker_llm_pipeline.json`; LLM source outputs in `outputs/speaker_llm_pipeline/`; readability results in `outputs/all_pipelines/readability_*` |  |
-| Member 6 | Video script, slides, and final presentation video | Video outline in `docs/VIDEO_SCRIPT.md`; presentation slides; final recorded video/demo |  |
+| Chen Duding | Video script, slides, and final presentation video | Video outline in `docs/VIDEO_SCRIPT.md`; presentation slides; final recorded video/demo | 15% |
 
 ## Final Checks
 
