@@ -72,6 +72,13 @@ PIPELINE_CHOICES = [
     "diarization_turn_asr",
     "separation_asr",
 ]
+PIPELINE_UI_CHOICES = [
+    ("自动选择", "auto"),
+    ("直接 ASR", "direct_asr"),
+    ("说话人识别 + ASR 对齐", "diarization_asr"),
+    ("说话人分段 + ASR", "diarization_turn_asr"),
+    ("语音分离 + ASR", "separation_asr"),
+]
 ASR_MODEL_CHOICES = [
     "faster-whisper:large-v3",
     "whisper:large-v3",
@@ -1327,6 +1334,10 @@ WEB_INDEX_HTML = """
       gap: 10px;
       margin: 14px 0;
     }
+    .audio-list {
+      gap: 14px;
+      margin: 12px 0 18px;
+    }
     .download, .audio-card {
       border: 2px solid var(--ink);
       border-radius: 8px;
@@ -1338,8 +1349,26 @@ WEB_INDEX_HTML = """
       font-weight: 850;
       text-decoration: none;
     }
-    .audio-card { min-width: 260px; flex: 1; }
-    .audio-card strong { display: block; margin-bottom: 8px; }
+    .audio-card {
+      min-width: 360px;
+      flex: 1 1 380px;
+      padding: 18px 20px;
+    }
+    .audio-card strong {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+    .audio-card audio {
+      display: block;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .audio-card .download {
+      display: inline-block;
+      padding: 9px 14px;
+    }
     audio { width: 100%; }
     .empty {
       padding: 42px;
@@ -1379,7 +1408,6 @@ WEB_INDEX_HTML = """
         <label>音频文件</label>
         <input name="audio" type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.ogg" required />
         <input name="overlap_level" type="hidden" value="auto" />
-        <input name="pipeline" type="hidden" value="auto" />
         <input name="speakers" type="hidden" value="2" />
 
         <label>语言</label>
@@ -1390,6 +1418,8 @@ WEB_INDEX_HTML = """
           <option value="ko">한국어</option>
           <option value="auto">Auto</option>
         </select>
+        <label>Pipeline 策略</label>
+        <select name="pipeline" id="pipeline"></select>
 
         <h2 class="section-title" style="margin-top:20px">模型</h2>
         <label>ASR</label><select name="asr_model" id="asr_model"></select>
@@ -1457,14 +1487,21 @@ WEB_INDEX_HTML = """
     const status = $("status");
     const form = $("runForm");
     const submitButton = $("submitButton");
+    const PIPELINE_LABELS = {
+      auto: "自动选择",
+      direct_asr: "直接 ASR",
+      diarization_asr: "说话人识别 + ASR 对齐",
+      diarization_turn_asr: "说话人分段 + ASR",
+      separation_asr: "语音分离 + ASR",
+    };
 
-    function fillSelect(id, values, fallback) {
+    function fillSelect(id, values, fallback, labels = {}) {
       const el = $(id);
       el.innerHTML = "";
       values.forEach((value) => {
         const option = document.createElement("option");
         option.value = value;
-        option.textContent = value;
+        option.textContent = labels[value] || value;
         el.appendChild(option);
       });
       if (values.includes(fallback)) el.value = fallback;
@@ -1526,6 +1563,7 @@ WEB_INDEX_HTML = """
     async function loadOptions() {
       const response = await fetch("/api/options");
       const options = await response.json();
+      fillSelect("pipeline", options.pipelines, "auto", PIPELINE_LABELS);
       fillSelect("asr_model", options.asr_models, options.defaults.asr);
       fillSelect("diarization_model", options.diarization_models, options.defaults.diarization);
       fillSelect("separation_model", options.separation_models, options.defaults.separation);
@@ -1705,13 +1743,18 @@ def build_app():
                     audio_file = gr.Audio(label="上传音频", type="filepath")
                     run_button = gr.Button("开始转写", variant="primary")
                     overlap_level = gr.State("auto")
-                    pipeline_choice = gr.State("auto")
                     speakers = gr.State(2)
                     mock = gr.State(False)
                     language = gr.Dropdown(
                         label="语言",
                         choices=["zh", "en", "ja", "ko", "auto"],
                         value="zh",
+                    )
+                    pipeline_choice = gr.Dropdown(
+                        label="Pipeline 策略",
+                        choices=PIPELINE_UI_CHOICES,
+                        value="auto",
+                        allow_custom_value=False,
                     )
                     with gr.Accordion("Models", open=True):
                         asr_model = gr.Dropdown(
