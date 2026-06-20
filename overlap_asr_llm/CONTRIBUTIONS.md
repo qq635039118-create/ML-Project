@@ -41,7 +41,7 @@ Star verified via GitHub API; fork verified as `Coco-Spot/open-forge`.
 ### Tian Zechen
 
 ![Tian Zechen fork screenshoot](../image/tzc_fork.png)
-![Tian Zechen fork screenshoot](../image/tzc_star.png)
+![Tian Zechen star screenshoot](../image/tzc_star.png)
 
 ### Jiang Weiji
 
