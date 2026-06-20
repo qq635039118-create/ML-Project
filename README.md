@@ -293,7 +293,7 @@ may have decent edit distance while dropping a speaker's clause, mixing speaker
 turns, or adding unsupported cleanup. The current text-only version combines
 character accuracy with recall-weighted semantic coverage:
 
-$$
+```math
 \mathrm{TRS}_{text}
 =
 100
@@ -303,12 +303,12 @@ $$
 \times
 F_{2,\mathrm{BERT}}
 }
-$$
+```
 
 For speaker-attributed outputs, the speaker-aware version adds speaker-block
 accuracy:
 
-$$
+```math
 \mathrm{TRS}_{speaker}
 =
 100
@@ -320,7 +320,7 @@ F_{2,\mathrm{BERT}}
 \times
 \left(1-\min(\mathrm{SpeakerBlockCER},1)\right)
 }
-$$
+```
 
 This geometric-mean design keeps the formula simple and makes one weak
 dimension lower the final score, which matches the project goal: a transcript

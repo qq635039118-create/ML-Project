@@ -34,11 +34,11 @@ TRS is a project reporting index. It is not presented as a new published metric.
 Before comparing systems, each sample should have an overlap severity estimate.
 This project uses the overlap ratio definition from the LibriCSS paper:
 
-$$
+```math
 \mathrm{OVR}
 =
 \frac{L_{\mathrm{ovl}}}{L_{\mathrm{all}}}
-$$
+```
 
 where:
 
@@ -47,29 +47,29 @@ where:
 
 In project terms:
 
-$$
+```math
 L_{\mathrm{ovl}}
 =
 \text{duration where at least two speakers are active}
-$$
+```
 
-$$
+```math
 L_{\mathrm{all}}
 =
 \text{duration where at least one speaker is active}
-$$
+```
 
 Interpretation:
 
-$$
+```math
 \mathrm{OVR}=0
-$$
+```
 
 means no overlap, while:
 
-$$
+```math
 \mathrm{OVR}=0.30
-$$
+```
 
 means 30 percent of speech time contains simultaneous speakers.
 
@@ -91,11 +91,11 @@ If future synthetic data exports oracle speaker activity, that can be added as
 
 WER is defined as:
 
-$$
+```math
 \mathrm{WER}
 =
 \frac{S + D + I}{N}
-$$
+```
 
 where:
 
@@ -107,11 +107,11 @@ where:
 For Mandarin ASR, CER is usually more stable because character-level evaluation
 avoids word segmentation ambiguity:
 
-$$
+```math
 \mathrm{CER}
 =
 \frac{S_c + D_c + I_c}{N_c}
-$$
+```
 
 where the counts are computed at the character level.
 
@@ -125,29 +125,29 @@ and a reference text `R`.
 
 Precision:
 
-$$
+```math
 P_{\mathrm{BERT}}
 =
 \frac{1}{|H|}
 \sum_{h_i \in H}
 \max_{r_j \in R}
 \mathrm{sim}(h_i,r_j)
-$$
+```
 
 Recall:
 
-$$
+```math
 R_{\mathrm{BERT}}
 =
 \frac{1}{|R|}
 \sum_{r_j \in R}
 \max_{h_i \in H}
 \mathrm{sim}(r_j,h_i)
-$$
+```
 
 F1:
 
-$$
+```math
 F_{\mathrm{BERT}}
 =
 \frac{
@@ -155,7 +155,7 @@ F_{\mathrm{BERT}}
 }{
 P_{\mathrm{BERT}} + R_{\mathrm{BERT}}
 }
-$$
+```
 
 Project interpretation:
 
@@ -173,7 +173,7 @@ Overlap speech often causes missing phrases. To emphasize coverage, the project
 also reports the standard F-beta aggregation over BERTScore precision and
 recall:
 
-$$
+```math
 F_{\beta,\mathrm{BERT}}
 =
 \frac{
@@ -181,17 +181,17 @@ F_{\beta,\mathrm{BERT}}
 }{
 \beta^2P_{\mathrm{BERT}} + R_{\mathrm{BERT}}
 }
-$$
+```
 
 The implemented readability report uses:
 
-$$
+```math
 \beta = 2
-$$
+```
 
 so the reported `bert_f2` is:
 
-$$
+```math
 F_{2,\mathrm{BERT}}
 =
 \frac{
@@ -199,7 +199,7 @@ F_{2,\mathrm{BERT}}
 }{
 4P_{\mathrm{BERT}} + R_{\mathrm{BERT}}
 }
-$$
+```
 
 This is useful for heavy overlap because missed reference content should count
 more strongly than in balanced F1.
@@ -213,20 +213,20 @@ predicted labels and reference speakers before computing CER/WER. This matters
 because diarization systems often use arbitrary labels: a predicted `SPEAKER_00`
 may correspond to reference `speaker_2`, not `speaker_1`.
 
-$$
+```math
 \mathrm{SpeakerConsistency}
 =
 1 - \min(\mathrm{SpeakerBlockCER},1)
-$$
+```
 
 If a pipeline has no speaker-attributed output, speaker consistency is reported
 as unavailable rather than zero:
 
-$$
+```math
 \mathrm{SpeakerConsistency}
 =
 \mathrm{N/A}
-$$
+```
 
 This keeps direct ASR comparable on text quality without unfairly penalizing it
 for not producing speaker labels.
@@ -236,19 +236,19 @@ for not producing speaker labels.
 Punctuation and segmentation affect human readability. If a reliable
 punctuation reference is available, punctuation error rate can be reported:
 
-$$
+```math
 \mathrm{PER}
 =
 \frac{S_p + D_p + I_p}{N_p}
-$$
+```
 
 and:
 
-$$
+```math
 \mathrm{FormattingReadability}
 =
 1 - \min(\mathrm{PER},1)
-$$
+```
 
 PER is not currently included in the implemented TRS because the project does
 not yet maintain punctuation as a separate reliable annotation layer.
@@ -266,7 +266,7 @@ one severe failure mode.
 
 Text-only readability:
 
-$$
+```math
 \mathrm{TRS}_{text}
 =
 100
@@ -276,11 +276,11 @@ $$
 \times
 F_{2,\mathrm{BERT}}
 }
-$$
+```
 
 Speaker-aware readability:
 
-$$
+```math
 \mathrm{TRS}_{speaker}
 =
 100
@@ -292,7 +292,7 @@ F_{2,\mathrm{BERT}}
 \times
 \left(1-\min(\mathrm{SpeakerBlockCER},1)\right)
 }
-$$
+```
 
 If `SpeakerBlockCER` is unavailable, `TRS_speaker` is unavailable. The
 implementation does not treat missing speaker metrics as zero.
