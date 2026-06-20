@@ -47,9 +47,9 @@ TODO: add star/fork screenshot.
 ![Jiang Weiji fork screenshot](../image/jwj_fork4.png)
 ![Jiang Weiji star screenshot](../image/jwj_star4.png)
 
-### Member 5
+### Shao Qian
 
-TODO: add star/fork screenshot.
+![Shao Qian screenshot](../image/sq.png)
 
 ### Chen Duding
 
